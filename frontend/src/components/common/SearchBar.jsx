@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { searchAPI } from "../../services/api";
 
 function SearchBar({
   placeholder = "Search athletes, teams, competitions...",
@@ -37,6 +38,32 @@ function SearchBar({
     { icon: "⚽", text: "Manchester United", type: "Team" },
   ];
 
+  const getIconForType = (type) => {
+    const icons = {
+      athlete: "🏃",
+      team: "⚽",
+      competition: "🏆",
+      venue: "🏟️",
+      sport: "🎯",
+      organization: "🏛️",
+      equipment: "🎽",
+      media: "📺",
+      performance: "📊",
+    };
+    return icons[type?.toLowerCase()] || "🔍";
+  };
+
+  const mapTypeToCategory = (type) => {
+    const mapping = {
+      athlete: "athletes",
+      team: "teams",
+      competition: "competitions",
+      venue: "venues",
+      sport: "sports",
+    };
+    return mapping[type?.toLowerCase()];
+  };
+
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
@@ -50,14 +77,32 @@ function SearchBar({
       return;
     }
 
-    // Simulate API call delay
+    // Call real API
     setIsLoading(true);
-    const timer = setTimeout(() => {
-      const filtered = popularSearches.filter((item) =>
-        item.text.toLowerCase().includes(query.toLowerCase())
-      );
-      setSuggestions(filtered);
-      setIsLoading(false);
+    const timer = setTimeout(async () => {
+      try {
+        const response = await searchAPI.suggest(query, { limit: 10 });
+        const suggestionsData = response.data.suggestions || [];
+        
+        const formatted = suggestionsData.map((item) => ({
+          icon: getIconForType(item.type),
+          text: item.name || item.id,
+          type: item.type,
+          category: mapTypeToCategory(item.type),
+          id: item.id,
+        }));
+        
+        setSuggestions(formatted);
+      } catch (err) {
+        console.error("Search API error:", err);
+        // Fallback to filtered popular searches
+        const filtered = popularSearches.filter((item) =>
+          item.text.toLowerCase().includes(query.toLowerCase())
+        );
+        setSuggestions(filtered);
+      } finally {
+        setIsLoading(false);
+      }
     }, 300);
 
     return () => clearTimeout(timer);
@@ -78,9 +123,8 @@ function SearchBar({
 
   const handleSuggestionClick = (suggestion) => {
     setQuery(suggestion.text);
-    if (suggestion.category) {
-      navigate(`/${suggestion.category}?search=${encodeURIComponent(suggestion.text)}`);
-    }
+    // Navigate to search page with the query
+    navigate(`/search?q=${encodeURIComponent(suggestion.text)}`);
     setIsFocused(false);
   };
 
