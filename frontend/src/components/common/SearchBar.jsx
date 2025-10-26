@@ -184,7 +184,7 @@ function SearchBar({
             onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className={`w-full ${sizeClasses[size]} pl-14 pr-28 rounded-full border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-all duration-300 bg-white font-medium`}
+            className={`w-full ${sizeClasses[size]} pl-14 pr-28 rounded-full border-2 border-purple-300 focus:border-purple-600 focus:outline-none transition-all duration-300 bg-white font-semibold text-gray-800 shadow-lg`}
           />
 
           {/* Action Buttons */}
@@ -204,7 +204,7 @@ function SearchBar({
             )}
             <button
               type="submit"
-              className="btn btn-primary btn-sm"
+              className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-bold hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={!query.trim()}
             >
               Search
