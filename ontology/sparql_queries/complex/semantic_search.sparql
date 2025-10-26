@@ -1,0 +1,23 @@
+PREFIX sport: <http://example.org/sports-ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?entity ?type ?name ?description
+WHERE {
+    ?entity rdf:type ?type .
+    ?type rdfs:subClassOf* sport:SportDiscipline|sport:Person|sport:Team|sport:Competition|
+                           sport:Venue|sport:Organization|sport:Equipment|sport:Performance|
+                           sport:Media|sport:Sponsorship .
+    
+    OPTIONAL { ?entity sport:hasName ?name }
+    OPTIONAL { ?entity rdfs:label ?name }
+    OPTIONAL { ?entity rdfs:comment ?description }
+    
+    FILTER(
+        CONTAINS(LCASE(STR(?entity)), LCASE("{{search_term}}")) ||
+        CONTAINS(LCASE(?name), LCASE("{{search_term}}")) ||
+        CONTAINS(LCASE(?description), LCASE("{{search_term}}"))
+    )
+}
+ORDER BY ?type ?name
+LIMIT 50

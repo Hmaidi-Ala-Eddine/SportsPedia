@@ -1,0 +1,13 @@
+PREFIX sport: <http://example.org/sports-ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?organization ?name ?foundedYear ?headquarters ?orgType
+WHERE {
+    ?organization rdf:type sport:Organization .
+    OPTIONAL { ?organization sport:hasName ?name }
+    OPTIONAL { ?organization sport:foundedYear ?foundedYear }
+    OPTIONAL { ?organization sport:hasHeadquarters ?headquarters }
+    OPTIONAL { ?organization rdf:type ?orgType }
+}
+ORDER BY ?name

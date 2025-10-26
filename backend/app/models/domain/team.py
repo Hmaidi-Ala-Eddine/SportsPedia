@@ -1,0 +1,40 @@
+from pydantic import BaseModel
+from typing import Optional, List
+from app.models.base import TeamBase
+
+
+class Team(TeamBase):
+    """Team model."""
+    name: Optional[str] = None
+    foundedYear: Optional[int] = None
+    country: Optional[str] = None
+    homeStadium: Optional[str] = None
+    teamColors: Optional[str] = None
+    league: Optional[str] = None
+    wins: Optional[int] = None
+    losses: Optional[int] = None
+    draws: Optional[int] = None
+    championships: Optional[int] = None
+
+
+class TeamDetail(Team):
+    """Detailed team model with related entities."""
+    homeStadiumName: Optional[str] = None
+    leagueName: Optional[str] = None
+    coachName: Optional[str] = None
+    rosterSize: Optional[int] = None
+    avgPlayerAge: Optional[float] = None
+
+
+class TeamList(BaseModel):
+    """Response model for list of teams."""
+    teams: List[Team]
+    total: int
+
+
+class TeamRoster(BaseModel):
+    """Team roster with athletes."""
+    teamId: str
+    teamName: Optional[str] = None
+    athletes: List[dict]
+    total: int

@@ -1,0 +1,13 @@
+PREFIX sport: <http://example.org/sports-ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?coach ?name ?nationality ?specialization ?team
+WHERE {
+    ?coach rdf:type sport:Coach .
+    OPTIONAL { ?coach sport:hasName ?name }
+    OPTIONAL { ?coach sport:hasNationality ?nationality }
+    OPTIONAL { ?coach sport:hasSpecialization ?specialization }
+    OPTIONAL { ?coach sport:coaches ?team }
+}
+ORDER BY ?name

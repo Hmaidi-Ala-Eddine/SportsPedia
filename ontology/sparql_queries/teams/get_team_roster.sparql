@@ -1,0 +1,15 @@
+PREFIX sport: <http://example.org/sports-ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?athlete ?name ?position ?jerseyNumber
+WHERE {
+    sport:{{team_id}} rdf:type sport:Team .
+    ?athlete rdf:type sport:Athlete .
+    ?athlete sport:playsFor sport:{{team_id}} .
+    
+    OPTIONAL { ?athlete sport:hasName ?name }
+    OPTIONAL { ?athlete sport:hasPosition ?position }
+    OPTIONAL { ?athlete sport:hasJerseyNumber ?jerseyNumber }
+}
+ORDER BY ?jerseyNumber ?name

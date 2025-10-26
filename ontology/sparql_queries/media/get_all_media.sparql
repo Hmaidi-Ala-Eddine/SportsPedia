@@ -1,0 +1,13 @@
+PREFIX sport: <http://example.org/sports-ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?media ?name ?mediaType ?broadcastDate ?competition
+WHERE {
+    ?media rdf:type sport:Media .
+    OPTIONAL { ?media sport:hasName ?name }
+    OPTIONAL { ?media rdf:type ?mediaType }
+    OPTIONAL { ?media sport:broadcastDate ?broadcastDate }
+    OPTIONAL { ?media sport:covers ?competition }
+}
+ORDER BY DESC(?broadcastDate)
