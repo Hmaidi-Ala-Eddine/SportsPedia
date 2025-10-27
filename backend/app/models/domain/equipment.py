@@ -1,5 +1,30 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
+
+
+class EquipmentCreate(BaseModel):
+    """Model for creating new equipment."""
+    id: str = Field(..., description="Unique equipment identifier")
+    equipmentName: str
+    brand: Optional[str] = None
+    model: Optional[str] = None
+    price: Optional[float] = None
+    color: Optional[str] = None
+    size: Optional[str] = None
+    material: Optional[str] = None
+    requiredFor: Optional[str] = None
+
+
+class EquipmentUpdate(BaseModel):
+    """Model for updating equipment."""
+    equipmentName: Optional[str] = None
+    brand: Optional[str] = None
+    model: Optional[str] = None
+    price: Optional[float] = None
+    color: Optional[str] = None
+    size: Optional[str] = None
+    material: Optional[str] = None
+    requiredFor: Optional[str] = None
 
 
 class Equipment(BaseModel):

@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "accordionId": "headingOne",
+        "title": "Strategy",
+        "subtitle": "Digital business planning",
+        "collapseId": "collapseOne",
+        "expanded": true,
+        "image": "5.jpg"
+    },
+    {
+        "id": 2,
+        "accordionId": "headingTwo",
+        "title": "Partnership",
+        "subtitle": "Business program management",
+        "collapseId": "collapseTwo",
+        "expanded": false,
+        "image": "6.jpg"
+    },
+    {
+        "id": 3,
+        "accordionId": "headingThree",
+        "title": "Branding",
+        "subtitle": "Strategy development",
+        "collapseId": "collapseThree",
+        "expanded": false,
+        "image": "7.jpg"
+    }
+]

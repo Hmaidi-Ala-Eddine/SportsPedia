@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict, Any
 from app.services.fuseki_client import fuseki_client
 from app.utils.json_converter import sparql_results_to_list, extract_id_from_uri
+from app.models.domain.competition import CompetitionCreate, CompetitionUpdate
+from app.services.crud_helper import SPARQLCRUDHelper
 import logging
 
 logger = logging.getLogger(__name__)
@@ -140,6 +142,47 @@ class CompetitionService:
             
         except Exception as e:
             logger.error(f"Error getting matches: {str(e)}")
+            raise
+    
+    async def create_competition(self, comp_data: CompetitionCreate) -> Dict[str, Any]:
+        """Create a new competition."""
+        data_dict = comp_data.dict(exclude={'id'}, exclude_none=True)
+        insert_pattern = SPARQLCRUDHelper.build_insert_query(
+            comp_data.id, "Competition", data_dict
+        )
+        query = f"{self.client.get_prefixes()}\nINSERT DATA {{ {insert_pattern} . }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Created competition: {comp_data.id}")
+            return {"id": comp_data.id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error creating competition: {str(e)}")
+            raise
+    
+    async def update_competition(self, comp_id: str, comp_data: CompetitionUpdate) -> Optional[Dict[str, Any]]:
+        """Update an existing competition."""
+        data_dict = comp_data.dict(exclude_none=True)
+        if not data_dict:
+            return {"id": comp_id}
+        delete_patterns, insert_patterns = SPARQLCRUDHelper.build_update_patterns(comp_id, data_dict)
+        query = f"{self.client.get_prefixes()}\nDELETE {{ {' '.join(delete_patterns)} }}\nINSERT {{ {' '.join(insert_patterns)} }}\nWHERE {{ {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'} }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Updated competition: {comp_id}")
+            return {"id": comp_id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error updating competition {comp_id}: {str(e)}")
+            raise
+    
+    async def delete_competition(self, comp_id: str) -> bool:
+        """Delete a competition."""
+        query = f"{self.client.get_prefixes()}\n{SPARQLCRUDHelper.build_delete_query(comp_id)}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Deleted competition: {comp_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting competition {comp_id}: {str(e)}")
             raise
 
 

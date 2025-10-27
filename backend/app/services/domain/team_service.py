@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict, Any
 from app.services.fuseki_client import fuseki_client
 from app.utils.json_converter import sparql_results_to_list, extract_id_from_uri
+from app.models.domain.team import TeamCreate, TeamUpdate
+from app.services.crud_helper import SPARQLCRUDHelper
 import logging
 
 logger = logging.getLogger(__name__)
@@ -159,6 +161,80 @@ class TeamService:
             
         except Exception as e:
             logger.error(f"Error getting roster for team {team_id}: {str(e)}")
+            raise
+    
+    async def create_team(self, team_data: TeamCreate) -> Dict[str, Any]:
+        """Create a new team."""
+        data_dict = team_data.dict(exclude={'id'}, exclude_none=True)
+        insert_pattern = SPARQLCRUDHelper.build_insert_query(
+            team_data.id, "Team", data_dict
+        )
+        
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        INSERT DATA {{
+            {insert_pattern} .
+        }}
+        """
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Created team: {team_data.id}")
+            return await self.get_team_by_id(team_data.id)
+        except Exception as e:
+            logger.error(f"Error creating team: {str(e)}")
+            raise
+    
+    async def update_team(self, team_id: str, team_data: TeamUpdate) -> Optional[Dict[str, Any]]:
+        """Update an existing team."""
+        existing = await self.get_team_by_id(team_id)
+        if not existing:
+            return None
+        
+        data_dict = team_data.dict(exclude_none=True)
+        if not data_dict:
+            return existing
+        
+        delete_patterns, insert_patterns = SPARQLCRUDHelper.build_update_patterns(
+            team_id, data_dict
+        )
+        
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        DELETE {{
+            {' '.join(delete_patterns)}
+        }}
+        INSERT {{
+            {' '.join(insert_patterns)}
+        }}
+        WHERE {{
+            {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'}
+        }}
+        """
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Updated team: {team_id}")
+            return await self.get_team_by_id(team_id)
+        except Exception as e:
+            logger.error(f"Error updating team {team_id}: {str(e)}")
+            raise
+    
+    async def delete_team(self, team_id: str) -> bool:
+        """Delete a team."""
+        query = f"""
+        {self.client.get_prefixes()}
+        {SPARQLCRUDHelper.build_delete_query(team_id)}
+        """
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Deleted team: {team_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting team {team_id}: {str(e)}")
             raise
 
 

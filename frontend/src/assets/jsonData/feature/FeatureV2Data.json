@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "title": "Manage IT Service",
+        "description": "Prevailed mr tolerably discourse assurance estimable everything melancholy uncommonly solicitude inhabiting projection.",
+        "image": "1.jpg",
+        "icon": "13.png"
+    },
+    {
+        "id": 2,
+        "title": "Cyber Security",
+        "description": "Prevailed mr tolerably discourse assurance estimable everything melancholy uncommonly solicitude inhabiting projection.",
+        "image": "2.jpg",
+        "icon": "14.png"
+    },
+    {
+        "id": 3,
+        "title": "Digital Experience",
+        "description": "Prevailed mr tolerably discourse assurance estimable everything melancholy uncommonly solicitude inhabiting projection.",
+        "image": "3.jpg",
+        "icon": "15.png"
+    }
+]

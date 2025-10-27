@@ -1,6 +1,29 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from app.models.base import VenueBase
+
+
+class VenueCreate(BaseModel):
+    """Model for creating a new venue."""
+    id: str = Field(..., description="Unique venue identifier")
+    venueName: str
+    capacity: Optional[int] = None
+    city: Optional[str] = None
+    country: Optional[str] = None
+    openedYear: Optional[int] = None
+    surfaceType: Optional[str] = None
+    isIndoor: Optional[bool] = None
+
+
+class VenueUpdate(BaseModel):
+    """Model for updating a venue."""
+    venueName: Optional[str] = None
+    capacity: Optional[int] = None
+    city: Optional[str] = None
+    country: Optional[str] = None
+    openedYear: Optional[int] = None
+    surfaceType: Optional[str] = None
+    isIndoor: Optional[bool] = None
 
 
 class Venue(VenueBase):

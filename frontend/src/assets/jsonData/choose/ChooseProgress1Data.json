@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "title": "Business Development",
+        "initialValue": 50,
+        "increment": 1,
+        "maxValue": 65
+    },
+    {
+        "id": 2,
+        "title": "Investment Analysis",
+        "initialValue": 30,
+        "increment": 1,
+        "maxValue": 84
+    }
+]

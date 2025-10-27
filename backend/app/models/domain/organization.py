@@ -1,5 +1,24 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
+
+
+class OrganizationCreate(BaseModel):
+    """Model for creating a new organization."""
+    id: str = Field(..., description="Unique organization identifier")
+    organizationName: str
+    establishedYear: Optional[int] = None
+    headquarters: Optional[str] = None
+    president: Optional[str] = None
+    memberCount: Optional[int] = None
+
+
+class OrganizationUpdate(BaseModel):
+    """Model for updating an organization."""
+    organizationName: Optional[str] = None
+    establishedYear: Optional[int] = None
+    headquarters: Optional[str] = None
+    president: Optional[str] = None
+    memberCount: Optional[int] = None
 
 
 class Organization(BaseModel):

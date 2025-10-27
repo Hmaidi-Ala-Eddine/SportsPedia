@@ -1,0 +1,392 @@
+[
+    {
+        "id": 1,
+        "activeClass": "active",
+        "memberThumb": "2.jpg",
+        "memberThumb2": "v4.jpg",
+        "designation": "CEO & Founder",
+        "name": "Aleesha Brown",
+        "email": "aleesha@digital.com",
+        "phone": "44-20-7328-4499",
+        "skillProgress": [
+            {
+                "id": 1,
+                "title": "Programming Language",
+                "end": 88
+            },
+            {
+                "id": 2,
+                "title": "Backend Development",
+                "end": 95
+            },
+            {
+                "id": 3,
+                "title": "Product Design",
+                "end": 80
+            }
+        ],
+        "memberData": [
+            {
+                "id": 1,
+                "listTitle": "Education",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Residential College",
+                        "info": "BA Honours - Biology",
+                        "timeSpan": "2004 - 2008"
+                    },
+                    {
+                        "id": 2,
+                        "title": "University of Iowa",
+                        "info": "Master's degree - Macroeconomics",
+                        "timeSpan": "2009 - 2012"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "listTitle": "Experience",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Product Manager",
+                        "info": "Samsung Bangladesh",
+                        "timeSpan": "31 Aug, 2013"
+                    },
+                    {
+                        "id": 2,
+                        "title": "Senior Marketing",
+                        "info": "Manuring Technology Company",
+                        "timeSpan": "12 Dec 2018"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "activeClass": "",
+        "memberThumb": "3.jpg",
+        "memberThumb2": "v5.jpg",
+        "designation": "Product Manager",
+        "name": "Kevin Martin",
+        "email": "kevin@digital.com",
+        "phone": "44-20-7328-4499",
+        "skillProgress": [
+            {
+                "id": 1,
+                "title": "Programming Language",
+                "end": 88
+            },
+            {
+                "id": 2,
+                "title": "Backend Development",
+                "end": 95
+            },
+            {
+                "id": 3,
+                "title": "Product Design",
+                "end": 80
+            }
+        ],
+        "memberData": [
+            {
+                "id": 1,
+                "listTitle": "Education",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Residential College",
+                        "info": "BA Honours - Biology",
+                        "timeSpan": "2004 - 2008"
+                    },
+                    {
+                        "id": 2,
+                        "title": "University of Iowa",
+                        "info": "Master's degree - Macroeconomics",
+                        "timeSpan": "2009 - 2012"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "listTitle": "Experience",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Product Manager",
+                        "info": "Samsung Bangladesh",
+                        "timeSpan": "31 Aug, 2013"
+                    },
+                    {
+                        "id": 2,
+                        "title": "Senior Marketing",
+                        "info": "Manuring Technology Company",
+                        "timeSpan": "12 Dec 2018"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "activeClass": "",
+        "memberThumb": "4.jpg",
+        "memberThumb2": "v1.jpg",
+        "designation": "Financial Consultant",
+        "name": "Istiak Ahmed",
+        "email": "istiak@digital.com",
+        "phone": "44-20-7328-4499",
+        "skillProgress": [
+            {
+                "id": 1,
+                "title": "Programming Language",
+                "end": 88
+            },
+            {
+                "id": 2,
+                "title": "Backend Development",
+                "end": 95
+            },
+            {
+                "id": 3,
+                "title": "Product Design",
+                "end": 80
+            }
+        ],
+        "memberData": [
+            {
+                "id": 1,
+                "listTitle": "Education",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Residential College",
+                        "info": "BA Honours - Biology",
+                        "timeSpan": "2004 - 2008"
+                    },
+                    {
+                        "id": 2,
+                        "title": "University of Iowa",
+                        "info": "Master's degree - Macroeconomics",
+                        "timeSpan": "2009 - 2012"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "listTitle": "Experience",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Product Manager",
+                        "info": "Samsung Bangladesh",
+                        "timeSpan": "31 Aug, 2013"
+                    },
+                    {
+                        "id": 2,
+                        "title": "Senior Marketing",
+                        "info": "Manuring Technology Company",
+                        "timeSpan": "12 Dec 2018"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "activeClass": "",
+        "memberThumb": "7.jpg",
+        "memberThumb2": "v2.jpg",
+        "designation": "Developer",
+        "name": "Joey Salad",
+        "email": "joey@digital.com",
+        "phone": "44-20-7328-4499",
+        "skillProgress": [
+            {
+                "id": 1,
+                "title": "Programming Language",
+                "end": 88
+            },
+            {
+                "id": 2,
+                "title": "Backend Development",
+                "end": 95
+            },
+            {
+                "id": 3,
+                "title": "Product Design",
+                "end": 80
+            }
+        ],
+        "memberData": [
+            {
+                "id": 1,
+                "listTitle": "Education",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Residential College",
+                        "info": "BA Honours - Biology",
+                        "timeSpan": "2004 - 2008"
+                    },
+                    {
+                        "id": 2,
+                        "title": "University of Iowa",
+                        "info": "Master's degree - Macroeconomics",
+                        "timeSpan": "2009 - 2012"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "listTitle": "Experience",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Product Manager",
+                        "info": "Samsung Bangladesh",
+                        "timeSpan": "31 Aug, 2013"
+                    },
+                    {
+                        "id": 2,
+                        "title": "Senior Marketing",
+                        "info": "Manuring Technology Company",
+                        "timeSpan": "12 Dec 2018"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "activeClass": "",
+        "memberThumb": "6.jpg",
+        "memberThumb2": "v3.jpg",
+        "designation": "CEO & Founder",
+        "name": "Kamal Abraham",
+        "email": "kamal@digital.com",
+        "phone": "44-20-7328-4499",
+        "skillProgress": [
+            {
+                "id": 1,
+                "title": "Programming Language",
+                "end": 88
+            },
+            {
+                "id": 2,
+                "title": "Backend Development",
+                "end": 95
+            },
+            {
+                "id": 3,
+                "title": "Product Design",
+                "end": 80
+            }
+        ],
+        "memberData": [
+            {
+                "id": 1,
+                "listTitle": "Education",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Residential College",
+                        "info": "BA Honours - Biology",
+                        "timeSpan": "2004 - 2008"
+                    },
+                    {
+                        "id": 2,
+                        "title": "University of Iowa",
+                        "info": "Master's degree - Macroeconomics",
+                        "timeSpan": "2009 - 2012"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "listTitle": "Experience",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Product Manager",
+                        "info": "Samsung Bangladesh",
+                        "timeSpan": "31 Aug, 2013"
+                    },
+                    {
+                        "id": 2,
+                        "title": "Senior Marketing",
+                        "info": "Manuring Technology Company",
+                        "timeSpan": "12 Dec 2018"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "activeClass": "",
+        "memberThumb": "9.jpg",
+        "memberThumb2": "9.jpg",
+        "designation": "Product Manager",
+        "name": "Daniyel Joe",
+        "email": "daniel@digital.com",
+        "phone": "44-20-7328-4499",
+        "skillProgress": [
+            {
+                "id": 1,
+                "title": "Programming Language",
+                "end": 88
+            },
+            {
+                "id": 2,
+                "title": "Backend Development",
+                "end": 95
+            },
+            {
+                "id": 3,
+                "title": "Product Design",
+                "end": 80
+            }
+        ],
+        "memberData": [
+            {
+                "id": 1,
+                "listTitle": "Education",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Residential College",
+                        "info": "BA Honours - Biology",
+                        "timeSpan": "2004 - 2008"
+                    },
+                    {
+                        "id": 2,
+                        "title": "University of Iowa",
+                        "info": "Master's degree - Macroeconomics",
+                        "timeSpan": "2009 - 2012"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "listTitle": "Experience",
+                "memberInfo": [
+                    {
+                        "id": 1,
+                        "title": "Product Manager",
+                        "info": "Samsung Bangladesh",
+                        "timeSpan": "31 Aug, 2013"
+                    },
+                    {
+                        "id": 2,
+                        "title": "Senior Marketing",
+                        "info": "Manuring Technology Company",
+                        "timeSpan": "12 Dec 2018"
+                    }
+                ]
+            }
+        ]
+    }
+]

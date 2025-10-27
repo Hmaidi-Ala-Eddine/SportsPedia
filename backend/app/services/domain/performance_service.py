@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict, Any
 from app.services.fuseki_client import fuseki_client
 from app.utils.json_converter import sparql_results_to_list, extract_id_from_uri
+from app.models.domain.performance import PerformanceCreate, PerformanceUpdate
+from app.services.crud_helper import SPARQLCRUDHelper
 import logging
 
 logger = logging.getLogger(__name__)
@@ -132,6 +134,45 @@ class PerformanceService:
             
         except Exception as e:
             logger.error(f"Error getting statistics for {entity_type} {entity_id}: {str(e)}")
+            raise
+    
+    async def create_performance(self, perf_data: PerformanceCreate) -> Dict[str, Any]:
+        """Create a new performance/record."""
+        data_dict = perf_data.dict(exclude={'id'}, exclude_none=True)
+        insert_pattern = SPARQLCRUDHelper.build_insert_query(perf_data.id, "Performance", data_dict)
+        query = f"{self.client.get_prefixes()}\nINSERT DATA {{ {insert_pattern} . }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Created performance: {perf_data.id}")
+            return {"id": perf_data.id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error creating performance: {str(e)}")
+            raise
+    
+    async def update_performance(self, perf_id: str, perf_data: PerformanceUpdate) -> Optional[Dict[str, Any]]:
+        """Update an existing performance/record."""
+        data_dict = perf_data.dict(exclude_none=True)
+        if not data_dict:
+            return {"id": perf_id}
+        delete_patterns, insert_patterns = SPARQLCRUDHelper.build_update_patterns(perf_id, data_dict)
+        query = f"{self.client.get_prefixes()}\nDELETE {{ {' '.join(delete_patterns)} }}\nINSERT {{ {' '.join(insert_patterns)} }}\nWHERE {{ {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'} }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Updated performance: {perf_id}")
+            return {"id": perf_id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error updating performance {perf_id}: {str(e)}")
+            raise
+    
+    async def delete_performance(self, perf_id: str) -> bool:
+        """Delete a performance/record."""
+        query = f"{self.client.get_prefixes()}\n{SPARQLCRUDHelper.build_delete_query(perf_id)}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Deleted performance: {perf_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting performance {perf_id}: {str(e)}")
             raise
 
 

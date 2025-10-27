@@ -1,6 +1,39 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from app.models.base import TeamBase
+
+
+class TeamCreate(BaseModel):
+    """Model for creating a new team."""
+    id: str = Field(..., description="Unique team identifier")
+    teamName: str
+    foundedYear: Optional[int] = None
+    primaryColor: Optional[str] = None
+    secondaryColor: Optional[str] = None
+    squadSize: Optional[int] = None
+    budget: Optional[float] = None
+    currentRanking: Optional[int] = None
+    wins: Optional[int] = None
+    losses: Optional[int] = None
+    draws: Optional[int] = None
+    homeVenue: Optional[str] = None
+    competition: Optional[str] = None
+
+
+class TeamUpdate(BaseModel):
+    """Model for updating a team."""
+    teamName: Optional[str] = None
+    foundedYear: Optional[int] = None
+    primaryColor: Optional[str] = None
+    secondaryColor: Optional[str] = None
+    squadSize: Optional[int] = None
+    budget: Optional[float] = None
+    currentRanking: Optional[int] = None
+    wins: Optional[int] = None
+    losses: Optional[int] = None
+    draws: Optional[int] = None
+    homeVenue: Optional[str] = None
+    competition: Optional[str] = None
 
 
 class Team(TeamBase):

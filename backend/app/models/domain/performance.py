@@ -1,5 +1,27 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
+from datetime import date
+
+
+class PerformanceCreate(BaseModel):
+    """Model for creating a new performance/record."""
+    id: str = Field(..., description="Unique performance identifier")
+    performanceValue: float
+    unit: Optional[str] = None
+    recordDate: Optional[date] = None
+    recordType: Optional[str] = None
+    achievedBy: Optional[str] = None
+    recordedIn: Optional[str] = None
+
+
+class PerformanceUpdate(BaseModel):
+    """Model for updating a performance/record."""
+    performanceValue: Optional[float] = None
+    unit: Optional[str] = None
+    recordDate: Optional[date] = None
+    recordType: Optional[str] = None
+    achievedBy: Optional[str] = None
+    recordedIn: Optional[str] = None
 
 
 class Record(BaseModel):

@@ -1,6 +1,23 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from app.models.base import SportBase
+
+
+class SportCreate(BaseModel):
+    """Model for creating a new sport."""
+    id: str = Field(..., description="Unique sport identifier")
+    sportName: str
+    isOlympic: Optional[bool] = None
+    originCountry: Optional[str] = None
+    globalParticipants: Optional[int] = None
+
+
+class SportUpdate(BaseModel):
+    """Model for updating a sport."""
+    sportName: Optional[str] = None
+    isOlympic: Optional[bool] = None
+    originCountry: Optional[str] = None
+    globalParticipants: Optional[int] = None
 
 
 class Sport(SportBase):

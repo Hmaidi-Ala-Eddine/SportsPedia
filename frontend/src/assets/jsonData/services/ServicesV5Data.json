@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "title": "Brand Design",
+        "description": "Excellence projecting is devonshire dispatched remarkably on estimating. Side in so life past. Continue indulged speaking the was out horrible.",
+        "image": "24.png",
+        "features": ["Color palette", "Tagline", "Advertisement"]
+    },
+    {
+        "id": 2,
+        "title": "Digital Marketing",
+        "description": "Excellence projecting is devonshire dispatched remarkably on estimating. Side in so life past. Continue indulged speaking the was out horrible.",
+        "image": "25.png",
+        "features": ["Color palette", "Tagline", "Advertisement"]
+    },
+    {
+        "id": 3,
+        "title": "Business Strategy",
+        "description": "Excellence projecting is devonshire dispatched remarkably on estimating. Side in so life past. Continue indulged speaking the was out horrible.",
+        "image": "26.png",
+        "features": ["Color palette", "Tagline", "Advertisement"]
+    }
+]

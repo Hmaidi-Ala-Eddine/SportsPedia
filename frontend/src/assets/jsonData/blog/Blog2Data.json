@@ -1,0 +1,35 @@
+[
+    {
+        "id": 1,
+        "blogClass": "",
+        "thumb": "1.jpg",
+        "badge": "Finance",
+        "date": "12 August, 2024",
+        "author": "Md Sohag",
+        "authorIcon": "fas fa-user",
+        "title": "Considered imprudence of he friendship many variations boisterous.",
+        "text": "Easy mind life fact with see has bore ten. Parish any chatty can elinor direct for former. Up as meant widow equal."
+    },
+    {
+        "id": 2,
+        "blogClass": "mb-30",
+        "thumb": "2.jpg",
+        "badge": "Success",
+        "date": "13 August, 2024",
+        "author": "Md Sohag",
+        "authorIcon": "fas fa-user",
+        "title": "Perceived determine departure explained no forfeited he something an.",
+        "text": ""
+    },
+    {
+        "id": 3,
+        "blogClass": "",
+        "thumb": "3.jpg",
+        "badge": "Analysis",
+        "date": "14 August, 2024",
+        "author": "Md Sohag",
+        "authorIcon": "fas fa-user",
+        "title": "Discovery incommode earnestly commanded if.",
+        "text": "Easy mind life fact with see has bore ten. Parish any chatty can elinor direct for former. Up as meant widow equal."
+    }
+]

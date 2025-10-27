@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict, Any
 from app.services.fuseki_client import fuseki_client
 from app.utils.json_converter import sparql_results_to_list, extract_id_from_uri
+from app.models.domain.organization import OrganizationCreate, OrganizationUpdate
+from app.services.crud_helper import SPARQLCRUDHelper
 import logging
 
 logger = logging.getLogger(__name__)
@@ -98,6 +100,45 @@ class OrganizationService:
             
         except Exception as e:
             logger.error(f"Error getting federations: {str(e)}")
+            raise
+    
+    async def create_organization(self, org_data: OrganizationCreate) -> Dict[str, Any]:
+        """Create a new organization."""
+        data_dict = org_data.dict(exclude={'id'}, exclude_none=True)
+        insert_pattern = SPARQLCRUDHelper.build_insert_query(org_data.id, "Organization", data_dict)
+        query = f"{self.client.get_prefixes()}\nINSERT DATA {{ {insert_pattern} . }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Created organization: {org_data.id}")
+            return {"id": org_data.id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error creating organization: {str(e)}")
+            raise
+    
+    async def update_organization(self, org_id: str, org_data: OrganizationUpdate) -> Optional[Dict[str, Any]]:
+        """Update an existing organization."""
+        data_dict = org_data.dict(exclude_none=True)
+        if not data_dict:
+            return {"id": org_id}
+        delete_patterns, insert_patterns = SPARQLCRUDHelper.build_update_patterns(org_id, data_dict)
+        query = f"{self.client.get_prefixes()}\nDELETE {{ {' '.join(delete_patterns)} }}\nINSERT {{ {' '.join(insert_patterns)} }}\nWHERE {{ {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'} }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Updated organization: {org_id}")
+            return {"id": org_id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error updating organization {org_id}: {str(e)}")
+            raise
+    
+    async def delete_organization(self, org_id: str) -> bool:
+        """Delete an organization."""
+        query = f"{self.client.get_prefixes()}\n{SPARQLCRUDHelper.build_delete_query(org_id)}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Deleted organization: {org_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting organization {org_id}: {str(e)}")
             raise
 
 

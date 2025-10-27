@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, status
 from typing import List, Optional
 from app.services.domain.venue_service import venue_service
+from app.models.domain.venue import VenueCreate, VenueUpdate
 
 router = APIRouter(prefix="/venues", tags=["Venues"])
 
@@ -52,5 +53,38 @@ async def get_venue(venue_id: str):
         return venue
     except HTTPException:
         raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("", status_code=status.HTTP_201_CREATED)
+async def create_venue(venue: VenueCreate):
+    """Create a new venue."""
+    try:
+        return await venue_service.create_venue(venue)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/{venue_id}")
+async def update_venue(venue_id: str, venue: VenueUpdate):
+    """Update an existing venue."""
+    try:
+        updated = await venue_service.update_venue(venue_id, venue)
+        if not updated:
+            raise HTTPException(status_code=404, detail=f"Venue {venue_id} not found")
+        return updated
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/{venue_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_venue(venue_id: str):
+    """Delete a venue."""
+    try:
+        await venue_service.delete_venue(venue_id)
+        return None
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

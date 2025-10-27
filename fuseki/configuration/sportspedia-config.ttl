@@ -1,22 +1,19 @@
 @prefix fuseki:  <http://jena.apache.org/fuseki#> .
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix tdb2:    <http://jena.apache.org/2016/tdb#> .
 @prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix :        <#> .
+@prefix tdb2:    <http://jena.apache.org/2016/tdb#> .
 
-## SportsPedia Dataset Configuration
-
-:service_sportspedia rdf:type fuseki:Service ;
+## SportsPedia Service
+<#sportspedia> rdf:type fuseki:Service ;
     fuseki:name "sportspedia" ;
-    fuseki:serviceQuery "query" ;
+    fuseki:serviceQuery "query", "sparql" ;
     fuseki:serviceUpdate "update" ;
     fuseki:serviceUpload "upload" ;
     fuseki:serviceReadWriteGraphStore "data" ;
-    fuseki:dataset :sportspedia_dataset ;
-    .
+    fuseki:dataset <#sportspedia_dataset> .
 
-:sportspedia_dataset rdf:type tdb2:DatasetTDB2 ;
-    tdb2:location "data/sportspedia" ;
-    tdb2:unionDefaultGraph true ;
+## SportsPedia Dataset (TDB2 - Persistent)
+<#sportspedia_dataset> rdf:type tdb2:DatasetTDB2 ;
+    tdb2:location "C:\\Users\\kings\\OneDrive\\Desktop\\SportsPedia\\SportsPedia\\fuseki\\apache-jena-fuseki-5.6.0\\run\\databases\\sportspedia" ;
     .

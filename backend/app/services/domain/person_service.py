@@ -1,7 +1,11 @@
 from typing import List, Optional, Dict, Any
 from app.services.fuseki_client import fuseki_client
 from app.utils.json_converter import sparql_results_to_list, extract_id_from_uri
-from app.models.domain.person import Athlete, AthleteList, Coach
+from app.models.domain.person import (
+    Athlete, AthleteList, AthleteCreate, AthleteUpdate,
+    Coach, CoachList, CoachCreate, CoachUpdate,
+    Referee, RefereeList, RefereeCreate, RefereeUpdate
+)
 import logging
 
 logger = logging.getLogger(__name__)
@@ -136,6 +140,136 @@ class PersonService:
             
         except Exception as e:
             logger.error(f"Error getting athlete {athlete_id}: {str(e)}")
+            raise
+    
+    async def create_athlete(self, athlete_data: AthleteCreate) -> Athlete:
+        """Create a new athlete."""
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        INSERT DATA {{
+            sport:{athlete_data.id} a sport:Athlete ;
+                sport:firstName "{athlete_data.firstName}" ;
+                sport:lastName "{athlete_data.lastName}" """
+        
+        if athlete_data.birthDate:
+            query += f'; sport:birthDate "{athlete_data.birthDate}"^^xsd:date '
+        if athlete_data.nationality:
+            query += f'; sport:nationality "{athlete_data.nationality}" '
+        if athlete_data.height:
+            query += f'; sport:height "{athlete_data.height}"^^xsd:float '
+        if athlete_data.weight:
+            query += f'; sport:weight "{athlete_data.weight}"^^xsd:float '
+        if athlete_data.gender:
+            query += f'; sport:gender "{athlete_data.gender}" '
+        if athlete_data.jerseyNumber:
+            query += f'; sport:jerseyNumber "{athlete_data.jerseyNumber}"^^xsd:integer '
+        if athlete_data.position:
+            query += f'; sport:position "{athlete_data.position}" '
+        if athlete_data.marketValue:
+            query += f'; sport:marketValue "{athlete_data.marketValue}"^^xsd:float '
+        if athlete_data.salary:
+            query += f'; sport:salary "{athlete_data.salary}"^^xsd:float '
+        if athlete_data.goalsScored is not None:
+            query += f'; sport:goalsScored "{athlete_data.goalsScored}"^^xsd:integer '
+        if athlete_data.assists is not None:
+            query += f'; sport:assists "{athlete_data.assists}"^^xsd:integer '
+        if athlete_data.matchesPlayed is not None:
+            query += f'; sport:matchesPlayed "{athlete_data.matchesPlayed}"^^xsd:integer '
+        if athlete_data.isCaptain is not None:
+            query += f'; sport:isCaptain "{str(athlete_data.isCaptain).lower()}"^^xsd:boolean '
+        if athlete_data.team:
+            query += f'; sport:playsFor sport:{athlete_data.team} '
+        if athlete_data.sport:
+            query += f'; sport:practicesSport sport:{athlete_data.sport} '
+        
+        query += ".\n}"
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Created athlete: {athlete_data.id}")
+            return await self.get_athlete_by_id(athlete_data.id)
+        except Exception as e:
+            logger.error(f"Error creating athlete: {str(e)}")
+            raise
+    
+    async def update_athlete(self, athlete_id: str, athlete_data: AthleteUpdate) -> Optional[Athlete]:
+        """Update an existing athlete."""
+        # First check if athlete exists
+        existing = await self.get_athlete_by_id(athlete_id)
+        if not existing:
+            return None
+        
+        # Build DELETE/INSERT query for updates
+        delete_patterns = []
+        insert_patterns = []
+        
+        if athlete_data.firstName is not None:
+            delete_patterns.append(f"sport:{athlete_id} sport:firstName ?oldFirstName .")
+            insert_patterns.append(f'sport:{athlete_id} sport:firstName "{athlete_data.firstName}" .')
+        if athlete_data.lastName is not None:
+            delete_patterns.append(f"sport:{athlete_id} sport:lastName ?oldLastName .")
+            insert_patterns.append(f'sport:{athlete_id} sport:lastName "{athlete_data.lastName}" .')
+        if athlete_data.nationality is not None:
+            delete_patterns.append(f"sport:{athlete_id} sport:nationality ?oldNationality .")
+            insert_patterns.append(f'sport:{athlete_id} sport:nationality "{athlete_data.nationality}" .')
+        if athlete_data.position is not None:
+            delete_patterns.append(f"sport:{athlete_id} sport:position ?oldPosition .")
+            insert_patterns.append(f'sport:{athlete_id} sport:position "{athlete_data.position}" .')
+        if athlete_data.jerseyNumber is not None:
+            delete_patterns.append(f"sport:{athlete_id} sport:jerseyNumber ?oldJersey .")
+            insert_patterns.append(f'sport:{athlete_id} sport:jerseyNumber "{athlete_data.jerseyNumber}"^^xsd:integer .')
+        if athlete_data.goalsScored is not None:
+            delete_patterns.append(f"sport:{athlete_id} sport:goalsScored ?oldGoals .")
+            insert_patterns.append(f'sport:{athlete_id} sport:goalsScored "{athlete_data.goalsScored}"^^xsd:integer .')
+        if athlete_data.assists is not None:
+            delete_patterns.append(f"sport:{athlete_id} sport:assists ?oldAssists .")
+            insert_patterns.append(f'sport:{athlete_id} sport:assists "{athlete_data.assists}"^^xsd:integer .')
+        if athlete_data.marketValue is not None:
+            delete_patterns.append(f"sport:{athlete_id} sport:marketValue ?oldValue .")
+            insert_patterns.append(f'sport:{athlete_id} sport:marketValue "{athlete_data.marketValue}"^^xsd:float .')
+        
+        if not delete_patterns:
+            return existing
+        
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        DELETE {{
+            {' '.join(delete_patterns)}
+        }}
+        INSERT {{
+            {' '.join(insert_patterns)}
+        }}
+        WHERE {{
+            {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'}
+        }}
+        """
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Updated athlete: {athlete_id}")
+            return await self.get_athlete_by_id(athlete_id)
+        except Exception as e:
+            logger.error(f"Error updating athlete {athlete_id}: {str(e)}")
+            raise
+    
+    async def delete_athlete(self, athlete_id: str) -> bool:
+        """Delete an athlete."""
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        DELETE WHERE {{
+            sport:{athlete_id} ?p ?o .
+        }}
+        """
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Deleted athlete: {athlete_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting athlete {athlete_id}: {str(e)}")
             raise
 
 

@@ -1,5 +1,24 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
+
+
+class MediaCreate(BaseModel):
+    """Model for creating new media."""
+    id: str = Field(..., description="Unique media identifier")
+    mediaName: str
+    audience: Optional[int] = None
+    launchYear: Optional[int] = None
+    website: Optional[str] = None
+    covers: Optional[str] = None
+
+
+class MediaUpdate(BaseModel):
+    """Model for updating media."""
+    mediaName: Optional[str] = None
+    audience: Optional[int] = None
+    launchYear: Optional[int] = None
+    website: Optional[str] = None
+    covers: Optional[str] = None
 
 
 class Media(BaseModel):

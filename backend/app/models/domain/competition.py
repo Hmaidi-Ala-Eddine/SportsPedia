@@ -1,7 +1,30 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import date
 from app.models.base import CompetitionBase
+
+
+class CompetitionCreate(BaseModel):
+    """Model for creating a new competition."""
+    id: str = Field(..., description="Unique competition identifier")
+    competitionName: str
+    startDate: Optional[date] = None
+    endDate: Optional[date] = None
+    numberOfTeams: Optional[int] = None
+    prizeMoney: Optional[float] = None
+    season: Optional[str] = None
+    organizedBy: Optional[str] = None
+
+
+class CompetitionUpdate(BaseModel):
+    """Model for updating a competition."""
+    competitionName: Optional[str] = None
+    startDate: Optional[date] = None
+    endDate: Optional[date] = None
+    numberOfTeams: Optional[int] = None
+    prizeMoney: Optional[float] = None
+    season: Optional[str] = None
+    organizedBy: Optional[str] = None
 
 
 class Competition(CompetitionBase):

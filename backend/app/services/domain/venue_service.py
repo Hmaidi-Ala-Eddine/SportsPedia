@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict, Any
 from app.services.fuseki_client import fuseki_client
 from app.utils.json_converter import sparql_results_to_list, extract_id_from_uri
+from app.models.domain.venue import VenueCreate, VenueUpdate
+from app.services.crud_helper import SPARQLCRUDHelper
 import logging
 
 logger = logging.getLogger(__name__)
@@ -151,6 +153,45 @@ class VenueService:
             
         except Exception as e:
             logger.error(f"Error getting stadiums: {str(e)}")
+            raise
+    
+    async def create_venue(self, venue_data: VenueCreate) -> Dict[str, Any]:
+        """Create a new venue."""
+        data_dict = venue_data.dict(exclude={'id'}, exclude_none=True)
+        insert_pattern = SPARQLCRUDHelper.build_insert_query(venue_data.id, "Venue", data_dict)
+        query = f"{self.client.get_prefixes()}\nINSERT DATA {{ {insert_pattern} . }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Created venue: {venue_data.id}")
+            return {"id": venue_data.id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error creating venue: {str(e)}")
+            raise
+    
+    async def update_venue(self, venue_id: str, venue_data: VenueUpdate) -> Optional[Dict[str, Any]]:
+        """Update an existing venue."""
+        data_dict = venue_data.dict(exclude_none=True)
+        if not data_dict:
+            return {"id": venue_id}
+        delete_patterns, insert_patterns = SPARQLCRUDHelper.build_update_patterns(venue_id, data_dict)
+        query = f"{self.client.get_prefixes()}\nDELETE {{ {' '.join(delete_patterns)} }}\nINSERT {{ {' '.join(insert_patterns)} }}\nWHERE {{ {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'} }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Updated venue: {venue_id}")
+            return {"id": venue_id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error updating venue {venue_id}: {str(e)}")
+            raise
+    
+    async def delete_venue(self, venue_id: str) -> bool:
+        """Delete a venue."""
+        query = f"{self.client.get_prefixes()}\n{SPARQLCRUDHelper.build_delete_query(venue_id)}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Deleted venue: {venue_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting venue {venue_id}: {str(e)}")
             raise
 
 

@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict, Any
 from app.services.fuseki_client import fuseki_client
 from app.utils.json_converter import sparql_results_to_list, extract_id_from_uri
+from app.models.domain.sponsorship import SponsorshipCreate, SponsorshipUpdate
+from app.services.crud_helper import SPARQLCRUDHelper
 import logging
 
 logger = logging.getLogger(__name__)
@@ -148,6 +150,45 @@ class SponsorshipService:
             
         except Exception as e:
             logger.error(f"Error getting endorsements for athlete {athlete_id}: {str(e)}")
+            raise
+    
+    async def create_sponsorship(self, spon_data: SponsorshipCreate) -> Dict[str, Any]:
+        """Create a new sponsorship."""
+        data_dict = spon_data.dict(exclude={'id'}, exclude_none=True)
+        insert_pattern = SPARQLCRUDHelper.build_insert_query(spon_data.id, "Sponsorship", data_dict)
+        query = f"{self.client.get_prefixes()}\nINSERT DATA {{ {insert_pattern} . }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Created sponsorship: {spon_data.id}")
+            return {"id": spon_data.id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error creating sponsorship: {str(e)}")
+            raise
+    
+    async def update_sponsorship(self, spon_id: str, spon_data: SponsorshipUpdate) -> Optional[Dict[str, Any]]:
+        """Update an existing sponsorship."""
+        data_dict = spon_data.dict(exclude_none=True)
+        if not data_dict:
+            return {"id": spon_id}
+        delete_patterns, insert_patterns = SPARQLCRUDHelper.build_update_patterns(spon_id, data_dict)
+        query = f"{self.client.get_prefixes()}\nDELETE {{ {' '.join(delete_patterns)} }}\nINSERT {{ {' '.join(insert_patterns)} }}\nWHERE {{ {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'} }}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Updated sponsorship: {spon_id}")
+            return {"id": spon_id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error updating sponsorship {spon_id}: {str(e)}")
+            raise
+    
+    async def delete_sponsorship(self, spon_id: str) -> bool:
+        """Delete a sponsorship."""
+        query = f"{self.client.get_prefixes()}\n{SPARQLCRUDHelper.build_delete_query(spon_id)}"
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Deleted sponsorship: {spon_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting sponsorship {spon_id}: {str(e)}")
             raise
 
 

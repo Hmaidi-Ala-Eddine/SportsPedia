@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "icon": "5.png",
+        "titleFirst": "Advanced Business",
+        "titleLast": "Intelligence",
+        "text": "Seeing rather her you not esteem men settle genius excuse. Deal say over you age devonshire Comparison new ham melancholy son themselves instrument out reasonably.",
+        "counts": "01"
+    },
+    {
+        "id": 2,
+        "icon": "6.png",
+        "titleFirst": "Business Research",
+        "titleLast": "And Development",
+        "text": "Seeing rather her you not esteem men settle genius excuse. Deal say over you age devonshire Comparison new ham melancholy son themselves instrument out reasonably.",
+        "counts": "02"
+    },
+    {
+        "id": 3,
+        "icon": "7.png",
+        "titleFirst": "Digital Project",
+        "titleLast": "Management System",
+        "text": "Seeing rather her you not esteem men settle genius excuse. Deal say over you age devonshire Comparison new ham melancholy son themselves instrument out reasonably.",
+        "counts": "03"
+    }
+]

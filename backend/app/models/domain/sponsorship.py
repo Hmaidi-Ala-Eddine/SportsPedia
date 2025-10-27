@@ -1,5 +1,26 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
+
+
+class SponsorshipCreate(BaseModel):
+    """Model for creating a new sponsorship."""
+    id: str = Field(..., description="Unique sponsorship identifier")
+    sponsorName: str
+    dealValue: Optional[float] = None
+    contractDuration: Optional[int] = None
+    industry: Optional[str] = None
+    sponsors: Optional[str] = None
+    endorses: Optional[str] = None
+
+
+class SponsorshipUpdate(BaseModel):
+    """Model for updating a sponsorship."""
+    sponsorName: Optional[str] = None
+    dealValue: Optional[float] = None
+    contractDuration: Optional[int] = None
+    industry: Optional[str] = None
+    sponsors: Optional[str] = None
+    endorses: Optional[str] = None
 
 
 class Sponsorship(BaseModel):

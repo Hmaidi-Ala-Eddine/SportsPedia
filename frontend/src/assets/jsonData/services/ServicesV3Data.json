@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "title": "Analytic Solutions",
+        "description": "Seeing rather her you not esteem men settle genius excuse. Deal say over you age from. Comparison new ham melancholy son themselves the perfect connections.",
+        "image": "16.png",
+        "tags": ["Management", "Backup"]
+    },
+    {
+        "id": 2,
+        "title": "Risk Management",
+        "description": "Regular rather her you not esteem men settle genius excuse. Deal say over you age from. Comparison new ham melancholy son themselves the perfect connections.",
+        "image": "17.png",
+        "tags": ["Hardware", "Error"]
+    },
+    {
+        "id": 3,
+        "title": "Firewall Advance",
+        "description": "Patient rather her you not esteem men settle genius excuse. Deal say over you age from. Comparison new ham melancholy son themselves the perfect connections.",
+        "image": "18.png",
+        "tags": ["Network", "Firewall"]
+    }
+]

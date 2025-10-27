@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict, Any
 from app.services.fuseki_client import fuseki_client
 from app.utils.json_converter import sparql_results_to_list, extract_id_from_uri
+from app.models.domain.equipment import EquipmentCreate, EquipmentUpdate
+from app.services.crud_helper import SPARQLCRUDHelper
 import logging
 
 logger = logging.getLogger(__name__)
@@ -97,6 +99,76 @@ class EquipmentService:
             
         except Exception as e:
             logger.error(f"Error getting equipment for sport {sport_id}: {str(e)}")
+            raise
+    
+    async def create_equipment(self, equip_data: EquipmentCreate) -> Dict[str, Any]:
+        """Create new equipment."""
+        data_dict = equip_data.dict(exclude={'id'}, exclude_none=True)
+        insert_pattern = SPARQLCRUDHelper.build_insert_query(
+            equip_data.id, "Equipment", data_dict
+        )
+        
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        INSERT DATA {{
+            {insert_pattern} .
+        }}
+        """
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Created equipment: {equip_data.id}")
+            return {"id": equip_data.id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error creating equipment: {str(e)}")
+            raise
+    
+    async def update_equipment(self, equip_id: str, equip_data: EquipmentUpdate) -> Optional[Dict[str, Any]]:
+        """Update existing equipment."""
+        data_dict = equip_data.dict(exclude_none=True)
+        if not data_dict:
+            return {"id": equip_id}
+        
+        delete_patterns, insert_patterns = SPARQLCRUDHelper.build_update_patterns(
+            equip_id, data_dict
+        )
+        
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        DELETE {{
+            {' '.join(delete_patterns)}
+        }}
+        INSERT {{
+            {' '.join(insert_patterns)}
+        }}
+        WHERE {{
+            {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'}
+        }}
+        """
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Updated equipment: {equip_id}")
+            return {"id": equip_id, **data_dict}
+        except Exception as e:
+            logger.error(f"Error updating equipment {equip_id}: {str(e)}")
+            raise
+    
+    async def delete_equipment(self, equip_id: str) -> bool:
+        """Delete equipment."""
+        query = f"""
+        {self.client.get_prefixes()}
+        {SPARQLCRUDHelper.build_delete_query(equip_id)}
+        """
+        
+        try:
+            self.client.execute_update(query)
+            logger.info(f"Deleted equipment: {equip_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting equipment {equip_id}: {str(e)}")
             raise
 
 

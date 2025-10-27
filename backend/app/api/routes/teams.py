@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, status
 from typing import List, Optional
 from app.services.domain.team_service import team_service
+from app.models.domain.team import TeamCreate, TeamUpdate
 
 router = APIRouter(prefix="/teams", tags=["Teams"])
 
@@ -54,5 +55,57 @@ async def get_team_roster(team_id: str):
             "athletes": roster,
             "total": len(roster)
         }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("", status_code=status.HTTP_201_CREATED)
+async def create_team(team: TeamCreate):
+    """
+    Create a new team.
+    
+    - **id**: Unique team identifier
+    - **teamName**: Team name (required)
+    - **Additional fields**: foundedYear, colors, budget, etc.
+    """
+    try:
+        return await team_service.create_team(team)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/{team_id}")
+async def update_team(team_id: str, team: TeamUpdate):
+    """
+    Update an existing team.
+    
+    - **team_id**: Unique team identifier
+    - **Request body**: Fields to update
+    """
+    try:
+        updated = await team_service.update_team(team_id, team)
+        if not updated:
+            raise HTTPException(status_code=404, detail=f"Team {team_id} not found")
+        return updated
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/{team_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_team(team_id: str):
+    """
+    Delete a team.
+    
+    - **team_id**: Unique team identifier
+    """
+    try:
+        success = await team_service.delete_team(team_id)
+        if not success:
+            raise HTTPException(status_code=404, detail=f"Team {team_id} not found")
+        return None
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

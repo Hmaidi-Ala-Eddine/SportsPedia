@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "mapIcon": "map.png",
+        "title": "Express Shipping Center",
+        "text": "70240 Avenue of the Moon MF Tower, East California"
+    },
+    {
+        "id": 2,
+        "mapIcon": "map.png",
+        "title": "Allstate Courier Systems",
+        "text": "70240 Avenue of the Moon MF Tower, East California"
+    },
+    {
+        "id": 3,
+        "mapIcon": "map.png",
+        "title": "Boston Car Transport",
+        "text": "70240 Avenue of the Moon MF Tower, East California"
+    },
+    {
+        "id": 4,
+        "mapIcon": "map.png",
+        "title": "Deputy Delivery Services",
+        "text": "70240 Avenue of the Moon MF Tower, East California"
+    },
+    {
+        "id": 5,
+        "mapIcon": "map.png",
+        "title": "Glover Logistics, Inc.",
+        "text": "70240 Avenue of the Moon MF Tower, East California"
+    },
+    {
+        "id": 6,
+        "mapIcon": "map.png",
+        "title": "Shipping Unleash",
+        "text": "70240 Avenue of the Moon MF Tower, East California"
+    }
+]
