@@ -1,0 +1,299 @@
+/* Authentication Form Styles */
+
+.login-form-area,
+.signup-form-area {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.profile-area {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+}
+
+.login-form-box,
+.signup-form-box,
+.profile-box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+    margin-bottom: 30px;
+}
+
+.form-header h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.form-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+.contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form .form-control {
+    height: 50px;
+    padding: 0 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.contact-form .form-control:focus {
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+}
+
+.contact-form .btn-submit,
+.btn.btn-primary,
+.btn.btn-success,
+.btn.btn-danger,
+.btn.btn-secondary {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.contact-form .btn-submit,
+.btn.btn-primary {
+    background: #ff6b35;
+    color: #fff;
+}
+
+.contact-form .btn-submit:hover,
+.btn.btn-primary:hover {
+    background: #e55a2b;
+    transform: translateY(-2px);
+}
+
+.btn.btn-success {
+    background: #28a745;
+    color: #fff;
+}
+
+.btn.btn-success:hover {
+    background: #218838;
+}
+
+.btn.btn-danger {
+    background: #dc3545;
+    color: #fff;
+}
+
+.btn.btn-danger:hover {
+    background: #c82333;
+}
+
+.btn.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+.btn.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.contact-form .btn-submit:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.text-primary {
+    color: #ff6b35 !important;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.text-primary:hover {
+    color: #e55a2b !important;
+    text-decoration: underline;
+}
+
+/* Profile Styles */
+
+.profile-header {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    margin-bottom: 20px;
+    color: #ff6b35;
+}
+
+.profile-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 5px;
+}
+
+.profile-details {
+    padding: 20px 0;
+}
+
+.detail-item {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.detail-item label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.detail-item label i {
+    margin-right: 8px;
+    color: #ff6b35;
+}
+
+.detail-item p {
+    margin: 0;
+    color: #666;
+    font-size: 16px;
+}
+
+.badge {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-success {
+    background: #28a745;
+    color: #fff;
+}
+
+.badge-danger {
+    background: #dc3545;
+    color: #fff;
+}
+
+.profile-actions {
+    margin-top: 30px;
+}
+
+.profile-actions .btn {
+    width: auto;
+    min-width: 150px;
+    margin: 5px;
+}
+
+/* Form Labels */
+.contact-form label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* Profile Circle in Navbar */
+.profile-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #ff6b35;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+}
+
+.profile-circle:hover {
+    background: #e55a2b;
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.5);
+    color: #fff;
+}
+
+.profile-circle i {
+    font-size: 18px;
+}
+
+.login-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background: #ff6b35;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+}
+
+.login-btn:hover {
+    background: #e55a2b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.5);
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .login-form-box,
+    .signup-form-box,
+    .profile-box {
+        padding: 30px 20px;
+    }
+
+    .form-header h2,
+    .profile-header h2 {
+        font-size: 24px;
+    }
+
+    .profile-actions .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .btn.btn-primary.me-3,
+    .btn.btn-success.me-3 {
+        margin-right: 0 !important;
+        margin-bottom: 10px;
+    }
+
+    .profile-circle-wrapper {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        margin-left: 15px;
+        display: inline-block;
+    }
+}

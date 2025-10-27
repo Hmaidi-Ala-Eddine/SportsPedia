@@ -12,7 +12,9 @@ from app.api.routes import (
     performance,
     media,
     sponsorships,
-    search
+    search,
+    auth,
+    users
 )
 import logging
 
@@ -38,7 +40,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers - All 10 domain classes + search
+# Include routers - All 10 domain classes + search + auth
 app.include_router(persons.router, prefix="/api")
 app.include_router(teams.router, prefix="/api")
 app.include_router(competitions.router, prefix="/api")
@@ -50,6 +52,8 @@ app.include_router(performance.router, prefix="/api")
 app.include_router(media.router, prefix="/api")
 app.include_router(sponsorships.router, prefix="/api")
 app.include_router(search.router, prefix="/api")
+app.include_router(auth.router, prefix="/api")
+app.include_router(users.router, prefix="/api")
 
 # Root endpoint
 @app.get("/")

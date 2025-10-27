@@ -34,6 +34,10 @@ import BlogSinglePage from './pages/blogPages/BlogSinglePage';
 import BlogSingleWithSidebarPage from './pages/blogPages/BlogSingleWithSidebarPage';
 import NotFoundPage from './pages/innerPages/NotFoundPage';
 
+import LoginPage from './pages/authPages/LoginPage';
+import SignupPage from './pages/authPages/SignupPage';
+import ProfilePage from './pages/authPages/ProfilePage';
+
 const Routers = () => {
     return (
         <>
@@ -74,6 +78,10 @@ const Routers = () => {
                 <Route path='/blog-3-column?:page?' element={<Blog3ColumnPage />}></Route>
                 <Route path='/blog-single/:id' element={<BlogSinglePage />}></Route>
                 <Route path='/blog-single-with-sidebar/:id' element={<BlogSingleWithSidebarPage />}></Route>
+
+                <Route path='/login' element={<LoginPage />}></Route>
+                <Route path='/signup' element={<SignupPage />}></Route>
+                <Route path='/profile' element={<ProfilePage />}></Route>
 
                 <Route path='*' element={<NotFoundPage />}></Route>
             </Routes>

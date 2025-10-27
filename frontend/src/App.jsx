@@ -15,6 +15,7 @@ import '../src/assets/css/validnavs.css';
 import '../src/assets/css/helper.css';
 import '../src/assets/css/unit-test.css';
 import '../src/assets/css/style.css';
+import '../src/assets/css/auth.css';
 
 import { ToastContainer } from 'react-toastify';
 import Routers from './Routers';

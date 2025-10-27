@@ -4,12 +4,19 @@ import useStickyMenu from '@/hooks/useStickyMenu';
 import useSubMenuToggle from '@/hooks/useSubMenuToggle';
 import useSidebarMenu from '@/hooks/useSidebarMenu';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import authService from '../../services/authService';
 
 const HeaderV5 = () => {
 
     const isMenuSticky = useStickyMenu();
     const toggleSubMenu = useSubMenuToggle();
     const { isOpen, openMenu, closeMenu } = useSidebarMenu();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        setIsAuthenticated(authService.isAuthenticated());
+    }, []);
 
     return (
         <>
@@ -33,11 +40,15 @@ const HeaderV5 = () => {
                         </div>
                         <div className="attr-right">
                             <div className="attr-nav">
-                                <ul>
-                                    <li className="button dark">
-                                        <Link to="/contact-us">Get consultant</Link>
-                                    </li>
-                                </ul>
+                                {isAuthenticated ? (
+                                    <Link to="/profile" className="profile-circle">
+                                        <i className="fa fa-user"></i>
+                                    </Link>
+                                ) : (
+                                    <Link to="/login" className="login-btn">
+                                        Login
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -28,3 +28,13 @@ pytest-asyncio==0.24.0
 
 # Development
 black==24.10.0
+
+# Database (MySQL)
+pymysql==1.1.1
+sqlalchemy==2.0.36
+cryptography==44.0.0
+
+# Authentication
+passlib==1.7.4
+bcrypt==4.2.1
+python-jose[cryptography]==3.3.0
