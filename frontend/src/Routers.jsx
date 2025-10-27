@@ -14,6 +14,7 @@ import TeamDetailsPage from './pages/innerPages/TeamDetailsPage';
 import PricingPage from './pages/innerPages/PricingPage';
 import FaqPage from './pages/innerPages/FaqPage';
 import ContactUsPage from './pages/innerPages/ContactUsPage';
+import ExplorePage from './pages/innerPages/ExplorePage';
 
 import ProjectPage from './pages/projectPages/ProjectPage';
 import Project2Page from './pages/projectPages/Project2Page';
@@ -51,6 +52,7 @@ const Routers = () => {
                 <Route path='/pricing' element={<PricingPage />}></Route>
                 <Route path='/faq' element={<FaqPage />}></Route>
                 <Route path='/contact-us' element={<ContactUsPage />}></Route>
+                <Route path='/explore' element={<ExplorePage />}></Route>
 
                 <Route path='/project' element={<ProjectPage />}></Route>
                 <Route path='/project-2' element={<Project2Page />}></Route>
