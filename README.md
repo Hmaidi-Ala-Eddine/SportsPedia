@@ -10,13 +10,38 @@ A comprehensive sports encyclopedia powered by semantic web technology.
 
 ## Prerequisites
 
+### Docker (Recommended)
+- Docker Desktop
+- Docker Compose
+
+### Manual Setup
 - Python 3.8+
 - Node.js 18+
+- MySQL 8.0+
 - Apache Jena Fuseki (optional, for full functionality)
 
 ## Quick Start
 
-### Option 1: Start Everything (Recommended)
+### Option 1: Docker (Recommended)
+
+Run the entire application stack with Docker:
+
+```powershell
+# Start all services
+docker-compose up -d
+
+# Initialize database
+docker-compose exec backend python init_db.py
+
+# View logs
+docker-compose logs -f
+```
+
+Access the application at http://localhost:5173
+
+For detailed Docker instructions, see [DOCKER_SETUP.md](DOCKER_SETUP.md)
+
+### Option 2: Start Everything (PowerShell)
 
 Run both frontend and backend servers with a single command:
 
@@ -26,7 +51,7 @@ Run both frontend and backend servers with a single command:
 
 This will open two PowerShell windows - one for the backend and one for the frontend.
 
-### Option 2: Start Servers Individually
+### Option 3: Start Servers Individually
 
 **Backend:**
 ```powershell
