@@ -3,7 +3,24 @@ from typing import List, Optional
 from app.services.domain.performance_service import performance_service
 from app.models.domain.performance import PerformanceCreate, PerformanceUpdate
 
-router = APIRouter(prefix="/performance", tags=["Performance"])
+router = APIRouter(prefix="/performances", tags=["Performance"])
+
+
+@router.get("/achievements")
+async def get_achievements(
+    limit: int = Query(default=100, ge=1, le=500),
+    offset: int = Query(default=0, ge=0)
+):
+    """
+    Get all achievements.
+    
+    - **limit**: Maximum number of results (1-500)
+    - **offset**: Number of results to skip
+    """
+    try:
+        return await performance_service.get_all_achievements(limit=limit, offset=offset)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/records")

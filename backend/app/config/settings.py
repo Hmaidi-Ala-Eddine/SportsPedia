@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     # Ontology
     ONTOLOGY_NAMESPACE: str = "http://example.org/sports-ontology#"
     
+    # Ollama Configuration
+    OLLAMA_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3.2:3b"
+    
     # API Configuration
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000

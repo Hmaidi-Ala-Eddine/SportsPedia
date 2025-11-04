@@ -1,0 +1,849 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import LayoutV1 from '@/components/layouts/LayoutV1';
+import { toast } from 'react-toastify';
+import authService from '@/services/authService';
+
+// Dropdown options
+const POSITIONS = ['Forward', 'Midfielder', 'Defender', 'Goalkeeper', 'Striker', 'Winger', 'Center', 'Point Guard', 'Shooting Guard', 'Small Forward', 'Power Forward'];
+const COACHING_STYLES = ['Attacking', 'Defensive', 'Possession-based', 'Counter-attacking', 'High-pressing', 'Tactical', 'Motivational'];
+const ACHIEVEMENT_TYPES = ['Ballon d\'Or', 'Champions League', 'World Cup', 'Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Golden Boot', 'MVP', 'NBA Championship', 'NBA Finals MVP'];
+const RECORD_TYPES = ['Most Goals', 'Most Assists', 'Most Appearances', 'Most Titles', 'Fastest Goal', 'Longest Goal', 'Most Goals in Season', 'Most Points', 'Most Championships'];
+
+const AdminPage = () => {
+    const navigate = useNavigate();
+    const [activeTab, setActiveTab] = useState('athletes');
+    const [loading, setLoading] = useState(false);
+    
+    // Data states
+    const [athletes, setAthletes] = useState([]);
+    const [coaches, setCoaches] = useState([]);
+    const [achievements, setAchievements] = useState([]);
+    const [records, setRecords] = useState([]);
+    const [referees, setReferees] = useState([]);
+    
+    // Form states
+    const [showForm, setShowForm] = useState(false);
+    const [editingItem, setEditingItem] = useState(null);
+    const [formData, setFormData] = useState({});
+    
+    // AI Search states
+    const [aiSearchQuery, setAiSearchQuery] = useState('');
+    const [aiSearchActive, setAiSearchActive] = useState(false);
+    const [sparqlQuery, setSparqlQuery] = useState('');
+    const [showSparql, setShowSparql] = useState(false);
+    const [searchResults, setSearchResults] = useState([]);
+
+    useEffect(() => {
+        checkAdminAccess();
+        if (!aiSearchActive) {
+            fetchData();
+        }
+    }, [activeTab, aiSearchActive]);
+
+    const checkAdminAccess = async () => {
+        try {
+            const profile = await authService.getProfile();
+            if (!profile.is_admin) {
+                toast.error('Admin access required');
+                navigate('/');
+            }
+        } catch (error) {
+            navigate('/login');
+        }
+    };
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            if (activeTab === 'athletes') {
+                const res = await fetch('http://localhost:8000/api/persons/athletes?limit=100');
+                const data = await res.json();
+                setAthletes(data.athletes || []);
+            } else if (activeTab === 'coaches') {
+                const res = await fetch('http://localhost:8000/api/persons/coaches?limit=100');
+                const data = await res.json();
+                setCoaches(data.coaches || []);
+            } else if (activeTab === 'achievements') {
+                const res = await fetch('http://localhost:8000/api/performances/achievements?limit=100');
+                const data = await res.json();
+                setAchievements(data.achievements || []);
+            } else if (activeTab === 'records') {
+                const res = await fetch('http://localhost:8000/api/performances/records?limit=100');
+                const data = await res.json();
+                setRecords(data.records || []);
+            } else if (activeTab === 'referees') {
+                const res = await fetch('http://localhost:8000/api/persons/referees?limit=100');
+                const data = await res.json();
+                setReferees(data.referees || []);
+            }
+        } catch (error) {
+            toast.error('Error fetching data');
+        }
+        setLoading(false);
+    };
+
+    const handleCreate = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const endpoint = `http://localhost:8000/api/admin/${activeTab}`;
+            
+            // Clean and prepare data
+            const cleanData = {};
+            Object.keys(formData).forEach(key => {
+                const value = formData[key];
+                if (value !== null && value !== undefined && value !== '') {
+                    // Convert number fields to integers
+                    if (['jerseyNumber', 'goalsScored', 'assists', 'matchesPlayed', 'experienceYears', 'titlesWon', 'year', 'matchesOfficiated'].includes(key)) {
+                        cleanData[key] = parseInt(value);
+                    } else {
+                        cleanData[key] = value;
+                    }
+                }
+            });
+            
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(cleanData)
+            });
+            
+            if (res.ok) {
+                toast.success('Created successfully!');
+                setShowForm(false);
+                setFormData({});
+                fetchData();
+            } else {
+                const errorData = await res.json().catch(() => ({}));
+                toast.error(errorData.detail || 'Creation failed');
+                console.error('Create error:', errorData);
+            }
+        } catch (error) {
+            toast.error('Error creating item: ' + error.message);
+            console.error('Create error:', error);
+        }
+        setLoading(false);
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const endpoint = `http://localhost:8000/api/admin/${activeTab}/${editingItem.id}`;
+            
+            // Clean and prepare data
+            const cleanData = {};
+            Object.keys(formData).forEach(key => {
+                const value = formData[key];
+                if (value !== null && value !== undefined && value !== '') {
+                    // Convert number fields to integers
+                    if (['jerseyNumber', 'goalsScored', 'assists', 'matchesPlayed', 'experienceYears', 'titlesWon', 'year', 'matchesOfficiated'].includes(key)) {
+                        cleanData[key] = parseInt(value);
+                    } else {
+                        cleanData[key] = value;
+                    }
+                }
+            });
+            
+            const res = await fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(cleanData)
+            });
+            
+            if (res.ok) {
+                toast.success('Updated successfully!');
+                setEditingItem(null);
+                setFormData({});
+                setShowForm(false);
+                fetchData();
+            } else {
+                const errorData = await res.json().catch(() => ({}));
+                toast.error(errorData.detail || 'Update failed');
+                console.error('Update error:', errorData);
+            }
+        } catch (error) {
+            toast.error('Error updating item: ' + error.message);
+            console.error('Update error:', error);
+        }
+        setLoading(false);
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this item? This will modify the RDF file!')) return;
+        
+        setLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const endpoint = `http://localhost:8000/api/admin/${activeTab}/${id}`;
+            const res = await fetch(endpoint, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (res.ok) {
+                toast.success('Deleted successfully!');
+                if (aiSearchActive) {
+                    handleAISearch();
+                } else {
+                    fetchData();
+                }
+            } else {
+                toast.error('Delete failed');
+            }
+        } catch (error) {
+            toast.error('Error deleting item');
+        }
+        setLoading(false);
+    };
+
+    const handleAISearch = async (e) => {
+        if (e) e.preventDefault();
+        
+        if (!aiSearchQuery.trim()) {
+            setAiSearchActive(false);
+            setSearchResults([]);
+            setSparqlQuery('');
+            fetchData();
+            return;
+        }
+
+        setLoading(true);
+        setAiSearchActive(true);
+        try {
+            const response = await fetch(`http://localhost:8000/api/nl-search/search?q=${encodeURIComponent(aiSearchQuery)}`);
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                throw new Error(errorData.detail || 'Search request failed');
+            }
+            
+            const data = await response.json();
+            console.log('AI Search Response:', data);
+            
+            setSparqlQuery(data.sparql_query || data.sparql || '');
+            
+            // Parse results and categorize by type
+            const results = data.results || [];
+            console.log('Raw results:', results);
+            
+            const categorizedResults = {
+                athletes: [],
+                coaches: [],
+                achievements: [],
+                records: [],
+                referees: []
+            };
+            
+            results.forEach(result => {
+                console.log('Processing result:', result);
+                
+                // Athletes
+                if (result.type === 'Athlete' || result.athlete || 
+                    (result.firstName && result.lastName && (result.position || result.goalsScored !== undefined))) {
+                    categorizedResults.athletes.push({
+                        id: result.id,
+                        firstName: result.firstName,
+                        lastName: result.lastName,
+                        nationality: result.nationality,
+                        position: result.position,
+                        goalsScored: result.goalsScored || result.goals || 0
+                    });
+                }
+                // Coaches  
+                else if (result.type === 'Coach' || result.coach ||
+                    (result.firstName && result.lastName && (result.experienceYears !== undefined || result.titlesWon !== undefined))) {
+                    categorizedResults.coaches.push({
+                        id: result.id,
+                        firstName: result.firstName,
+                        lastName: result.lastName,
+                        nationality: result.nationality,
+                        experienceYears: result.experienceYears || result.yearsExperience || 0,
+                        titlesWon: result.titlesWon || 0
+                    });
+                }
+                // Achievements
+                else if (result.type === 'Achievement' || result.achievement || result.achievementType) {
+                    categorizedResults.achievements.push({
+                        id: result.id,
+                        achievementType: result.achievementType,
+                        year: result.year,
+                        achievedBy: result.athleteName || result.fullName || '-'
+                    });
+                }
+                // Records
+                else if (result.type === 'Record' || result.record || result.recordType) {
+                    categorizedResults.records.push({
+                        id: result.id,
+                        recordType: result.recordType,
+                        recordValue: result.recordValue || result.value || result.performanceValue,
+                        setBy: result.athleteName || result.fullName || '-'
+                    });
+                }
+                // Referees
+                else if (result.type === 'Referee' || result.referee || result.matchesOfficiated !== undefined) {
+                    categorizedResults.referees.push({
+                        id: result.id,
+                        firstName: result.firstName,
+                        lastName: result.lastName,
+                        nationality: result.nationality,
+                        experienceYears: result.experienceYears || 0,
+                        matchesOfficiated: result.matchesOfficiated || 0
+                    });
+                }
+            });
+            
+            console.log('Categorized results:', categorizedResults);
+            setSearchResults(categorizedResults);
+            
+            const totalFound = results.length;
+            if (totalFound > 0) {
+                toast.success(`Found ${totalFound} result${totalFound > 1 ? 's' : ''}`);
+            } else {
+                toast.info('No results found for your query');
+            }
+        } catch (error) {
+            console.error('AI search error:', error);
+            toast.error(`AI search failed: ${error.message}`);
+            setAiSearchActive(false);
+        }
+        setLoading(false);
+    };
+
+    const openCreateForm = () => {
+        setFormData({});
+        setEditingItem(null);
+        setShowForm(true);
+    };
+
+    const openEditForm = (item) => {
+        // Map athleteId to achievedBy/setBy for achievements and records
+        const mappedData = { ...item };
+        
+        if (activeTab === 'achievements' && item.athleteId) {
+            mappedData.achievedBy = item.athleteId;
+        }
+        
+        if (activeTab === 'records' && item.athleteId) {
+            mappedData.setBy = item.athleteId;
+        }
+        
+        setFormData(mappedData);
+        setEditingItem(item);
+        setShowForm(true);
+    };
+
+    const tabs = [
+        { id: 'athletes', label: '🏃 Athletes', icon: 'fa-running', color: '#2563eb' },
+        { id: 'coaches', label: '📋 Coaches', icon: 'fa-clipboard', color: '#16a34a' },
+        { id: 'achievements', label: '🏆 Achievements', icon: 'fa-trophy', color: '#f59e0b' },
+        { id: 'records', label: '🥇 Records', icon: 'fa-medal', color: '#a855f7' },
+        { id: 'referees', label: '🔷 Referees', icon: 'fa-whistle', color: '#ec4899' }
+    ];
+
+    const getCurrentData = () => {
+        if (aiSearchActive && searchResults) {
+            if (activeTab === 'athletes') return searchResults.athletes || [];
+            if (activeTab === 'coaches') return searchResults.coaches || [];
+            if (activeTab === 'achievements') return searchResults.achievements || [];
+            if (activeTab === 'records') return searchResults.records || [];
+            if (activeTab === 'referees') return searchResults.referees || [];
+        }
+        
+        if (activeTab === 'athletes') return athletes;
+        if (activeTab === 'coaches') return coaches;
+        if (activeTab === 'achievements') return achievements;
+        if (activeTab === 'records') return records;
+        if (activeTab === 'referees') return referees;
+        return [];
+    };
+
+    const renderForm = () => {
+        if (!showForm && !editingItem) return null;
+
+        const isEditing = !!editingItem;
+
+        return (
+            <div style={{ 
+                position: 'fixed', 
+                top: 0, 
+                left: 0, 
+                right: 0, 
+                bottom: 0, 
+                background: 'rgba(0,0,0,0.5)', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                zIndex: 1000,
+                padding: '20px'
+            }}>
+                <div style={{ 
+                    background: 'white', 
+                    borderRadius: '20px', 
+                    padding: '40px', 
+                    maxWidth: '600px', 
+                    width: '100%', 
+                    maxHeight: '90vh', 
+                    overflowY: 'auto' 
+                }}>
+                    <h2 style={{ marginBottom: '30px', color: '#1e293b' }}>
+                        {isEditing ? 'Edit' : 'Create'} {activeTab.slice(0, -1)}
+                    </h2>
+                    <form onSubmit={isEditing ? handleUpdate : handleCreate}>
+                        {activeTab === 'athletes' && (
+                            <>
+                                <FormField label="First Name *" name="firstName" value={formData.firstName || ''} onChange={(e) => setFormData({...formData, firstName: e.target.value})} required />
+                                <FormField label="Last Name *" name="lastName" value={formData.lastName || ''} onChange={(e) => setFormData({...formData, lastName: e.target.value})} required />
+                                <FormField label="Birth Date" name="birthDate" type="date" value={formData.birthDate || ''} onChange={(e) => setFormData({...formData, birthDate: e.target.value})} />
+                                <FormField label="Nationality" name="nationality" value={formData.nationality || ''} onChange={(e) => setFormData({...formData, nationality: e.target.value})} />
+                                <SelectField label="Position" name="position" value={formData.position || ''} onChange={(e) => setFormData({...formData, position: e.target.value})} options={POSITIONS} />
+                                <FormField label="Jersey Number" name="jerseyNumber" type="number" value={formData.jerseyNumber || ''} onChange={(e) => setFormData({...formData, jerseyNumber: e.target.value})} />
+                                <FormField label="Goals Scored" name="goalsScored" type="number" value={formData.goalsScored || ''} onChange={(e) => setFormData({...formData, goalsScored: e.target.value})} />
+                                <FormField label="Assists" name="assists" type="number" value={formData.assists || ''} onChange={(e) => setFormData({...formData, assists: e.target.value})} />
+                                <FormField label="Matches Played" name="matchesPlayed" type="number" value={formData.matchesPlayed || ''} onChange={(e) => setFormData({...formData, matchesPlayed: e.target.value})} />
+                            </>
+                        )}
+
+                        {activeTab === 'coaches' && (
+                            <>
+                                <FormField label="First Name *" name="firstName" value={formData.firstName || ''} onChange={(e) => setFormData({...formData, firstName: e.target.value})} required />
+                                <FormField label="Last Name *" name="lastName" value={formData.lastName || ''} onChange={(e) => setFormData({...formData, lastName: e.target.value})} required />
+                                <FormField label="Birth Date" name="birthDate" type="date" value={formData.birthDate || ''} onChange={(e) => setFormData({...formData, birthDate: e.target.value})} />
+                                <FormField label="Nationality" name="nationality" value={formData.nationality || ''} onChange={(e) => setFormData({...formData, nationality: e.target.value})} />
+                                <FormField label="Experience Years" name="experienceYears" type="number" value={formData.experienceYears || ''} onChange={(e) => setFormData({...formData, experienceYears: e.target.value})} />
+                                <FormField label="Titles Won" name="titlesWon" type="number" value={formData.titlesWon || ''} onChange={(e) => setFormData({...formData, titlesWon: e.target.value})} />
+                                <SelectField label="Coaching Style" name="coachingStyle" value={formData.coachingStyle || ''} onChange={(e) => setFormData({...formData, coachingStyle: e.target.value})} options={COACHING_STYLES} />
+                            </>
+                        )}
+
+                        {activeTab === 'achievements' && (
+                            <>
+                                <SelectField label="Achievement Type *" name="achievementType" value={formData.achievementType || ''} onChange={(e) => setFormData({...formData, achievementType: e.target.value})} options={ACHIEVEMENT_TYPES} required />
+                                <FormField label="Year" name="year" type="number" value={formData.year || ''} onChange={(e) => setFormData({...formData, year: e.target.value})} />
+                                <FormField label="Performance Value" name="performanceValue" value={formData.performanceValue || ''} onChange={(e) => setFormData({...formData, performanceValue: e.target.value})} />
+                                <FormField label="Unit" name="unit" value={formData.unit || ''} onChange={(e) => setFormData({...formData, unit: e.target.value})} />
+                                <AthleteSelectField label="Achieved By (Athlete)" name="achievedBy" value={formData.achievedBy || ''} onChange={(e) => setFormData({...formData, achievedBy: e.target.value})} athletes={athletes} />
+                            </>
+                        )}
+
+                        {activeTab === 'records' && (
+                            <>
+                                <SelectField label="Record Type *" name="recordType" value={formData.recordType || ''} onChange={(e) => setFormData({...formData, recordType: e.target.value})} options={RECORD_TYPES} required />
+                                <FormField label="Record Value *" name="recordValue" value={formData.recordValue || ''} onChange={(e) => setFormData({...formData, recordValue: e.target.value})} required />
+                                <FormField label="Set On" name="setOn" type="date" value={formData.setOn || ''} onChange={(e) => setFormData({...formData, setOn: e.target.value})} />
+                                <AthleteSelectField label="Set By (Athlete)" name="setBy" value={formData.setBy || ''} onChange={(e) => setFormData({...formData, setBy: e.target.value})} athletes={athletes} />
+                            </>
+                        )}
+
+                        {activeTab === 'referees' && (
+                            <>
+                                <FormField label="First Name *" name="firstName" value={formData.firstName || ''} onChange={(e) => setFormData({...formData, firstName: e.target.value})} required />
+                                <FormField label="Last Name *" name="lastName" value={formData.lastName || ''} onChange={(e) => setFormData({...formData, lastName: e.target.value})} required />
+                                <FormField label="Birth Date" name="birthDate" type="date" value={formData.birthDate || ''} onChange={(e) => setFormData({...formData, birthDate: e.target.value})} />
+                                <FormField label="Nationality" name="nationality" value={formData.nationality || ''} onChange={(e) => setFormData({...formData, nationality: e.target.value})} />
+                                <FormField label="Experience Years" name="experienceYears" type="number" value={formData.experienceYears || ''} onChange={(e) => setFormData({...formData, experienceYears: e.target.value})} />
+                                <FormField label="Matches Officiated" name="matchesOfficiated" type="number" value={formData.matchesOfficiated || ''} onChange={(e) => setFormData({...formData, matchesOfficiated: e.target.value})} />
+                            </>
+                        )}
+
+                        <div style={{ marginTop: '30px', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                            <button type="button" onClick={() => { setShowForm(false); setEditingItem(null); setFormData({}); }} style={{ padding: '12px 24px', background: '#94a3b8', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: '600' }}>
+                                Cancel
+                            </button>
+                            <button type="submit" disabled={loading} style={{ padding: '12px 24px', background: loading ? '#94a3b8' : '#2563eb', color: 'white', border: 'none', borderRadius: '10px', cursor: loading ? 'not-allowed' : 'pointer', fontWeight: '600' }}>
+                                {loading ? 'Saving...' : isEditing ? 'Update' : 'Create'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <LayoutV1>
+            <div style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%)', minHeight: '100vh', paddingTop: '120px', paddingBottom: '60px' }}>
+                <div className="container">
+                    {/* Header */}
+                    <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                        <h1 style={{ fontSize: '48px', fontWeight: '900', color: '#1e293b', marginBottom: '15px' }}>
+                            <i className="fas fa-shield-alt" style={{ marginRight: '15px', color: '#2563eb' }}></i>
+                            Admin Panel
+                        </h1>
+                        <p style={{ fontSize: '18px', color: '#64748b', fontWeight: '500' }}>
+                            Manage your RDF knowledge graph in real-time
+                        </p>
+                    </div>
+
+                    {/* Tabs */}
+                    <div style={{ display: 'flex', gap: '15px', marginBottom: '30px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        {tabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                style={{
+                                    padding: '15px 30px',
+                                    background: activeTab === tab.id ? tab.color : 'white',
+                                    color: activeTab === tab.id ? 'white' : '#64748b',
+                                    border: `2px solid ${activeTab === tab.id ? tab.color : '#e2e8f0'}`,
+                                    borderRadius: '15px',
+                                    fontSize: '16px',
+                                    fontWeight: '700',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s',
+                                    boxShadow: activeTab === tab.id ? `0 8px 25px ${tab.color}40` : 'none'
+                                }}
+                            >
+                                <i className={`fas ${tab.icon}`} style={{ marginRight: '10px' }}></i>
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* AI Search */}
+                    <div style={{ marginBottom: '30px' }}>
+                        <div style={{ background: 'white', borderRadius: '20px', padding: '30px', boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}>
+                            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <i className="fas fa-robot" style={{ color: '#8b5cf6' }}></i>
+                                AI-Powered Search
+                                <span style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', marginLeft: '10px' }}>Search across all classes using Ollama</span>
+                            </h2>
+                            <form onSubmit={handleAISearch} style={{ display: 'flex', gap: '15px', marginBottom: showSparql ? '20px' : '0' }}>
+                                <input
+                                    type="text"
+                                    value={aiSearchQuery}
+                                    onChange={(e) => setAiSearchQuery(e.target.value)}
+                                    placeholder="Try: 'Spanish athletes', 'coaches with most titles', 'world cup winners', 'NBA records'..."
+                                    style={{
+                                        flex: 1,
+                                        padding: '15px 20px',
+                                        border: '2px solid #e2e8f0',
+                                        borderRadius: '12px',
+                                        fontSize: '15px',
+                                        outline: 'none',
+                                        transition: 'all 0.3s'
+                                    }}
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    style={{
+                                        padding: '15px 30px',
+                                        background: loading ? '#94a3b8' : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '12px',
+                                        fontSize: '16px',
+                                        fontWeight: '700',
+                                        cursor: loading ? 'not-allowed' : 'pointer',
+                                        boxShadow: '0 8px 25px rgba(139,92,246,0.3)',
+                                        transition: 'all 0.3s'
+                                    }}
+                                >
+                                    <i className="fas fa-search" style={{ marginRight: '10px' }}></i>
+                                    {loading ? 'Searching...' : 'Search'}
+                                </button>
+                                {sparqlQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowSparql(!showSparql)}
+                                        style={{
+                                            padding: '15px 30px',
+                                            background: showSparql ? '#3b82f6' : 'white',
+                                            color: showSparql ? 'white' : '#3b82f6',
+                                            border: '2px solid #3b82f6',
+                                            borderRadius: '12px',
+                                            fontSize: '16px',
+                                            fontWeight: '700',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.3s'
+                                        }}
+                                    >
+                                        <i className="fas fa-code" style={{ marginRight: '10px' }}></i>
+                                        {showSparql ? 'Hide' : 'Show'} SPARQL
+                                    </button>
+                                )}
+                            </form>
+                            
+                            {showSparql && sparqlQuery && (
+                                <div style={{
+                                    background: '#0f172a',
+                                    padding: '25px',
+                                    borderRadius: '15px',
+                                    marginTop: '20px',
+                                    maxHeight: '400px',
+                                    overflowY: 'auto',
+                                    border: '2px solid #1e40af',
+                                    boxShadow: '0 8px 30px rgba(30, 64, 175, 0.3)'
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', paddingBottom: '15px', borderBottom: '2px solid #1e40af' }}>
+                                        <span style={{ color: '#10b981', fontWeight: '800', fontSize: '16px', letterSpacing: '0.5px' }}>
+                                            <i className="fas fa-code" style={{ marginRight: '10px' }}></i>
+                                            Generated SPARQL Query
+                                        </span>
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(sparqlQuery);
+                                                toast.success('SPARQL copied to clipboard!');
+                                            }}
+                                            style={{
+                                                padding: '6px 14px',
+                                                background: '#1e40af',
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '8px',
+                                                fontSize: '12px',
+                                                fontWeight: '600',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.3s'
+                                            }}
+                                        >
+                                            <i className="fas fa-copy" style={{ marginRight: '6px' }}></i>
+                                            Copy
+                                        </button>
+                                    </div>
+                                    <pre style={{
+                                        color: '#000000',
+                                        fontSize: '14px',
+                                        lineHeight: '1.8',
+                                        margin: 0,
+                                        fontFamily: '"Fira Code", Monaco, Consolas, monospace',
+                                        whiteSpace: 'pre-wrap',
+                                        wordWrap: 'break-word',
+                                        fontWeight: '600',
+                                        background: 'white',
+                                        padding: '20px',
+                                        borderRadius: '10px'
+                                    }}>
+                                        {sparqlQuery}
+                                    </pre>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Create Button */}
+                    <div style={{ marginBottom: '30px', textAlign: 'right' }}>
+                        <button
+                            onClick={openCreateForm}
+                            style={{
+                                padding: '15px 30px',
+                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '12px',
+                                fontSize: '16px',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                boxShadow: '0 8px 25px rgba(16,185,129,0.3)',
+                                transition: 'all 0.3s'
+                            }}
+                            onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+                            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+                        >
+                            <i className="fas fa-plus" style={{ marginRight: '10px' }}></i>
+                            Create New
+                        </button>
+                    </div>
+
+                    {/* Data Table */}
+                    <div style={{ background: 'white', borderRadius: '20px', padding: '30px', boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}>
+                        {loading && <div style={{ textAlign: 'center', padding: '40px' }}><i className="fas fa-spinner fa-spin" style={{ fontSize: '36px', color: '#2563eb' }}></i></div>}
+                        
+                        {!loading && getCurrentData().length === 0 && (
+                            <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
+                                No {activeTab} found. Create your first one!
+                            </div>
+                        )}
+
+                        {!loading && getCurrentData().length > 0 && (
+                            <div style={{ overflowX: 'auto' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                    <thead>
+                                        <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+                                            {activeTab === 'athletes' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Nationality</th><th style={thStyle}>Position</th><th style={thStyle}>Goals</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'coaches' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Nationality</th><th style={thStyle}>Experience</th><th style={thStyle}>Titles</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'achievements' && <><th style={thStyle}>ID</th><th style={thStyle}>Type</th><th style={thStyle}>Year</th><th style={thStyle}>Achieved By</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'records' && <><th style={thStyle}>ID</th><th style={thStyle}>Type</th><th style={thStyle}>Value</th><th style={thStyle}>Set By</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'referees' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Nationality</th><th style={thStyle}>Experience</th><th style={thStyle}>Matches</th><th style={thStyle}>Actions</th></>}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {getCurrentData().map(item => (
+                                            <tr key={item.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                                {activeTab === 'athletes' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.firstName} {item.lastName}</td>
+                                                        <td style={tdStyle}>{item.nationality || '-'}</td>
+                                                        <td style={tdStyle}>{item.position || '-'}</td>
+                                                        <td style={tdStyle}>{item.goalsScored || 0}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'coaches' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.firstName} {item.lastName}</td>
+                                                        <td style={tdStyle}>{item.nationality || '-'}</td>
+                                                        <td style={tdStyle}>{item.experienceYears || 0} years</td>
+                                                        <td style={tdStyle}>{item.titlesWon || 0}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'achievements' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.achievementType}</td>
+                                                        <td style={tdStyle}>{item.year || '-'}</td>
+                                                        <td style={tdStyle}>{item.achievedBy || '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'records' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.recordType}</td>
+                                                        <td style={tdStyle}>{item.recordValue || item.performanceValue}</td>
+                                                        <td style={tdStyle}>{item.setBy || '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'referees' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.firstName} {item.lastName}</td>
+                                                        <td style={tdStyle}>{item.nationality || '-'}</td>
+                                                        <td style={tdStyle}>{item.experienceYears || 0} years</td>
+                                                        <td style={tdStyle}>{item.matchesOfficiated || 0}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+            {renderForm()}
+        </LayoutV1>
+    );
+};
+
+const FormField = ({ label, name, type = 'text', value, onChange, required, placeholder }) => (
+    <div style={{ marginBottom: '20px' }}>
+        <label style={{ display: 'block', marginBottom: '8px', color: '#1e293b', fontSize: '14px', fontWeight: '600' }}>
+            {label}
+        </label>
+        <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            required={required}
+            placeholder={placeholder}
+            style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: '2px solid #e2e8f0',
+                borderRadius: '10px',
+                fontSize: '15px',
+                outline: 'none',
+                transition: 'all 0.3s'
+            }}
+        />
+    </div>
+);
+
+const SelectField = ({ label, name, value, onChange, options, required }) => (
+    <div style={{ marginBottom: '20px' }}>
+        <label style={{ display: 'block', marginBottom: '8px', color: '#1e293b', fontSize: '14px', fontWeight: '600' }}>
+            {label}
+        </label>
+        <select
+            name={name}
+            value={value}
+            onChange={onChange}
+            required={required}
+            style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: '2px solid #e2e8f0',
+                borderRadius: '10px',
+                fontSize: '15px',
+                outline: 'none',
+                transition: 'all 0.3s',
+                backgroundColor: 'white',
+                cursor: 'pointer'
+            }}
+        >
+            <option value="">-- Select {label} --</option>
+            {options.map(option => (
+                <option key={option} value={option}>{option}</option>
+            ))}
+        </select>
+    </div>
+);
+
+const AthleteSelectField = ({ label, name, value, onChange, athletes }) => (
+    <div style={{ marginBottom: '20px' }}>
+        <label style={{ display: 'block', marginBottom: '8px', color: '#1e293b', fontSize: '14px', fontWeight: '600' }}>
+            {label}
+        </label>
+        <select
+            name={name}
+            value={value}
+            onChange={onChange}
+            style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: '2px solid #e2e8f0',
+                borderRadius: '10px',
+                fontSize: '15px',
+                outline: 'none',
+                transition: 'all 0.3s',
+                backgroundColor: 'white',
+                cursor: 'pointer'
+            }}
+        >
+            <option value="">-- Select Athlete --</option>
+            {athletes.map(athlete => (
+                <option key={athlete.id} value={athlete.id}>
+                    {athlete.firstName} {athlete.lastName} ({athlete.id})
+                </option>
+            ))}
+        </select>
+    </div>
+);
+
+const ActionButtons = ({ item, onEdit, onDelete, editDisabled }) => (
+    <div style={{ display: 'flex', gap: '10px' }}>
+        {!editDisabled && (
+            <button onClick={() => onEdit(item)} style={{ padding: '8px 16px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}>
+                <i className="fas fa-edit"></i>
+            </button>
+        )}
+        <button onClick={() => onDelete(item.id)} style={{ padding: '8px 16px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}>
+            <i className="fas fa-trash"></i>
+        </button>
+    </div>
+);
+
+const thStyle = { padding: '15px', textAlign: 'left', fontSize: '14px', fontWeight: '700', color: '#475569' };
+const tdStyle = { padding: '15px', fontSize: '14px', color: '#1e293b' };
+
+export default AdminPage;

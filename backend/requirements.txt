@@ -12,6 +12,7 @@ httpx==0.27.2
 # Data Validation (UPDATED - pre-built wheels)
 pydantic==2.10.3
 pydantic-settings==2.6.1
+email-validator==2.1.0
 
 # CORS
 python-multipart==0.0.18

@@ -35,7 +35,7 @@ const HeaderV1 = () => {
                             <div className="attr-nav">
                                 <ul>
                                     <li className="button">
-                                        <Link to="/contact-us">Get consultant</Link>
+                                        <Link to="/search">AI Search</Link>
                                     </li>
                                 </ul>
                             </div>

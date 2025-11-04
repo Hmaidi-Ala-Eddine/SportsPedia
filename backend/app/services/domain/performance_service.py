@@ -14,6 +14,65 @@ class PerformanceService:
     def __init__(self):
         self.client = fuseki_client
     
+    async def get_all_achievements(self, limit: int = 100, offset: int = 0) -> Dict[str, Any]:
+        """
+        Get all achievements.
+        
+        Args:
+            limit: Maximum number of results
+            offset: Number of results to skip
+            
+        Returns:
+            Dict with achievements list and total count
+        """
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        SELECT DISTINCT ?achievement ?achievementType ?year ?performanceValue ?unit ?athlete ?firstName ?lastName
+        WHERE {{
+            ?achievement a sport:Achievement .
+            OPTIONAL {{ ?achievement sport:achievementType ?achievementType . }}
+            OPTIONAL {{ ?achievement sport:year ?year . }}
+            OPTIONAL {{ ?achievement sport:performanceValue ?performanceValue . }}
+            OPTIONAL {{ ?achievement sport:unit ?unit . }}
+            OPTIONAL {{ 
+                ?achievement sport:achievedBy ?athlete .
+                ?athlete sport:firstName ?firstName .
+                ?athlete sport:lastName ?lastName .
+            }}
+        }}
+        ORDER BY DESC(?year)
+        LIMIT {limit}
+        OFFSET {offset}
+        """
+        
+        try:
+            results = self.client.execute_query(query)
+            achievements_data = sparql_results_to_list(results)
+            
+            achievements = []
+            for data in achievements_data:
+                first_name = data.get('firstName', '')
+                last_name = data.get('lastName', '')
+                full_name = f"{first_name} {last_name}".strip() if first_name or last_name else None
+                
+                achievement = {
+                    "id": extract_id_from_uri(data.get('achievement', '')),
+                    "achievementType": data.get('achievementType'),
+                    "year": int(data.get('year')) if data.get('year') else None,
+                    "performanceValue": data.get('performanceValue'),
+                    "unit": data.get('unit'),
+                    "athleteId": extract_id_from_uri(data.get('athlete', '')) if data.get('athlete') else None,
+                    "achievedBy": full_name
+                }
+                achievements.append(achievement)
+            
+            return {"achievements": achievements, "total": len(achievements)}
+            
+        except Exception as e:
+            logger.error(f"Error getting achievements: {str(e)}")
+            raise
+    
     async def get_all_records(self, limit: int = 100, offset: int = 0) -> Dict[str, Any]:
         """
         Get all records.
@@ -28,14 +87,15 @@ class PerformanceService:
         query = f"""
         {self.client.get_prefixes()}
         
-        SELECT DISTINCT ?record ?recordType ?value ?athlete ?athleteName ?date ?sport
+        SELECT DISTINCT ?record ?recordType ?value ?athlete ?firstName ?lastName ?date ?sport
         WHERE {{
             ?record a sport:Record .
             OPTIONAL {{ ?record sport:recordType ?recordType . }}
             OPTIONAL {{ ?record sport:recordValue ?value . }}
             OPTIONAL {{ 
                 ?record sport:setBy ?athlete .
-                ?athlete sport:lastName ?athleteName .
+                ?athlete sport:firstName ?firstName .
+                ?athlete sport:lastName ?lastName .
             }}
             OPTIONAL {{ ?record sport:setOn ?date . }}
             OPTIONAL {{ ?record sport:inSport ?sport . }}
@@ -51,13 +111,17 @@ class PerformanceService:
             
             records = []
             for data in records_data:
+                first_name = data.get('firstName', '')
+                last_name = data.get('lastName', '')
+                full_name = f"{first_name} {last_name}".strip() if first_name or last_name else None
+                
                 record = {
                     "id": extract_id_from_uri(data.get('record', '')),
                     "recordType": data.get('recordType'),
-                    "value": data.get('value'),
+                    "recordValue": data.get('value'),
                     "athleteId": extract_id_from_uri(data.get('athlete', '')) if data.get('athlete') else None,
-                    "athleteName": data.get('athleteName'),
-                    "date": data.get('date'),
+                    "setBy": full_name,
+                    "setOn": data.get('date'),
                     "sport": extract_id_from_uri(data.get('sport', '')) if data.get('sport') else None
                 }
                 records.append(record)

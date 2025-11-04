@@ -96,3 +96,97 @@ async def delete_athlete(athlete_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============ COACH ENDPOINTS ============
+
+@router.get("/coaches")
+async def get_coaches(
+    limit: int = Query(default=100, ge=1, le=500),
+    offset: int = Query(default=0, ge=0)
+):
+    """Get all coaches."""
+    try:
+        return await person_service.get_all_coaches(limit=limit, offset=offset)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/coaches/{coach_id}")
+async def get_coach(coach_id: str):
+    """Get coach by ID."""
+    try:
+        coach = await person_service.get_coach_by_id(coach_id)
+        if not coach:
+            raise HTTPException(status_code=404, detail=f"Coach {coach_id} not found")
+        return coach
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============ REFEREE ENDPOINTS ============
+
+@router.get("/referees")
+async def get_referees(
+    limit: int = Query(default=100, ge=1, le=500),
+    offset: int = Query(default=0, ge=0)
+):
+    """Get all referees."""
+    try:
+        return await person_service.get_all_referees(limit=limit, offset=offset)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/referees/{referee_id}")
+async def get_referee(referee_id: str):
+    """Get referee by ID."""
+    try:
+        referee = await person_service.get_referee_by_id(referee_id)
+        if not referee:
+            raise HTTPException(status_code=404, detail=f"Referee {referee_id} not found")
+        return referee
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============ RELATIONSHIPS ENDPOINTS ============
+
+@router.get("/athletes/{athlete_id}/coaches")
+async def get_athlete_coaches(athlete_id: str):
+    """Get coaches who trained this athlete."""
+    try:
+        return await person_service.get_athlete_coaches(athlete_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/athletes/{athlete_id}/achievements")
+async def get_athlete_achievements(athlete_id: str):
+    """Get achievements for this athlete."""
+    try:
+        return await person_service.get_athlete_achievements(athlete_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/athletes/{athlete_id}/records")
+async def get_athlete_records(athlete_id: str):
+    """Get records for this athlete."""
+    try:
+        return await person_service.get_athlete_records(athlete_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/coaches/{coach_id}/athletes")
+async def get_coach_athletes(coach_id: str):
+    """Get athletes trained by this coach."""
+    try:
+        return await person_service.get_coach_athletes(coach_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

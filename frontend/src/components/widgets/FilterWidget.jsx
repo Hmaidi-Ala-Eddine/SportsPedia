@@ -3,17 +3,13 @@ import { useState } from 'react';
 const FilterWidget = ({ onFilterChange }) => {
     const [activeFilters, setActiveFilters] = useState([]);
 
+    // Updated categories for Ahmed's classes (Person & Performance)
     const categories = [
-        { id: 'competition', label: 'Competition', icon: 'fas fa-trophy' },
-        { id: 'equipment', label: 'Equipment', icon: 'fas fa-tools' },
-        { id: 'media', label: 'Media', icon: 'fas fa-photo-video' },
-        { id: 'organization', label: 'Organization', icon: 'fas fa-building' },
-        { id: 'performance', label: 'Performance', icon: 'fas fa-chart-line' },
-        { id: 'person', label: 'Person', icon: 'fas fa-user' },
-        { id: 'sponsorship', label: 'Sponsorship', icon: 'fas fa-handshake' },
-        { id: 'sport', label: 'Sport', icon: 'fas fa-futbol' },
-        { id: 'team', label: 'Team', icon: 'fas fa-users' },
-        { id: 'venue', label: 'Venue', icon: 'fas fa-map-marker-alt' }
+        { id: 'athlete', label: 'Athletes', icon: 'fas fa-running', color: '#2563eb', description: 'Players & competitors' },
+        { id: 'coach', label: 'Coaches', icon: 'fas fa-clipboard', color: '#16a34a', description: 'Team managers & trainers' },
+        { id: 'referee', label: 'Referees', icon: 'fas fa-whistle', color: '#dc2626', description: 'Match officials' },
+        { id: 'achievement', label: 'Achievements', icon: 'fas fa-trophy', color: '#f59e0b', description: 'Awards & titles' },
+        { id: 'record', label: 'Records', icon: 'fas fa-medal', color: '#8b5cf6', description: 'Performance records' }
     ];
 
     const handleFilterToggle = (filterId) => {
@@ -79,25 +75,40 @@ const FilterWidget = ({ onFilterChange }) => {
                                         style={{ 
                                             marginRight: '12px',
                                             cursor: 'pointer',
-                                            width: '18px',
-                                            height: '18px',
-                                            accentColor: '#ff4444'
+                                            width: '20px',
+                                            height: '20px',
+                                            accentColor: category.color
                                         }}
                                     />
-                                    <i className={category.icon} style={{ marginRight: '10px', width: '20px' }}></i>
-                                    <span style={{ flex: 1 }}>{category.label}</span>
+                                    <i 
+                                        className={category.icon} 
+                                        style={{ 
+                                            marginRight: '10px', 
+                                            width: '24px',
+                                            color: activeFilters.includes(category.id) ? category.color : '#666',
+                                            transition: 'color 0.3s'
+                                        }}
+                                    ></i>
+                                    <span style={{ 
+                                        flex: 1,
+                                        fontWeight: activeFilters.includes(category.id) ? '600' : '400',
+                                        color: activeFilters.includes(category.id) ? category.color : '#333'
+                                    }}>
+                                        {category.label}
+                                    </span>
                                     {activeFilters.includes(category.id) && (
                                         <span 
                                             className="badge" 
                                             style={{ 
-                                                backgroundColor: '#ff4444',
+                                                backgroundColor: category.color,
                                                 color: 'white',
-                                                padding: '2px 8px',
-                                                borderRadius: '12px',
-                                                fontSize: '11px'
+                                                padding: '4px 10px',
+                                                borderRadius: '15px',
+                                                fontSize: '11px',
+                                                fontWeight: '600'
                                             }}
                                         >
-                                            Active
+                                            ✓
                                         </span>
                                     )}
                                 </label>

@@ -15,5 +15,5 @@
 
 ## SportsPedia Dataset (TDB2 - Persistent)
 <#sportspedia_dataset> rdf:type tdb2:DatasetTDB2 ;
-    tdb2:location "C:\\Users\\kings\\OneDrive\\Desktop\\SportsPedia\\SportsPedia\\fuseki\\apache-jena-fuseki-5.6.0\\run\\databases\\sportspedia" ;
+    tdb2:location "/fuseki/databases/sportspedia" ;
     .

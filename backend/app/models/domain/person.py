@@ -73,6 +73,10 @@ class Athlete(PersonBase):
     sport: Optional[str] = None
     contractStart: Optional[date] = None
     contractEnd: Optional[date] = None
+    # Rich biographical fields
+    description: Optional[str] = None
+    achievements: Optional[str] = None
+    specialties: Optional[str] = None
 
 
 class AthleteDetail(Athlete):

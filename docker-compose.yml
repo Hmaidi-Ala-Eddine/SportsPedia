@@ -34,6 +34,7 @@ services:
     volumes:
       - fuseki_data:/fuseki
       - ./ontology:/staging
+      - ./fuseki/configuration:/fuseki/configuration
     networks:
       - sportspedia-network
     healthcheck:
@@ -41,6 +42,24 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  # Ollama AI Service
+  ollama:
+    image: ollama/ollama:latest
+    container_name: sportspedia-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - sportspedia-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   # Backend API
   backend:
@@ -71,12 +90,17 @@ services:
       # Fuseki Configuration
       FUSEKI_ENDPOINT: "http://fuseki:3030/sportspedia/query"
       
+      # Ollama Configuration
+      OLLAMA_URL: "http://ollama:11434"
+      OLLAMA_MODEL: "llama3.2:3b"
+      
       # CORS Configuration
       CORS_ORIGINS: '["http://localhost:5173", "http://localhost:3000", "http://localhost", "http://localhost:80"]'
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
+      - ./ontology/sportspedia_final.rdf:/app/data/sportspedia_final.rdf
     depends_on:
       mysql:
         condition: service_healthy
@@ -111,4 +135,6 @@ volumes:
   mysql_data:
     driver: local
   fuseki_data:
+    driver: local
+  ollama_data:
     driver: local

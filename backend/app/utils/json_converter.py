@@ -19,10 +19,15 @@ def sparql_results_to_list(results: Dict[str, Any]) -> List[Dict[str, Any]]:
     converted = []
     for binding in bindings:
         item = {}
+        entity_uri = None
+        
         for key, value in binding.items():
             # Extract the actual value based on type
             if value['type'] == 'uri':
                 item[key] = value['value']
+                # Store the first URI we encounter (usually the entity URI)
+                if not entity_uri and key in ['athlete', 'coach', 'referee', 'achievement', 'record', 'person']:
+                    entity_uri = value['value']
             elif value['type'] == 'literal':
                 item[key] = value['value']
                 # Include datatype if present
@@ -30,6 +35,45 @@ def sparql_results_to_list(results: Dict[str, Any]) -> List[Dict[str, Any]]:
                     item[f"{key}_datatype"] = value['datatype']
             elif value['type'] == 'bnode':
                 item[key] = value['value']
+        
+        # Extract ID from URI and determine type
+        if entity_uri:
+            item['id'] = extract_id_from_uri(entity_uri)
+        elif 'athlete' in item:
+            item['id'] = extract_id_from_uri(item['athlete'])
+        elif 'coach' in item:
+            item['id'] = extract_id_from_uri(item['coach'])
+        elif 'referee' in item:
+            item['id'] = extract_id_from_uri(item['referee'])
+        elif 'achievement' in item:
+            item['id'] = extract_id_from_uri(item['achievement'])
+        elif 'record' in item:
+            item['id'] = extract_id_from_uri(item['record'])
+        elif 'person' in item:
+            item['id'] = extract_id_from_uri(item['person'])
+        
+        # Determine entity type
+        if 'type' not in item:
+            if 'athlete' in item or ('position' in item and 'goals' in item):
+                item['type'] = 'Athlete'
+            elif 'coach' in item or ('experienceYears' in item and 'titlesWon' in item):
+                item['type'] = 'Coach'
+            elif 'referee' in item or 'matchesOfficiated' in item:
+                item['type'] = 'Referee'
+            elif 'achievement' in item or 'achievementType' in item:
+                item['type'] = 'Achievement'
+            elif 'record' in item or 'recordType' in item:
+                item['type'] = 'Record'
+            elif 'firstName' in item and 'lastName' in item:
+                # Default to Athlete if we have person data but no specific type
+                item['type'] = 'Athlete'
+        
+        # Format numeric values
+        if 'goals' in item:
+            item['goalsScored'] = item['goals']
+        if 'yearsExperience' in item:
+            item['experienceYears'] = item['yearsExperience']
+        
         converted.append(item)
     
     return converted

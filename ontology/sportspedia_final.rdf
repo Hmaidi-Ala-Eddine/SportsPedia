@@ -1,10 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-         xmlns:owl="http://www.w3.org/2002/07/owl#"
-         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-         xmlns:sport="http://example.org/sports-ontology#"
-         xml:base="http://example.org/sports-ontology#">
+<?xml version='1.0' encoding='utf-8'?>
+<rdf:RDF xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:sport="http://example.org/sports-ontology#" xml:base="http://example.org/sports-ontology#">
 
   <owl:Ontology rdf:about="http://example.org/sports-ontology">
     <rdfs:label xml:lang="en">Comprehensive Sports Encyclopedia Ontology</rdfs:label>
@@ -12,995 +7,995 @@
     <owl:versionInfo>2.0</owl:versionInfo>
   </owl:Ontology>
 
-  <!-- ===================== 10 MAIN CLASSES WITH HIERARCHIES ===================== -->
   
-  <!-- 1. SPORT DISCIPLINE CLASS -->
+  
+  
   <owl:Class rdf:about="#SportDiscipline">
     <rdfs:label xml:lang="en">Sport Discipline</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all types of sports and athletic disciplines</rdfs:comment>
   </owl:Class>
   
-  <!-- Sport Discipline Subclasses -->
+  
   <owl:Class rdf:about="#TeamSport">
-    <rdfs:subClassOf rdf:resource="#SportDiscipline"/>
+    <rdfs:subClassOf rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">Team Sport</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#IndividualSport">
-    <rdfs:subClassOf rdf:resource="#SportDiscipline"/>
+    <rdfs:subClassOf rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">Individual Sport</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#CombatSport">
-    <rdfs:subClassOf rdf:resource="#SportDiscipline"/>
+    <rdfs:subClassOf rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">Combat Sport</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#WaterSport">
-    <rdfs:subClassOf rdf:resource="#SportDiscipline"/>
+    <rdfs:subClassOf rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">Water Sport</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#WinterSport">
-    <rdfs:subClassOf rdf:resource="#SportDiscipline"/>
+    <rdfs:subClassOf rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">Winter Sport</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#MotorSport">
-    <rdfs:subClassOf rdf:resource="#SportDiscipline"/>
+    <rdfs:subClassOf rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">Motor Sport</rdfs:label>
   </owl:Class>
   
-  <!-- 2. PERSON CLASS -->
+  
   <owl:Class rdf:about="#Person">
     <rdfs:label xml:lang="en">Person</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all people involved in sports</rdfs:comment>
   </owl:Class>
   
-  <!-- Person Subclasses -->
+  
   <owl:Class rdf:about="#Athlete">
-    <rdfs:subClassOf rdf:resource="#Person"/>
+    <rdfs:subClassOf rdf:resource="#Person" />
     <rdfs:label xml:lang="en">Athlete</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Coach">
-    <rdfs:subClassOf rdf:resource="#Person"/>
+    <rdfs:subClassOf rdf:resource="#Person" />
     <rdfs:label xml:lang="en">Coach</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Referee">
-    <rdfs:subClassOf rdf:resource="#Person"/>
+    <rdfs:subClassOf rdf:resource="#Person" />
     <rdfs:label xml:lang="en">Referee</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#SportsMedical">
-    <rdfs:subClassOf rdf:resource="#Person"/>
+    <rdfs:subClassOf rdf:resource="#Person" />
     <rdfs:label xml:lang="en">Sports Medical Staff</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#SportsJournalist">
-    <rdfs:subClassOf rdf:resource="#Person"/>
+    <rdfs:subClassOf rdf:resource="#Person" />
     <rdfs:label xml:lang="en">Sports Journalist</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#SportsAgent">
-    <rdfs:subClassOf rdf:resource="#Person"/>
+    <rdfs:subClassOf rdf:resource="#Person" />
     <rdfs:label xml:lang="en">Sports Agent</rdfs:label>
   </owl:Class>
   
-  <!-- 3. TEAM CLASS -->
+  
   <owl:Class rdf:about="#Team">
     <rdfs:label xml:lang="en">Team</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing sports teams and clubs</rdfs:comment>
   </owl:Class>
   
-  <!-- Team Subclasses -->
+  
   <owl:Class rdf:about="#ProfessionalTeam">
-    <rdfs:subClassOf rdf:resource="#Team"/>
+    <rdfs:subClassOf rdf:resource="#Team" />
     <rdfs:label xml:lang="en">Professional Team</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#AmateurTeam">
-    <rdfs:subClassOf rdf:resource="#Team"/>
+    <rdfs:subClassOf rdf:resource="#Team" />
     <rdfs:label xml:lang="en">Amateur Team</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#NationalTeam">
-    <rdfs:subClassOf rdf:resource="#Team"/>
+    <rdfs:subClassOf rdf:resource="#Team" />
     <rdfs:label xml:lang="en">National Team</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#YouthTeam">
-    <rdfs:subClassOf rdf:resource="#Team"/>
+    <rdfs:subClassOf rdf:resource="#Team" />
     <rdfs:label xml:lang="en">Youth Team</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#WomenTeam">
-    <rdfs:subClassOf rdf:resource="#Team"/>
+    <rdfs:subClassOf rdf:resource="#Team" />
     <rdfs:label xml:lang="en">Women Team</rdfs:label>
   </owl:Class>
   
-  <!-- 4. COMPETITION CLASS -->
+  
   <owl:Class rdf:about="#Competition">
     <rdfs:label xml:lang="en">Competition</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all types of sports competitions and events</rdfs:comment>
   </owl:Class>
   
-  <!-- Competition Subclasses -->
+  
   <owl:Class rdf:about="#League">
-    <rdfs:subClassOf rdf:resource="#Competition"/>
+    <rdfs:subClassOf rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">League</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Tournament">
-    <rdfs:subClassOf rdf:resource="#Competition"/>
+    <rdfs:subClassOf rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">Tournament</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Championship">
-    <rdfs:subClassOf rdf:resource="#Competition"/>
+    <rdfs:subClassOf rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">Championship</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Olympics">
-    <rdfs:subClassOf rdf:resource="#Competition"/>
+    <rdfs:subClassOf rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">Olympics</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#WorldCup">
-    <rdfs:subClassOf rdf:resource="#Competition"/>
+    <rdfs:subClassOf rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">World Cup</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Match">
-    <rdfs:subClassOf rdf:resource="#Competition"/>
+    <rdfs:subClassOf rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">Match</rdfs:label>
   </owl:Class>
   
-  <!-- 5. VENUE CLASS -->
+  
   <owl:Class rdf:about="#Venue">
     <rdfs:label xml:lang="en">Venue</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all sports venues and facilities</rdfs:comment>
   </owl:Class>
   
-  <!-- Venue Subclasses -->
+  
   <owl:Class rdf:about="#Stadium">
-    <rdfs:subClassOf rdf:resource="#Venue"/>
+    <rdfs:subClassOf rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">Stadium</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Arena">
-    <rdfs:subClassOf rdf:resource="#Venue"/>
+    <rdfs:subClassOf rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">Arena</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Court">
-    <rdfs:subClassOf rdf:resource="#Venue"/>
+    <rdfs:subClassOf rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">Court</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Track">
-    <rdfs:subClassOf rdf:resource="#Venue"/>
+    <rdfs:subClassOf rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">Track</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Pool">
-    <rdfs:subClassOf rdf:resource="#Venue"/>
+    <rdfs:subClassOf rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">Pool</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#GolfCourse">
-    <rdfs:subClassOf rdf:resource="#Venue"/>
+    <rdfs:subClassOf rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">Golf Course</rdfs:label>
   </owl:Class>
   
-  <!-- 6. ORGANIZATION CLASS -->
+  
   <owl:Class rdf:about="#Organization">
     <rdfs:label xml:lang="en">Organization</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all sports organizations and governing bodies</rdfs:comment>
   </owl:Class>
   
-  <!-- Organization Subclasses -->
+  
   <owl:Class rdf:about="#Federation">
-    <rdfs:subClassOf rdf:resource="#Organization"/>
+    <rdfs:subClassOf rdf:resource="#Organization" />
     <rdfs:label xml:lang="en">Federation</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Club">
-    <rdfs:subClassOf rdf:resource="#Organization"/>
+    <rdfs:subClassOf rdf:resource="#Organization" />
     <rdfs:label xml:lang="en">Club</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#League_Org">
-    <rdfs:subClassOf rdf:resource="#Organization"/>
+    <rdfs:subClassOf rdf:resource="#Organization" />
     <rdfs:label xml:lang="en">League Organization</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#SportsAgency">
-    <rdfs:subClassOf rdf:resource="#Organization"/>
+    <rdfs:subClassOf rdf:resource="#Organization" />
     <rdfs:label xml:lang="en">Sports Agency</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#AntiDoping">
-    <rdfs:subClassOf rdf:resource="#Organization"/>
+    <rdfs:subClassOf rdf:resource="#Organization" />
     <rdfs:label xml:lang="en">Anti-Doping Agency</rdfs:label>
   </owl:Class>
   
-  <!-- 7. EQUIPMENT CLASS -->
+  
   <owl:Class rdf:about="#Equipment">
     <rdfs:label xml:lang="en">Equipment</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all sports equipment and gear</rdfs:comment>
   </owl:Class>
   
-  <!-- Equipment Subclasses -->
+  
   <owl:Class rdf:about="#ProtectiveGear">
-    <rdfs:subClassOf rdf:resource="#Equipment"/>
+    <rdfs:subClassOf rdf:resource="#Equipment" />
     <rdfs:label xml:lang="en">Protective Gear</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#PlayingEquipment">
-    <rdfs:subClassOf rdf:resource="#Equipment"/>
+    <rdfs:subClassOf rdf:resource="#Equipment" />
     <rdfs:label xml:lang="en">Playing Equipment</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Apparel">
-    <rdfs:subClassOf rdf:resource="#Equipment"/>
+    <rdfs:subClassOf rdf:resource="#Equipment" />
     <rdfs:label xml:lang="en">Apparel</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Footwear">
-    <rdfs:subClassOf rdf:resource="#Equipment"/>
+    <rdfs:subClassOf rdf:resource="#Equipment" />
     <rdfs:label xml:lang="en">Footwear</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#TrainingEquipment">
-    <rdfs:subClassOf rdf:resource="#Equipment"/>
+    <rdfs:subClassOf rdf:resource="#Equipment" />
     <rdfs:label xml:lang="en">Training Equipment</rdfs:label>
   </owl:Class>
   
-  <!-- 8. PERFORMANCE CLASS -->
+  
   <owl:Class rdf:about="#Performance">
     <rdfs:label xml:lang="en">Performance</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all types of sports performance and statistics</rdfs:comment>
   </owl:Class>
   
-  <!-- Performance Subclasses -->
+  
   <owl:Class rdf:about="#Record">
-    <rdfs:subClassOf rdf:resource="#Performance"/>
+    <rdfs:subClassOf rdf:resource="#Performance" />
     <rdfs:label xml:lang="en">Record</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Statistic">
-    <rdfs:subClassOf rdf:resource="#Performance"/>
+    <rdfs:subClassOf rdf:resource="#Performance" />
     <rdfs:label xml:lang="en">Statistic</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Ranking">
-    <rdfs:subClassOf rdf:resource="#Performance"/>
+    <rdfs:subClassOf rdf:resource="#Performance" />
     <rdfs:label xml:lang="en">Ranking</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Achievement">
-    <rdfs:subClassOf rdf:resource="#Performance"/>
+    <rdfs:subClassOf rdf:resource="#Performance" />
     <rdfs:label xml:lang="en">Achievement</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Measurement">
-    <rdfs:subClassOf rdf:resource="#Performance"/>
+    <rdfs:subClassOf rdf:resource="#Performance" />
     <rdfs:label xml:lang="en">Measurement</rdfs:label>
   </owl:Class>
   
-  <!-- 9. MEDIA CLASS -->
+  
   <owl:Class rdf:about="#Media">
     <rdfs:label xml:lang="en">Media</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all types of sports media and broadcasting</rdfs:comment>
   </owl:Class>
   
-  <!-- Media Subclasses -->
+  
   <owl:Class rdf:about="#Television">
-    <rdfs:subClassOf rdf:resource="#Media"/>
+    <rdfs:subClassOf rdf:resource="#Media" />
     <rdfs:label xml:lang="en">Television</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Radio">
-    <rdfs:subClassOf rdf:resource="#Media"/>
+    <rdfs:subClassOf rdf:resource="#Media" />
     <rdfs:label xml:lang="en">Radio</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#PrintMedia">
-    <rdfs:subClassOf rdf:resource="#Media"/>
+    <rdfs:subClassOf rdf:resource="#Media" />
     <rdfs:label xml:lang="en">Print Media</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#DigitalMedia">
-    <rdfs:subClassOf rdf:resource="#Media"/>
+    <rdfs:subClassOf rdf:resource="#Media" />
     <rdfs:label xml:lang="en">Digital Media</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#SocialMedia">
-    <rdfs:subClassOf rdf:resource="#Media"/>
+    <rdfs:subClassOf rdf:resource="#Media" />
     <rdfs:label xml:lang="en">Social Media</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#StreamingPlatform">
-    <rdfs:subClassOf rdf:resource="#Media"/>
+    <rdfs:subClassOf rdf:resource="#Media" />
     <rdfs:label xml:lang="en">Streaming Platform</rdfs:label>
   </owl:Class>
   
-  <!-- 10. SPONSORSHIP CLASS -->
+  
   <owl:Class rdf:about="#Sponsorship">
     <rdfs:label xml:lang="en">Sponsorship</rdfs:label>
     <rdfs:comment xml:lang="en">Main class representing all types of sports sponsorship and commercial partnerships</rdfs:comment>
   </owl:Class>
   
-  <!-- Sponsorship Subclasses -->
+  
   <owl:Class rdf:about="#TitleSponsor">
-    <rdfs:subClassOf rdf:resource="#Sponsorship"/>
+    <rdfs:subClassOf rdf:resource="#Sponsorship" />
     <rdfs:label xml:lang="en">Title Sponsor</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#OfficialSponsor">
-    <rdfs:subClassOf rdf:resource="#Sponsorship"/>
+    <rdfs:subClassOf rdf:resource="#Sponsorship" />
     <rdfs:label xml:lang="en">Official Sponsor</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#TechnicalSponsor">
-    <rdfs:subClassOf rdf:resource="#Sponsorship"/>
+    <rdfs:subClassOf rdf:resource="#Sponsorship" />
     <rdfs:label xml:lang="en">Technical Sponsor</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#NamingRights">
-    <rdfs:subClassOf rdf:resource="#Sponsorship"/>
+    <rdfs:subClassOf rdf:resource="#Sponsorship" />
     <rdfs:label xml:lang="en">Naming Rights</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="#Endorsement">
-    <rdfs:subClassOf rdf:resource="#Sponsorship"/>
+    <rdfs:subClassOf rdf:resource="#Sponsorship" />
     <rdfs:label xml:lang="en">Endorsement</rdfs:label>
   </owl:Class>
 
-  <!-- ===================== OBJECT PROPERTIES ===================== -->
   
-  <!-- Person-related Object Properties -->
+  
+  
   <owl:ObjectProperty rdf:about="#playsFor">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="#Team"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="#Team" />
     <rdfs:label xml:lang="en">plays for</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#practicesSport">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="#SportDiscipline"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">practices sport</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#coaches">
-    <rdfs:domain rdf:resource="#Coach"/>
-    <rdfs:range rdf:resource="#Team"/>
+    <rdfs:domain rdf:resource="#Coach" />
+    <rdfs:range rdf:resource="#Team" />
     <rdfs:label xml:lang="en">coaches</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#coachesAthlete">
-    <rdfs:domain rdf:resource="#Coach"/>
-    <rdfs:range rdf:resource="#Athlete"/>
+    <rdfs:domain rdf:resource="#Coach" />
+    <rdfs:range rdf:resource="#Athlete" />
     <rdfs:label xml:lang="en">coaches athlete</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#refereesMatch">
-    <rdfs:domain rdf:resource="#Referee"/>
-    <rdfs:range rdf:resource="#Match"/>
+    <rdfs:domain rdf:resource="#Referee" />
+    <rdfs:range rdf:resource="#Match" />
     <rdfs:label xml:lang="en">referees match</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#treatsAthlete">
-    <rdfs:domain rdf:resource="#SportsMedical"/>
-    <rdfs:range rdf:resource="#Athlete"/>
+    <rdfs:domain rdf:resource="#SportsMedical" />
+    <rdfs:range rdf:resource="#Athlete" />
     <rdfs:label xml:lang="en">treats athlete</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#representsAthlete">
-    <rdfs:domain rdf:resource="#SportsAgent"/>
-    <rdfs:range rdf:resource="#Athlete"/>
+    <rdfs:domain rdf:resource="#SportsAgent" />
+    <rdfs:range rdf:resource="#Athlete" />
     <rdfs:label xml:lang="en">represents athlete</rdfs:label>
   </owl:ObjectProperty>
   
-  <!-- Team-related Object Properties -->
+  
   <owl:ObjectProperty rdf:about="#competesIn">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="#Competition"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">competes in</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#homeVenue">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="#Venue"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">home venue</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#sponsoredBy">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="#Sponsorship"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="#Sponsorship" />
     <rdfs:label xml:lang="en">sponsored by</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#memberOf">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="#Organization"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="#Organization" />
     <rdfs:label xml:lang="en">member of</rdfs:label>
   </owl:ObjectProperty>
   
-  <!-- Competition-related Object Properties -->
+  
   <owl:ObjectProperty rdf:about="#takesPlaceAt">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="#Venue"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">takes place at</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#organizedBy">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="#Organization"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="#Organization" />
     <rdfs:label xml:lang="en">organized by</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#featuresTeam">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="#Team"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="#Team" />
     <rdfs:label xml:lang="en">features team</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#broadcastBy">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="#Media"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="#Media" />
     <rdfs:label xml:lang="en">broadcast by</rdfs:label>
   </owl:ObjectProperty>
   
-  <!-- Venue-related Object Properties -->
+  
   <owl:ObjectProperty rdf:about="#hostsEvent">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="#Competition"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">hosts event</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#ownedBy">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="#Organization"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="#Organization" />
     <rdfs:label xml:lang="en">owned by</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#suitableFor">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="#SportDiscipline"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">suitable for</rdfs:label>
   </owl:ObjectProperty>
   
-  <!-- Equipment-related Object Properties -->
+  
   <owl:ObjectProperty rdf:about="#usedBy">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="#Athlete"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="#Athlete" />
     <rdfs:label xml:lang="en">used by</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#requiredFor">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="#SportDiscipline"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="#SportDiscipline" />
     <rdfs:label xml:lang="en">required for</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#providedBy">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="#Sponsorship"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="#Sponsorship" />
     <rdfs:label xml:lang="en">provided by</rdfs:label>
   </owl:ObjectProperty>
   
-  <!-- Performance-related Object Properties -->
+  
   <owl:ObjectProperty rdf:about="#achievedBy">
-    <rdfs:domain rdf:resource="#Performance"/>
-    <rdfs:range rdf:resource="#Athlete"/>
+    <rdfs:domain rdf:resource="#Performance" />
+    <rdfs:range rdf:resource="#Athlete" />
     <rdfs:label xml:lang="en">achieved by</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#recordedIn">
-    <rdfs:domain rdf:resource="#Performance"/>
-    <rdfs:range rdf:resource="#Competition"/>
+    <rdfs:domain rdf:resource="#Performance" />
+    <rdfs:range rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">recorded in</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#measuredAt">
-    <rdfs:domain rdf:resource="#Performance"/>
-    <rdfs:range rdf:resource="#Venue"/>
+    <rdfs:domain rdf:resource="#Performance" />
+    <rdfs:range rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">measured at</rdfs:label>
   </owl:ObjectProperty>
   
-  <!-- Media-related Object Properties -->
+  
   <owl:ObjectProperty rdf:about="#covers">
-    <rdfs:domain rdf:resource="#Media"/>
-    <rdfs:range rdf:resource="#Competition"/>
+    <rdfs:domain rdf:resource="#Media" />
+    <rdfs:range rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">covers</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#interviews">
-    <rdfs:domain rdf:resource="#Media"/>
-    <rdfs:range rdf:resource="#Person"/>
+    <rdfs:domain rdf:resource="#Media" />
+    <rdfs:range rdf:resource="#Person" />
     <rdfs:label xml:lang="en">interviews</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#partnersWithTeam">
-    <rdfs:domain rdf:resource="#Media"/>
-    <rdfs:range rdf:resource="#Team"/>
+    <rdfs:domain rdf:resource="#Media" />
+    <rdfs:range rdf:resource="#Team" />
     <rdfs:label xml:lang="en">partners with team</rdfs:label>
   </owl:ObjectProperty>
   
-  <!-- Sponsorship-related Object Properties -->
+  
   <owl:ObjectProperty rdf:about="#sponsors">
-    <rdfs:domain rdf:resource="#Sponsorship"/>
-    <rdfs:range rdf:resource="#Team"/>
+    <rdfs:domain rdf:resource="#Sponsorship" />
+    <rdfs:range rdf:resource="#Team" />
     <rdfs:label xml:lang="en">sponsors</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#endorses">
-    <rdfs:domain rdf:resource="#Sponsorship"/>
-    <rdfs:range rdf:resource="#Athlete"/>
+    <rdfs:domain rdf:resource="#Sponsorship" />
+    <rdfs:range rdf:resource="#Athlete" />
     <rdfs:label xml:lang="en">endorses</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#sponsorsEvent">
-    <rdfs:domain rdf:resource="#Sponsorship"/>
-    <rdfs:range rdf:resource="#Competition"/>
+    <rdfs:domain rdf:resource="#Sponsorship" />
+    <rdfs:range rdf:resource="#Competition" />
     <rdfs:label xml:lang="en">sponsors event</rdfs:label>
   </owl:ObjectProperty>
   
   <owl:ObjectProperty rdf:about="#hasNamingRights">
-    <rdfs:domain rdf:resource="#Sponsorship"/>
-    <rdfs:range rdf:resource="#Venue"/>
+    <rdfs:domain rdf:resource="#Sponsorship" />
+    <rdfs:range rdf:resource="#Venue" />
     <rdfs:label xml:lang="en">has naming rights</rdfs:label>
   </owl:ObjectProperty>
-  <!-- ===================== DATA PROPERTIES ===================== -->
   
-  <!-- Person Data Properties -->
+  
+  
   <owl:DatatypeProperty rdf:about="#firstName">
-    <rdfs:domain rdf:resource="#Person"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Person" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">first name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#lastName">
-    <rdfs:domain rdf:resource="#Person"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Person" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">last name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#birthDate">
-    <rdfs:domain rdf:resource="#Person"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#Person" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date" />
     <rdfs:label xml:lang="en">birth date</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#nationality">
-    <rdfs:domain rdf:resource="#Person"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Person" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">nationality</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#height">
-    <rdfs:domain rdf:resource="#Person"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Person" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">height in cm</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#weight">
-    <rdfs:domain rdf:resource="#Person"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Person" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">weight in kg</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#gender">
-    <rdfs:domain rdf:resource="#Person"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Person" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">gender</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Athlete-specific Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#jerseyNumber">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">jersey number</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#position">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">position</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#marketValue">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">market value in millions</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#salary">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">annual salary</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#contractStart">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date" />
     <rdfs:label xml:lang="en">contract start date</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#contractEnd">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date" />
     <rdfs:label xml:lang="en">contract end date</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#goalsScored">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">goals scored</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#assists">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">assists</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#matchesPlayed">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">matches played</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#yellowCards">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">yellow cards</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#redCards">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">red cards</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#isCaptain">
-    <rdfs:domain rdf:resource="#Athlete"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Athlete" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean" />
     <rdfs:label xml:lang="en">is captain</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Coach Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#coachingLicense">
-    <rdfs:domain rdf:resource="#Coach"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Coach" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">coaching license</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#yearsExperience">
-    <rdfs:domain rdf:resource="#Coach"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Coach" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">years of experience</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#winPercentage">
-    <rdfs:domain rdf:resource="#Coach"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Coach" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">win percentage</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#titlesWon">
-    <rdfs:domain rdf:resource="#Coach"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Coach" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">titles won</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Team Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#teamName">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">team name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#foundedYear">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">founded year</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#primaryColor">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">primary color</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#secondaryColor">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">secondary color</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#squadSize">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">squad size</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#budget">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">annual budget in millions</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#currentRanking">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">current ranking</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#wins">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">wins</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#losses">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">losses</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#draws">
-    <rdfs:domain rdf:resource="#Team"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Team" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">draws</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Competition Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#competitionName">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">competition name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#startDate">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date" />
     <rdfs:label xml:lang="en">start date</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#endDate">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date" />
     <rdfs:label xml:lang="en">end date</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#numberOfTeams">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">number of teams</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#prizeMoney">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">prize money in millions</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#season">
-    <rdfs:domain rdf:resource="#Competition"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Competition" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">season</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Match-specific Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#homeScore">
-    <rdfs:domain rdf:resource="#Match"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Match" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">home team score</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#awayScore">
-    <rdfs:domain rdf:resource="#Match"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Match" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">away team score</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#matchDate">
-    <rdfs:domain rdf:resource="#Match"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#Match" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime" />
     <rdfs:label xml:lang="en">match date and time</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#attendance">
-    <rdfs:domain rdf:resource="#Match"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Match" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">attendance</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#duration">
-    <rdfs:domain rdf:resource="#Match"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Match" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">duration in minutes</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Venue Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#venueName">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">venue name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#capacity">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">capacity</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#city">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">city</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#country">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">country</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#openedYear">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">opened year</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#surfaceType">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">surface type</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#isIndoor">
-    <rdfs:domain rdf:resource="#Venue"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Venue" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean" />
     <rdfs:label xml:lang="en">is indoor</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Organization Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#organizationName">
-    <rdfs:domain rdf:resource="#Organization"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Organization" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">organization name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#establishedYear">
-    <rdfs:domain rdf:resource="#Organization"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Organization" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">established year</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#headquarters">
-    <rdfs:domain rdf:resource="#Organization"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Organization" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">headquarters</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#president">
-    <rdfs:domain rdf:resource="#Organization"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Organization" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">president</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#memberCount">
-    <rdfs:domain rdf:resource="#Organization"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Organization" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">member count</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Sport Discipline Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#sportName">
-    <rdfs:domain rdf:resource="#SportDiscipline"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SportDiscipline" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">sport name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#isOlympic">
-    <rdfs:domain rdf:resource="#SportDiscipline"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SportDiscipline" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean" />
     <rdfs:label xml:lang="en">is olympic sport</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#originCountry">
-    <rdfs:domain rdf:resource="#SportDiscipline"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SportDiscipline" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">origin country</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#globalParticipants">
-    <rdfs:domain rdf:resource="#SportDiscipline"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#SportDiscipline" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">global participants</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Equipment Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#equipmentName">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">equipment name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#brand">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">brand</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#model">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">model</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#price">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">price</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#color">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">color</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#size">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">size</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#material">
-    <rdfs:domain rdf:resource="#Equipment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Equipment" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">material</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Performance Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#performanceValue">
-    <rdfs:domain rdf:resource="#Performance"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Performance" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">performance value</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#unit">
-    <rdfs:domain rdf:resource="#Performance"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Performance" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">unit of measurement</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#recordDate">
-    <rdfs:domain rdf:resource="#Record"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#Record" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date" />
     <rdfs:label xml:lang="en">record date</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#recordType">
-    <rdfs:domain rdf:resource="#Record"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Record" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">record type</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Media Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#mediaName">
-    <rdfs:domain rdf:resource="#Media"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Media" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">media name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#audience">
-    <rdfs:domain rdf:resource="#Media"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Media" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">audience size</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#launchYear">
-    <rdfs:domain rdf:resource="#Media"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Media" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">launch year</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#website">
-    <rdfs:domain rdf:resource="#DigitalMedia"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#DigitalMedia" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">website URL</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- Sponsorship Data Properties -->
+  
   <owl:DatatypeProperty rdf:about="#sponsorName">
-    <rdfs:domain rdf:resource="#Sponsorship"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Sponsorship" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">sponsor name</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#dealValue">
-    <rdfs:domain rdf:resource="#Sponsorship"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Sponsorship" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float" />
     <rdfs:label xml:lang="en">deal value in millions</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#contractDuration">
-    <rdfs:domain rdf:resource="#Sponsorship"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Sponsorship" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer" />
     <rdfs:label xml:lang="en">contract duration in years</rdfs:label>
   </owl:DatatypeProperty>
   
   <owl:DatatypeProperty rdf:about="#industry">
-    <rdfs:domain rdf:resource="#Sponsorship"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Sponsorship" />
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string" />
     <rdfs:label xml:lang="en">industry sector</rdfs:label>
   </owl:DatatypeProperty>
   
-  <!-- ===================== INDIVIDUALS / INSTANCES ===================== -->
   
-  <!-- Sport Discipline Instances -->
+  
+  
   <sport:TeamSport rdf:about="#Football">
     <sport:sportName>Football</sport:sportName>
     <sport:isOlympic rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sport:isOlympic>
@@ -1022,26 +1017,21 @@
     <sport:globalParticipants rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87000000</sport:globalParticipants>
   </sport:IndividualSport>
   
-  <!-- Athlete Instances -->
+  
   <sport:Athlete rdf:about="#LionelMessi">
-    <sport:firstName>Lionel</sport:firstName>
-    <sport:lastName>Messi</sport:lastName>
     <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1987-06-24</sport:birthDate>
-    <sport:nationality>Argentina</sport:nationality>
     <sport:height rdf:datatype="http://www.w3.org/2001/XMLSchema#float">170.0</sport:height>
     <sport:weight rdf:datatype="http://www.w3.org/2001/XMLSchema#float">72.0</sport:weight>
     <sport:gender>Male</sport:gender>
-    <sport:jerseyNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</sport:jerseyNumber>
-    <sport:position>Forward</sport:position>
     <sport:marketValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">50.0</sport:marketValue>
     <sport:salary rdf:datatype="http://www.w3.org/2001/XMLSchema#float">50000000</sport:salary>
-    <sport:goalsScored rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">807</sport:goalsScored>
-    <sport:assists rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">357</sport:assists>
-    <sport:matchesPlayed rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1003</sport:matchesPlayed>
     <sport:isCaptain rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sport:isCaptain>
-    <sport:playsFor rdf:resource="#InterMiami"/>
-    <sport:practicesSport rdf:resource="#Football"/>
-  </sport:Athlete>
+    <sport:description>Widely regarded as one of the greatest footballers of all time, Lionel Messi has won a record eight Ballon d'Or awards. The Argentine captain led his nation to World Cup glory in 2022, cementing his legacy as a complete player. Known for his dribbling, vision, and goal-scoring prowess, Messi spent over two decades at Barcelona before joining Paris Saint-Germain and later Inter Miami.</sport:description>
+    <sport:achievements>8x Ballon d'Or, 2022 World Cup Winner, 4x Champions League Winner, 10x La Liga Champion</sport:achievements>
+    <sport:specialties>Dribbling, Free-kicks, Playmaking, Goal-scoring</sport:specialties>
+    <sport:playsFor rdf:resource="#InterMiami" />
+    <sport:practicesSport rdf:resource="#Football" />
+  <sport:firstName>Lionel</sport:firstName><sport:lastName>Messi</sport:lastName><sport:nationality>Argentina</sport:nationality><sport:jerseyNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</sport:jerseyNumber><sport:position>Forward</sport:position><sport:goalsScored rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">806</sport:goalsScored><sport:assists rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">357</sport:assists><sport:matchesPlayed rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1003</sport:matchesPlayed></sport:Athlete>
   
   <sport:Athlete rdf:about="#CristianoRonaldo">
     <sport:firstName>Cristiano</sport:firstName>
@@ -1057,11 +1047,14 @@
     <sport:goalsScored rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">890</sport:goalsScored>
     <sport:assists rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">245</sport:assists>
     <sport:matchesPlayed rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1200</sport:matchesPlayed>
-    <sport:playsFor rdf:resource="#AlNassr"/>
-    <sport:practicesSport rdf:resource="#Football"/>
+    <sport:description>A five-time Ballon d'Or winner and one of the most prolific goalscorers in football history with over 890 career goals. Ronaldo has conquered multiple leagues including the Premier League, La Liga, and Serie A. Known for his athleticism, heading ability, and incredible work ethic, he continues to break records well into his late thirties. His dedication to fitness and relentless pursuit of excellence have made him a global icon.</sport:description>
+    <sport:achievements>5x Ballon d'Or, 5x Champions League Winner, Euro 2016 Champion, Multiple League Titles across England, Spain, and Italy</sport:achievements>
+    <sport:specialties>Heading, Long-range Shots, Speed, Aerial Ability, Penalty-taking</sport:specialties>
+    <sport:playsFor rdf:resource="#AlNassr" />
+    <sport:practicesSport rdf:resource="#Football" />
   </sport:Athlete>
   
-  <!-- Team Instances -->
+  
   <sport:ProfessionalTeam rdf:about="#InterMiami">
     <sport:teamName>Inter Miami CF</sport:teamName>
     <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2018</sport:foundedYear>
@@ -1069,8 +1062,8 @@
     <sport:secondaryColor>Black</sport:secondaryColor>
     <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</sport:squadSize>
     <sport:budget rdf:datatype="http://www.w3.org/2001/XMLSchema#float">25.0</sport:budget>
-    <sport:homeVenue rdf:resource="#DRVPNKStadium"/>
-    <sport:competesIn rdf:resource="#MLS"/>
+    <sport:homeVenue rdf:resource="#DRVPNKStadium" />
+    <sport:competesIn rdf:resource="#MLS" />
   </sport:ProfessionalTeam>
   
   <sport:ProfessionalTeam rdf:about="#AlNassr">
@@ -1080,11 +1073,11 @@
     <sport:secondaryColor>Blue</sport:secondaryColor>
     <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">28</sport:squadSize>
     <sport:budget rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.0</sport:budget>
-    <sport:homeVenue rdf:resource="#MrsoolParkStadium"/>
-    <sport:competesIn rdf:resource="#SaudiProLeague"/>
+    <sport:homeVenue rdf:resource="#MrsoolParkStadium" />
+    <sport:competesIn rdf:resource="#SaudiProLeague" />
   </sport:ProfessionalTeam>
   
-  <!-- Venue Instances -->
+  
   <sport:Stadium rdf:about="#DRVPNKStadium">
     <sport:venueName>DRV PNK Stadium</sport:venueName>
     <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18000</sport:capacity>
@@ -1093,19 +1086,19 @@
     <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2020</sport:openedYear>
     <sport:surfaceType>Natural Grass</sport:surfaceType>
     <sport:isIndoor rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</sport:isIndoor>
-    <sport:suitableFor rdf:resource="#Football"/>
+    <sport:suitableFor rdf:resource="#Football" />
   </sport:Stadium>
   
-  <!-- Competition Instances -->
+  
   <sport:League rdf:about="#MLS">
     <sport:competitionName>Major League Soccer</sport:competitionName>
     <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">29</sport:numberOfTeams>
     <sport:season>2024</sport:season>
-    <sport:organizedBy rdf:resource="#MLSOrganization"/>
-    <sport:broadcastBy rdf:resource="#ESPN"/>
+    <sport:organizedBy rdf:resource="#MLSOrganization" />
+    <sport:broadcastBy rdf:resource="#ESPN" />
   </sport:League>
   
-  <!-- Organization Instances -->
+  
   <sport:League_Org rdf:about="#MLSOrganization">
     <sport:organizationName>Major League Soccer</sport:organizationName>
     <sport:establishedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1993</sport:establishedYear>
@@ -1114,15 +1107,15 @@
     <sport:memberCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">29</sport:memberCount>
   </sport:League_Org>
   
-  <!-- Media Instances -->
+  
   <sport:Television rdf:about="#ESPN">
     <sport:mediaName>ESPN</sport:mediaName>
     <sport:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94000000</sport:audience>
     <sport:launchYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1979</sport:launchYear>
-    <sport:covers rdf:resource="#MLS"/>
+    <sport:covers rdf:resource="#MLS" />
   </sport:Television>
   
-  <!-- Equipment Instances -->
+  
   <sport:Footwear rdf:about="#AdidasX">
     <sport:equipmentName>Adidas X Speedportal</sport:equipmentName>
     <sport:brand>Adidas</sport:brand>
@@ -1130,32 +1123,32 @@
     <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">280.0</sport:price>
     <sport:color>White/Black</sport:color>
     <sport:material>Synthetic</sport:material>
-    <sport:usedBy rdf:resource="#LionelMessi"/>
-    <sport:requiredFor rdf:resource="#Football"/>
+    <sport:usedBy rdf:resource="#LionelMessi" />
+    <sport:requiredFor rdf:resource="#Football" />
   </sport:Footwear>
   
-  <!-- Performance Instances -->
+  
   <sport:Record rdf:about="#MessiGoalsRecord">
     <sport:performanceValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">807.0</sport:performanceValue>
     <sport:unit>Goals</sport:unit>
     <sport:recordDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-06-20</sport:recordDate>
     <sport:recordType>Most Career Goals</sport:recordType>
-    <sport:achievedBy rdf:resource="#LionelMessi"/>
+    <sport:achievedBy rdf:resource="#LionelMessi" />
   </sport:Record>
   
-  <!-- Sponsorship Instances -->
+  
   <sport:TechnicalSponsor rdf:about="#AdidasSponsorship">
     <sport:sponsorName>Adidas</sport:sponsorName>
     <sport:dealValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1000.0</sport:dealValue>
     <sport:contractDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</sport:contractDuration>
     <sport:industry>Sports Equipment</sport:industry>
-    <sport:endorses rdf:resource="#LionelMessi"/>
-    <sport:providedBy rdf:resource="#AdidasX"/>
+    <sport:endorses rdf:resource="#LionelMessi" />
+    <sport:providedBy rdf:resource="#AdidasX" />
   </sport:TechnicalSponsor>
 
-  <!-- More Comprehensive Individuals -->
   
-  <!-- Additional Sport Disciplines -->
+  
+  
   <sport:WaterSport rdf:about="#Swimming">
     <sport:sportName>Swimming</sport:sportName>
     <sport:isOlympic rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sport:isOlympic>
@@ -1170,7 +1163,7 @@
     <sport:globalParticipants rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200000000</sport:globalParticipants>
   </sport:CombatSport>
   
-  <!-- Additional Athletes -->
+  
   <sport:Athlete rdf:about="#SerenaWilliams">
     <sport:firstName>Serena</sport:firstName>
     <sport:lastName>Williams</sport:lastName>
@@ -1180,7 +1173,7 @@
     <sport:weight rdf:datatype="http://www.w3.org/2001/XMLSchema#float">70.0</sport:weight>
     <sport:gender>Female</sport:gender>
     <sport:position>Singles Player</sport:position>
-    <sport:practicesSport rdf:resource="#Tennis"/>
+    <sport:practicesSport rdf:resource="#Tennis" />
   </sport:Athlete>
   
   <sport:Athlete rdf:about="#LeBronJames">
@@ -1196,11 +1189,11 @@
     <sport:marketValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">44.0</sport:marketValue>
     <sport:goalsScored rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">38652</sport:goalsScored>
     <sport:matchesPlayed rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1421</sport:matchesPlayed>
-    <sport:playsFor rdf:resource="#LALakers"/>
-    <sport:practicesSport rdf:resource="#Basketball"/>
+    <sport:playsFor rdf:resource="#LALakers" />
+    <sport:practicesSport rdf:resource="#Basketball" />
   </sport:Athlete>
   
-  <!-- Additional Teams -->
+  
   <sport:ProfessionalTeam rdf:about="#LALakers">
     <sport:teamName>Los Angeles Lakers</sport:teamName>
     <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1947</sport:foundedYear>
@@ -1209,8 +1202,8 @@
     <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</sport:squadSize>
     <sport:budget rdf:datatype="http://www.w3.org/2001/XMLSchema#float">180.0</sport:budget>
     <sport:wins rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</sport:wins>
-    <sport:homeVenue rdf:resource="#CryptoComArena"/>
-    <sport:competesIn rdf:resource="#NBA"/>
+    <sport:homeVenue rdf:resource="#CryptoComArena" />
+    <sport:competesIn rdf:resource="#NBA" />
   </sport:ProfessionalTeam>
   
   <sport:NationalTeam rdf:about="#ArgentinaNT">
@@ -1220,10 +1213,10 @@
     <sport:secondaryColor>White</sport:secondaryColor>
     <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">26</sport:squadSize>
     <sport:wins rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</sport:wins>
-    <sport:competesIn rdf:resource="#FIFAWorldCup"/>
+    <sport:competesIn rdf:resource="#FIFAWorldCup" />
   </sport:NationalTeam>
   
-  <!-- Additional Venues -->
+  
   <sport:Arena rdf:about="#CryptoComArena">
     <sport:venueName>Crypto.com Arena</sport:venueName>
     <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20000</sport:capacity>
@@ -1232,7 +1225,7 @@
     <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1999</sport:openedYear>
     <sport:surfaceType>Hardwood</sport:surfaceType>
     <sport:isIndoor rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sport:isIndoor>
-    <sport:suitableFor rdf:resource="#Basketball"/>
+    <sport:suitableFor rdf:resource="#Basketball" />
   </sport:Arena>
   
   <sport:Court rdf:about="#WimbledonCentreCourt">
@@ -1243,17 +1236,17 @@
     <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1922</sport:openedYear>
     <sport:surfaceType>Grass</sport:surfaceType>
     <sport:isIndoor rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</sport:isIndoor>
-    <sport:suitableFor rdf:resource="#Tennis"/>
+    <sport:suitableFor rdf:resource="#Tennis" />
   </sport:Court>
   
-  <!-- Additional Competitions -->
+  
   <sport:Championship rdf:about="#NBA">
     <sport:competitionName>National Basketball Association</sport:competitionName>
     <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</sport:numberOfTeams>
     <sport:season>2023-24</sport:season>
     <sport:prizeMoney rdf:datatype="http://www.w3.org/2001/XMLSchema#float">8.0</sport:prizeMoney>
-    <sport:organizedBy rdf:resource="#NBAOrganization"/>
-    <sport:broadcastBy rdf:resource="#TNT"/>
+    <sport:organizedBy rdf:resource="#NBAOrganization" />
+    <sport:broadcastBy rdf:resource="#TNT" />
   </sport:Championship>
   
   <sport:WorldCup rdf:about="#FIFAWorldCup">
@@ -1261,11 +1254,11 @@
     <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</sport:numberOfTeams>
     <sport:season>2022</sport:season>
     <sport:prizeMoney rdf:datatype="http://www.w3.org/2001/XMLSchema#float">440.0</sport:prizeMoney>
-    <sport:organizedBy rdf:resource="#FIFA"/>
-    <sport:broadcastBy rdf:resource="#FOX"/>
+    <sport:organizedBy rdf:resource="#FIFA" />
+    <sport:broadcastBy rdf:resource="#FOX" />
   </sport:WorldCup>
   
-  <!-- Additional Organizations -->
+  
   <sport:Federation rdf:about="#FIFA">
     <sport:organizationName>Fédération Internationale de Football Association</sport:organizationName>
     <sport:establishedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1904</sport:establishedYear>
@@ -1282,12 +1275,12 @@
     <sport:memberCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</sport:memberCount>
   </sport:League_Org>
   
-  <!-- Additional Media -->
+  
   <sport:Television rdf:about="#TNT">
     <sport:mediaName>TNT Sports</sport:mediaName>
     <sport:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">89000000</sport:audience>
     <sport:launchYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1988</sport:launchYear>
-    <sport:covers rdf:resource="#NBA"/>
+    <sport:covers rdf:resource="#NBA" />
   </sport:Television>
   
   <sport:DigitalMedia rdf:about="#ESPN_Digital">
@@ -1295,10 +1288,10 @@
     <sport:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100000000</sport:audience>
     <sport:launchYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1995</sport:launchYear>
     <sport:website>https://www.espn.com</sport:website>
-    <sport:covers rdf:resource="#MLS"/>
+    <sport:covers rdf:resource="#MLS" />
   </sport:DigitalMedia>
   
-  <!-- Additional Equipment -->
+  
   <sport:PlayingEquipment rdf:about="#WilsonBasketball">
     <sport:equipmentName>Wilson Evolution</sport:equipmentName>
     <sport:brand>Wilson</sport:brand>
@@ -1306,7 +1299,7 @@
     <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">65.0</sport:price>
     <sport:color>Orange</sport:color>
     <sport:material>Composite Leather</sport:material>
-    <sport:requiredFor rdf:resource="#Basketball"/>
+    <sport:requiredFor rdf:resource="#Basketball" />
   </sport:PlayingEquipment>
   
   <sport:Apparel rdf:about="#NikeJersey">
@@ -1317,31 +1310,81 @@
     <sport:color>Purple</sport:color>
     <sport:size>Large</sport:size>
     <sport:material>Polyester</sport:material>
-    <sport:usedBy rdf:resource="#LeBronJames"/>
+    <sport:usedBy rdf:resource="#LeBronJames" />
   </sport:Apparel>
   
-  <!-- Additional Performance Records -->
+  
   <sport:Record rdf:about="#LeBronPointsRecord">
     <sport:performanceValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">38652.0</sport:performanceValue>
     <sport:unit>Points</sport:unit>
     <sport:recordDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-02-07</sport:recordDate>
     <sport:recordType>Most Career Points NBA</sport:recordType>
-    <sport:achievedBy rdf:resource="#LeBronJames"/>
+    <sport:achievedBy rdf:resource="#LeBronJames" />
   </sport:Record>
   
   <sport:Achievement rdf:about="#SerenaGrandSlams">
     <sport:performanceValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">23.0</sport:performanceValue>
     <sport:unit>Grand Slam Titles</sport:unit>
-    <sport:achievedBy rdf:resource="#SerenaWilliams"/>
+    <sport:achievementType>Grand Slam Champion</sport:achievementType>
+    <sport:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2017</sport:year>
+    <sport:achievedBy rdf:resource="#SerenaWilliams" />
   </sport:Achievement>
   
-  <!-- Additional Sponsorships -->
+  <sport:Achievement rdf:about="#MessiBallonDOr2023">
+    <sport:achievementType>Ballon d'Or Winner</sport:achievementType>
+    <sport:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2023</sport:year>
+    <sport:achievedBy rdf:resource="#LionelMessi" />
+  </sport:Achievement>
+  
+  <sport:Achievement rdf:about="#RonaldoChampionsLeague">
+    <sport:achievementType>UEFA Champions League Winner</sport:achievementType>
+    <sport:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2018</sport:year>
+    <sport:achievedBy rdf:resource="#CristianoRonaldo" />
+  </sport:Achievement>
+  
+  <sport:Achievement rdf:about="#LeBronNBAChampion">
+    <sport:achievementType>NBA Championship</sport:achievementType>
+    <sport:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2020</sport:year>
+    <sport:achievedBy rdf:resource="#LeBronJames" />
+  </sport:Achievement>
+  
+  <sport:Achievement rdf:about="#MbappeWorldCup">
+    <sport:achievementType>FIFA World Cup Winner</sport:achievementType>
+    <sport:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2018</sport:year>
+    <sport:achievedBy rdf:resource="#KylianMbappe" />
+  </sport:Achievement>
+  
+  <sport:Record rdf:about="#MessiMostGoals">
+    <sport:recordType>Most Goals in Calendar Year</sport:recordType>
+    <sport:recordValue>91 goals</sport:recordValue>
+    <sport:setBy rdf:resource="#LionelMessi" />
+    <sport:setOn rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2012-12-31</sport:setOn>
+  </sport:Record>
+  
+  <sport:Record rdf:about="#RonaldoChampionsLeagueGoals">
+    <sport:recordType>Most Goals</sport:recordType><sport:recordValue>140 goals</sport:recordValue><sport:athleteId>CristianoRonaldo</sport:athleteId><sport:setBy rdf:resource="#CristianoRonaldo" /><sport:setOn rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-06-15</sport:setOn></sport:Record>
+  
+  <sport:Record rdf:about="#LeBronAllTimeScorer">
+    <sport:recordType>NBA All-Time Leading Scorer</sport:recordType>
+    <sport:recordValue>40,474 points</sport:recordValue>
+    <sport:setBy rdf:resource="#LeBronJames" />
+    <sport:setOn rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-02-07</sport:setOn>
+  </sport:Record>
+  
+  <sport:Record rdf:about="#HaalandPremierLeagueGoals">
+    <sport:recordType>Most Goals in Premier League Season</sport:recordType>
+    <sport:recordValue>36 goals</sport:recordValue>
+    <sport:setBy rdf:resource="#ErlingHaaland" />
+    <sport:setOn rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-05-28</sport:setOn>
+  </sport:Record>
+  
+  
   <sport:Endorsement rdf:about="#NikeLeBron">
     <sport:sponsorName>Nike</sport:sponsorName>
     <sport:dealValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1000.0</sport:dealValue>
     <sport:contractDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</sport:contractDuration>
     <sport:industry>Sports Equipment</sport:industry>
-    <sport:endorses rdf:resource="#LeBronJames"/>
+    <sport:endorses rdf:resource="#LeBronJames" />
   </sport:Endorsement>
   
   <sport:NamingRights rdf:about="#CryptoComNaming">
@@ -1349,23 +1392,18 @@
     <sport:dealValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">700.0</sport:dealValue>
     <sport:contractDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</sport:contractDuration>
     <sport:industry>Cryptocurrency</sport:industry>
-    <sport:hasNamingRights rdf:resource="#CryptoComArena"/>
+    <sport:hasNamingRights rdf:resource="#CryptoComArena" />
   </sport:NamingRights>
   
-  <!-- Coaches -->
+  
   <sport:Coach rdf:about="#PepGuardiola">
-    <sport:firstName>Pep</sport:firstName>
-    <sport:lastName>Guardiola</sport:lastName>
-    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1971-01-18</sport:birthDate>
-    <sport:nationality>Spain</sport:nationality>
     <sport:coachingLicense>UEFA Pro License</sport:coachingLicense>
     <sport:yearsExperience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</sport:yearsExperience>
     <sport:winPercentage rdf:datatype="http://www.w3.org/2001/XMLSchema#float">72.5</sport:winPercentage>
-    <sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">37</sport:titlesWon>
-    <sport:coaches rdf:resource="#ManchesterCity"/>
-  </sport:Coach>
+    <sport:coaches rdf:resource="#ManchesterCity" />
+  <sport:firstName>Pep</sport:firstName><sport:lastName>Guardiola</sport:lastName><sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1971-01-18</sport:birthDate><sport:nationality>Spain</sport:nationality><sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</sport:experienceYears><sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">37</sport:titlesWon><sport:coachingStyle>Possession-based</sport:coachingStyle></sport:Coach>
   
-  <!-- Additional Team -->
+  
   <sport:ProfessionalTeam rdf:about="#ManchesterCity">
     <sport:teamName>Manchester City FC</sport:teamName>
     <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1880</sport:foundedYear>
@@ -1374,11 +1412,11 @@
     <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</sport:squadSize>
     <sport:budget rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</sport:budget>
     <sport:wins rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</sport:wins>
-    <sport:homeVenue rdf:resource="#EtihadStadium"/>
-    <sport:competesIn rdf:resource="#PremierLeague"/>
+    <sport:homeVenue rdf:resource="#EtihadStadium" />
+    <sport:competesIn rdf:resource="#PremierLeague" />
   </sport:ProfessionalTeam>
   
-  <!-- Additional Venue -->
+  
   <sport:Stadium rdf:about="#EtihadStadium">
     <sport:venueName>Etihad Stadium</sport:venueName>
     <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">55000</sport:capacity>
@@ -1387,25 +1425,502 @@
     <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2002</sport:openedYear>
     <sport:surfaceType>Natural Grass</sport:surfaceType>
     <sport:isIndoor rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</sport:isIndoor>
-    <sport:suitableFor rdf:resource="#Football"/>
+    <sport:suitableFor rdf:resource="#Football" />
   </sport:Stadium>
   
-  <!-- Additional Competition -->
+  
   <sport:League rdf:about="#PremierLeague">
     <sport:competitionName>Premier League</sport:competitionName>
     <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</sport:numberOfTeams>
     <sport:season>2023-24</sport:season>
     <sport:prizeMoney rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.0</sport:prizeMoney>
-    <sport:organizedBy rdf:resource="#PremierLeagueOrg"/>
-    <sport:broadcastBy rdf:resource="#SkySports"/>
+    <sport:organizedBy rdf:resource="#PremierLeagueOrg" />
+    <sport:broadcastBy rdf:resource="#SkySports" />
   </sport:League>
   
-  <!-- Additional Media -->
+  
   <sport:Television rdf:about="#SkySports">
     <sport:mediaName>Sky Sports</sport:mediaName>
     <sport:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12000000</sport:audience>
     <sport:launchYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1991</sport:launchYear>
-    <sport:covers rdf:resource="#PremierLeague"/>
+    <sport:covers rdf:resource="#PremierLeague" />
   </sport:Television>
+
+  
+  <sport:Athlete rdf:about="#KylianMbappe">
+    <sport:firstName>Kylian</sport:firstName>
+    <sport:lastName>Mbappe</sport:lastName>
+    <sport:nationality>France</sport:nationality>
+    <sport:position>Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#Neymar">
+    <sport:firstName>Neymar</sport:firstName>
+    <sport:lastName>Jr</sport:lastName>
+    <sport:nationality>Brazil</sport:nationality>
+    <sport:position>Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#KarimBenzema">
+    <sport:firstName>Karim</sport:firstName>
+    <sport:lastName>Benzema</sport:lastName>
+    <sport:nationality>France</sport:nationality>
+    <sport:position>Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#LukaModric">
+    <sport:firstName>Luka</sport:firstName>
+    <sport:lastName>Modric</sport:lastName>
+    <sport:nationality>Croatia</sport:nationality>
+    <sport:position>Midfielder</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#MohamedSalah">
+    <sport:firstName>Mohamed</sport:firstName>
+    <sport:lastName>Salah</sport:lastName>
+    <sport:nationality>Egypt</sport:nationality>
+    <sport:position>Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  
+  <sport:Athlete rdf:about="#HarryKane">
+    <sport:firstName>Harry</sport:firstName>
+    <sport:lastName>Kane</sport:lastName>
+    <sport:nationality>England</sport:nationality>
+    <sport:position>Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#ErlingHaaland">
+    <sport:firstName>Erling</sport:firstName>
+    <sport:lastName>Haaland</sport:lastName>
+    <sport:nationality>Norway</sport:nationality>
+    <sport:position>Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#KevinDeBruyne">
+    <sport:firstName>Kevin</sport:firstName>
+    <sport:lastName>De Bruyne</sport:lastName>
+    <sport:nationality>Belgium</sport:nationality>
+    <sport:position>Midfielder</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#RobertLewandowski">
+    <sport:firstName>Robert</sport:firstName>
+    <sport:lastName>Lewandowski</sport:lastName>
+    <sport:nationality>Poland</sport:nationality>
+    <sport:position>Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#VirgilVanDijk">
+    <sport:firstName>Virgil</sport:firstName>
+    <sport:lastName>van Dijk</sport:lastName>
+    <sport:nationality>Netherlands</sport:nationality>
+    <sport:position>Defender</sport:position>
+    <sport:practicesSport rdf:resource="#Football" />
+  </sport:Athlete>
+
+  
+  <sport:Athlete rdf:about="#StephenCurry">
+    <sport:firstName>Stephen</sport:firstName>
+    <sport:lastName>Curry</sport:lastName>
+    <sport:nationality>United States</sport:nationality>
+    <sport:position>Point Guard</sport:position>
+    <sport:practicesSport rdf:resource="#Basketball" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#KevinDurant">
+    <sport:firstName>Kevin</sport:firstName>
+    <sport:lastName>Durant</sport:lastName>
+    <sport:nationality>United States</sport:nationality>
+    <sport:position>Small Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Basketball" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#GiannisAntetokounmpo">
+    <sport:firstName>Giannis</sport:firstName>
+    <sport:lastName>Antetokounmpo</sport:lastName>
+    <sport:nationality>Greece</sport:nationality>
+    <sport:position>Power Forward</sport:position>
+    <sport:practicesSport rdf:resource="#Basketball" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#RafaelNadal">
+    <sport:firstName>Rafael</sport:firstName>
+    <sport:lastName>Nadal</sport:lastName>
+    <sport:nationality>Spain</sport:nationality>
+    <sport:practicesSport rdf:resource="#Tennis" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#RogerFederer">
+    <sport:firstName>Roger</sport:firstName>
+    <sport:lastName>Federer</sport:lastName>
+    <sport:nationality>Switzerland</sport:nationality>
+    <sport:practicesSport rdf:resource="#Tennis" />
+  </sport:Athlete>
+
+  <sport:Athlete rdf:about="#NovakDjokovic">
+    <sport:firstName>Novak</sport:firstName>
+    <sport:lastName>Djokovic</sport:lastName>
+    <sport:nationality>Serbia</sport:nationality>
+    <sport:practicesSport rdf:resource="#Tennis" />
+  </sport:Athlete>
+
+  
+  <sport:ProfessionalTeam rdf:about="#RealMadrid">
+    <sport:teamName>Real Madrid CF</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1902</sport:foundedYear>
+    <sport:primaryColor>White</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  <sport:ProfessionalTeam rdf:about="#Barcelona">
+    <sport:teamName>FC Barcelona</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1899</sport:foundedYear>
+    <sport:primaryColor>Blue</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  <sport:ProfessionalTeam rdf:about="#ManchesterCity">
+    <sport:teamName>Manchester City FC</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1880</sport:foundedYear>
+    <sport:primaryColor>Sky Blue</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  <sport:ProfessionalTeam rdf:about="#BayernMunich">
+    <sport:teamName>FC Bayern Munich</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1900</sport:foundedYear>
+    <sport:primaryColor>Red</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  <sport:ProfessionalTeam rdf:about="#PSG">
+    <sport:teamName>Paris Saint-Germain</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1970</sport:foundedYear>
+    <sport:primaryColor>Blue</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  <sport:ProfessionalTeam rdf:about="#Liverpool">
+    <sport:teamName>Liverpool FC</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1892</sport:foundedYear>
+    <sport:primaryColor>Red</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  
+  <sport:ProfessionalTeam rdf:about="#GoldenStateWarriors">
+    <sport:teamName>Golden State Warriors</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1946</sport:foundedYear>
+    <sport:primaryColor>Blue</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  <sport:ProfessionalTeam rdf:about="#BostonCeltics">
+    <sport:teamName>Boston Celtics</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1946</sport:foundedYear>
+    <sport:primaryColor>Green</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  <sport:ProfessionalTeam rdf:about="#ChicagoBulls">
+    <sport:teamName>Chicago Bulls</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1966</sport:foundedYear>
+    <sport:primaryColor>Red</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  <sport:ProfessionalTeam rdf:about="#MiamiHeat">
+    <sport:teamName>Miami Heat</sport:teamName>
+    <sport:foundedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1988</sport:foundedYear>
+    <sport:primaryColor>Red</sport:primaryColor>
+    <sport:squadSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</sport:squadSize>
+  </sport:ProfessionalTeam>
+
+  
+  <sport:Stadium rdf:about="#SantiagoBernabeu">
+    <sport:venueName>Santiago Bernabeu</sport:venueName>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">81044</sport:capacity>
+    <sport:city>Madrid</sport:city>
+    <sport:country>Spain</sport:country>
+  </sport:Stadium>
+
+  <sport:Stadium rdf:about="#CampNou">
+    <sport:venueName>Camp Nou</sport:venueName>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">99354</sport:capacity>
+    <sport:city>Barcelona</sport:city>
+    <sport:country>Spain</sport:country>
+  </sport:Stadium>
+
+  <sport:Stadium rdf:about="#OldTrafford">
+    <sport:venueName>Old Trafford</sport:venueName>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">74140</sport:capacity>
+    <sport:city>Manchester</sport:city>
+    <sport:country>United Kingdom</sport:country>
+  </sport:Stadium>
+
+  <sport:Stadium rdf:about="#Anfield">
+    <sport:venueName>Anfield</sport:venueName>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">54074</sport:capacity>
+    <sport:city>Liverpool</sport:city>
+    <sport:country>United Kingdom</sport:country>
+  </sport:Stadium>
+
+  <sport:Stadium rdf:about="#AllenzArena">
+    <sport:venueName>Allianz Arena</sport:venueName>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">75000</sport:capacity>
+    <sport:city>Munich</sport:city>
+    <sport:country>Germany</sport:country>
+  </sport:Stadium>
+
+  <sport:Stadium rdf:about="#Wembley">
+    <sport:venueName>Wembley Stadium</sport:venueName>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90000</sport:capacity>
+    <sport:city>London</sport:city>
+    <sport:country>United Kingdom</sport:country>
+  </sport:Stadium>
+
+  
+  <sport:Coach rdf:about="#PepGuardiola">
+    <sport:firstName>Pep</sport:firstName>
+    <sport:lastName>Guardiola</sport:lastName>
+    <sport:nationality>Spain</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</sport:experienceYears>
+  </sport:Coach>
+
+  <sport:Coach rdf:about="#CarloAncelotti">
+    <sport:firstName>Carlo</sport:firstName>
+    <sport:lastName>Ancelotti</sport:lastName>
+    <sport:nationality>Italy</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">28</sport:experienceYears>
+  </sport:Coach>
+
+  <sport:Coach rdf:about="#JurgenKlopp">
+    <sport:firstName>Jurgen</sport:firstName>
+    <sport:lastName>Klopp</sport:lastName>
+    <sport:nationality>Germany</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">23</sport:experienceYears>
+  </sport:Coach>
+
+  <sport:Coach rdf:about="#SteveKerr">
+    <sport:firstName>Steve</sport:firstName>
+    <sport:lastName>Kerr</sport:lastName>
+    <sport:nationality>United States</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</sport:experienceYears>
+  </sport:Coach>
+
+  <sport:Coach rdf:about="#ZinedineZidane">
+    <sport:firstName>Zinedine</sport:firstName>
+    <sport:lastName>Zidane</sport:lastName>
+    <sport:nationality>France</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</sport:experienceYears>
+  </sport:Coach>
+
+  
+  <sport:Referee rdf:about="#PierluigiCollina">
+    <sport:level>International</sport:level>
+  <sport:firstName>Pierluigi</sport:firstName><sport:lastName>Collina</sport:lastName><sport:nationality>Italy</sport:nationality><sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">29</sport:experienceYears><sport:matchesOfficiated rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">430</sport:matchesOfficiated></sport:Referee>
+
+  <sport:Referee rdf:about="#HowardWebb">
+    <sport:firstName>Howard</sport:firstName>
+    <sport:lastName>Webb</sport:lastName>
+    <sport:nationality>United Kingdom</sport:nationality>
+    <sport:level>International</sport:level>
+  </sport:Referee>
+
+  <sport:Referee rdf:about="#FelixBrych">
+    <sport:firstName>Felix</sport:firstName>
+    <sport:lastName>Brych</sport:lastName>
+    <sport:nationality>Germany</sport:nationality>
+    <sport:level>International</sport:level>
+  </sport:Referee>
+
+  <sport:Referee rdf:about="#ClementTurpin">
+    <sport:firstName>Clement</sport:firstName>
+    <sport:lastName>Turpin</sport:lastName>
+    <sport:nationality>France</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">16</sport:experienceYears>
+    <sport:matchesOfficiated rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</sport:matchesOfficiated>
+    <sport:level>International</sport:level>
+    <sport:description>France's leading referee and one of UEFA's elite officials. Clement Turpin has been selected for major tournament finals including the 2022 World Cup. His modern approach to refereeing balances strict rule enforcement with understanding of game flow. Known for his fitness, clear communication, and ability to use VAR effectively, he represents the new generation of top-level referees.</sport:description>
+    <sport:expertise>Modern refereeing approach, Technology integration (VAR), Clear communication, Fitness, Progressive officiating</sport:expertise>
+  </sport:Referee>
+
+  
+  <sport:Championship rdf:about="#ChampionsLeague">
+    <sport:competitionName>UEFA Champions League</sport:competitionName>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</sport:numberOfTeams>
+    <sport:season>2023-24</sport:season>
+  </sport:Championship>
+
+  <sport:WorldCup rdf:about="#FIFAWorldCup">
+    <sport:competitionName>FIFA World Cup</sport:competitionName>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</sport:numberOfTeams>
+    <sport:season>2022</sport:season>
+  </sport:WorldCup>
+
+  <sport:League rdf:about="#LaLiga">
+    <sport:competitionName>La Liga</sport:competitionName>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</sport:numberOfTeams>
+    <sport:season>2023-24</sport:season>
+  </sport:League>
+
+  <sport:League rdf:about="#Bundesliga">
+    <sport:competitionName>Bundesliga</sport:competitionName>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</sport:numberOfTeams>
+    <sport:season>2023-24</sport:season>
+  </sport:League>
+
+  <sport:League rdf:about="#SerieA">
+    <sport:competitionName>Serie A</sport:competitionName>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</sport:numberOfTeams>
+    <sport:season>2023-24</sport:season>
+  </sport:League>
+
+  <sport:Championship rdf:about="#Wimbledon">
+    <sport:competitionName>Wimbledon Championships</sport:competitionName>
+    <sport:season>2024</sport:season>
+  </sport:Championship>
+
+  <sport:Championship rdf:about="#Olympics">
+    <sport:competitionName>Olympic Games</sport:competitionName>
+    <sport:season>2024</sport:season>
+  </sport:Championship>
+
+  
+  <sport:PlayingEquipment rdf:about="#WilsonBasketball">
+    <sport:equipmentName>Wilson NBA Basketball</sport:equipmentName>
+    <sport:brand>Wilson</sport:brand>
+    <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">150.0</sport:price>
+  </sport:PlayingEquipment>
+
+  <sport:PlayingEquipment rdf:about="#WilsonTennisRacket">
+    <sport:equipmentName>Wilson Pro Staff Tennis Racket</sport:equipmentName>
+    <sport:brand>Wilson</sport:brand>
+    <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">250.0</sport:price>
+  </sport:PlayingEquipment>
+
+  <sport:Apparel rdf:about="#NikeJersey">
+    <sport:equipmentName>Nike Dri-FIT Jersey</sport:equipmentName>
+    <sport:brand>Nike</sport:brand>
+    <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">90.0</sport:price>
+  </sport:Apparel>
+
+  
+  <sport:Coach rdf:about="#PepGuardiola">
+    <sport:firstName>Pep</sport:firstName>
+    <sport:lastName>Guardiola</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1971-01-18</sport:birthDate>
+    <sport:nationality>Spain</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</sport:experienceYears>
+    <sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">37</sport:titlesWon>
+    <sport:coachingStyle>Possession-based</sport:coachingStyle>
+    <sport:description>Revolutionized modern football with his possession-based 'tiki-taka' philosophy. Pep Guardiola has won league titles in Spain, Germany, and England, making him one of the most successful managers in history. His tactical innovations, attention to detail, and ability to develop young talents have influenced coaches worldwide. Under his guidance, teams don't just win—they dominate with style.</sport:description>
+    <sport:philosophy>Possession-based football, High pressing, Positional play, Total football principles</sport:philosophy>
+    <sport:coachesAthlete rdf:resource="#LionelMessi" />
+    <sport:coachesAthlete rdf:resource="#ErlingHaaland" />
+  </sport:Coach>
+
+  <sport:Coach rdf:about="#CarloAncelotti">
+    <sport:firstName>Carlo</sport:firstName>
+    <sport:lastName>Ancelotti</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1959-06-10</sport:birthDate>
+    <sport:nationality>Italy</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">28</sport:experienceYears>
+    <sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">26</sport:titlesWon>
+    <sport:coachingStyle>Defensive</sport:coachingStyle>
+    <sport:description>One of only three managers to win the UEFA Champions League four times. Carlo Ancelotti is known for his calm demeanor, tactical flexibility, and exceptional ability to manage superstars. His man-management skills and tactical adaptability have brought success across multiple top European clubs including AC Milan, Chelsea, PSG, Bayern Munich, and Real Madrid.</sport:description>
+    <sport:philosophy>Tactical flexibility, Player management, Defensive organization, Counter-attacking, Calm leadership</sport:philosophy>
+    <sport:coachesAthlete rdf:resource="#CristianoRonaldo" />
+    <sport:coachesAthlete rdf:resource="#KylianMbappe" />
+  </sport:Coach>
+
+  <sport:Coach rdf:about="#JurgenKlopp">
+    <sport:firstName>Jurgen</sport:firstName>
+    <sport:lastName>Klopp</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1967-06-16</sport:birthDate>
+    <sport:nationality>Germany</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">23</sport:experienceYears>
+    <sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</sport:titlesWon>
+    <sport:coachingStyle>Gegenpressing</sport:coachingStyle>
+    <sport:description>The charismatic German manager known for his 'gegenpressing' or 'heavy metal football' style. Klopp transformed Liverpool into European champions and ended their 30-year wait for a Premier League title. His passion, emotional leadership, and connection with fans are unmatched. He builds teams that press relentlessly and play with incredible intensity and unity.</sport:description>
+    <sport:philosophy>Gegenpressing, High-intensity football, Emotional leadership, Team unity, Full-throttle mentality</sport:philosophy>
+  </sport:Coach>
+
+  <sport:Coach rdf:about="#ZinedineZidane">
+    <sport:firstName>Zinedine</sport:firstName>
+    <sport:lastName>Zidane</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1972-06-23</sport:birthDate>
+    <sport:nationality>France</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</sport:experienceYears>
+    <sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</sport:titlesWon>
+    <sport:coachingStyle>Counter-attacking</sport:coachingStyle>
+    <sport:description>A legendary player turned legendary coach, Zidane won three consecutive Champions League titles with Real Madrid—a feat unmatched in the modern era. His calm presence, tactical acumen, and ability to manage one of football's most star-studded squads demonstrated his natural leadership. As both player and coach, Zidane represents football excellence at its highest level.</sport:description>
+    <sport:philosophy>Counter-attacking football, Player empowerment, Rotation management, Tactical adaptability, Star management</sport:philosophy>
+  </sport:Coach>
+
+  <sport:Coach rdf:about="#DiegoSimeone">
+    <sport:firstName>Diego</sport:firstName>
+    <sport:lastName>Simeone</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1970-04-28</sport:birthDate>
+    <sport:nationality>Argentina</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</sport:experienceYears>
+    <sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</sport:titlesWon>
+    <sport:coachingStyle>Defensive</sport:coachingStyle>
+    <sport:description>The Argentine firebrand known for his intense, defensive tactical approach. Simeone transformed Atletico Madrid into a powerhouse, breaking the Barcelona-Real Madrid duopoly in La Liga. His teams are known for their incredible work ethic, defensive solidity, and never-say-die attitude. His passionate touchline presence and warrior mentality inspire total commitment from his players.</sport:description>
+    <sport:philosophy>Defensive solidity, Counter-attacking, High work rate, Mental resilience, Warrior mentality</sport:philosophy>
+  </sport:Coach>
+
+  
+  <sport:Referee rdf:about="#PierluigiCollina">
+    <sport:firstName>Pierluigi</sport:firstName>
+    <sport:lastName>Collina</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1960-02-13</sport:birthDate>
+    <sport:nationality>Italy</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">28</sport:experienceYears>
+    <sport:matchesOfficiated rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">430</sport:matchesOfficiated>
+    <sport:description>Widely regarded as the greatest referee of all time, Pierluigi Collina officiated the 2002 World Cup Final and multiple Champions League finals. His distinctive bald appearance and authoritative presence commanded respect from players and coaches alike. Known for his exceptional decision-making, consistency, and ability to control high-pressure matches, he set the standard for modern refereeing.</sport:description>
+    <sport:expertise>Match control, Consistency, Communication, Decision-making under pressure, Authority</sport:expertise>
+  </sport:Referee>
+
+  <sport:Referee rdf:about="#HowardWebb">
+    <sport:firstName>Howard</sport:firstName>
+    <sport:lastName>Webb</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1971-07-14</sport:birthDate>
+    <sport:nationality>England</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</sport:experienceYears>
+    <sport:matchesOfficiated rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">315</sport:matchesOfficiated>
+    <sport:description>The English referee who officiated both the 2010 World Cup Final and Champions League Final in the same year—a unique achievement in refereeing history. Webb was known for his calm demeanor, excellent communication with players, and ability to manage high-stakes matches. He retired as one of the most respected officials in world football and now serves as Chief Refereeing Officer for the Premier League.</sport:description>
+    <sport:expertise>High-pressure situations, Player management, Consistent decision-making, Communication, Big-match temperament</sport:expertise>
+  </sport:Referee>
+
+  <sport:Referee rdf:about="#BjornKuipers">
+    <sport:firstName>Bjorn</sport:firstName>
+    <sport:lastName>Kuipers</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1973-03-28</sport:birthDate>
+    <sport:nationality>Netherlands</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">21</sport:experienceYears>
+    <sport:matchesOfficiated rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">387</sport:matchesOfficiated>
+  </sport:Referee>
+
+  <sport:Referee rdf:about="#FelixBrych">
+    <sport:firstName>Felix</sport:firstName>
+    <sport:lastName>Brych</sport:lastName>
+    <sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1975-08-03</sport:birthDate>
+    <sport:nationality>Germany</sport:nationality>
+    <sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">24</sport:experienceYears>
+    <sport:matchesOfficiated rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">402</sport:matchesOfficiated>
+    <sport:description>Germany's most prominent referee and a lawyer by profession. Felix Brych has officiated multiple Champions League finals and major international tournaments. His calm authority, legal precision in decision-making, and deep understanding of the game have made him one of UEFA's most trusted officials. He consistently handles the biggest matches in European football with confidence and fairness.</sport:description>
+    <sport:expertise>Game management, Legal precision in decisions, Experience in top-level matches, Calm authority, Fair play enforcement</sport:expertise>
+  </sport:Referee>
 
 </rdf:RDF>
