@@ -130,14 +130,373 @@ Open your browser:
 Each team member needs to add their assigned classes to both the **backend** and **frontend**.
 
 ### 👤 **Ala's Classes (30%)**
-- ✅ Team (already exists)
-- ✅ Competition (already exists)
-- ✅ Organization (already exists)
 
-**Status**: Your classes are already implemented! You can focus on:
-1. Adding more instances to the RDF file
-2. Enhancing UI components
-3. Adding advanced filters
+#### Your Assigned Classes:
+- ✅ **Team** (ProfessionalTeam, NationalTeam) - 13 instances
+- ✅ **Competition** (League, Championship, WorldCup) - 10 instances
+- ✅ **Organization** (League_Org, Federation) - 2 instances
+
+**Status**: Your backend and frontend are already implemented! ✅
+
+However, you have **important enhancement tasks** to complete:
+
+---
+
+#### 🎯 Your Tasks & Responsibilities
+
+##### Task 1: Enrich RDF Data (Priority: HIGH)
+
+Add **more instances** and **detailed information** to your existing classes:
+
+**A. Add More Teams (Target: 20+ teams)**
+
+Current teams in RDF: FCBarcelona, RealMadrid, etc.
+
+Add teams like:
+```xml
+<!-- Professional Team Example -->
+<sport:Team rdf:about="#ManchesterUnited">
+    <sport:teamName>Manchester United</sport:teamName>
+    <sport:teamType>ProfessionalTeam</sport:teamType>
+    <sport:foundingYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1878</sport:foundingYear>
+    <sport:country>England</sport:country>
+    <sport:stadium rdf:resource="#OldTrafford"/>
+    <sport:league rdf:resource="#PremierLeague"/>
+    <sport:numberOfTitles rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</sport:numberOfTitles>
+    <sport:teamColors>Red, White</sport:teamColors>
+    <sport:nickname>Red Devils</sport:nickname>
+</sport:Team>
+
+<!-- National Team Example -->
+<sport:Team rdf:about="#BrazilNationalTeam">
+    <sport:teamName>Brazil National Football Team</sport:teamName>
+    <sport:teamType>NationalTeam</sport:teamType>
+    <sport:country>Brazil</sport:country>
+    <sport:worldCupTitles rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</sport:worldCupTitles>
+    <sport:fifaRanking rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</sport:fifaRanking>
+    <sport:teamColors>Yellow, Green, Blue</sport:teamColors>
+    <sport:nickname>Seleção</sport:nickname>
+</sport:Team>
+```
+
+**B. Add More Competitions (Target: 15+ competitions)**
+
+Add competitions like:
+```xml
+<!-- League Example -->
+<sport:Competition rdf:about="#PremierLeague">
+    <sport:competitionName>Premier League</sport:competitionName>
+    <sport:competitionType>League</sport:competitionType>
+    <sport:country>England</sport:country>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</sport:numberOfTeams>
+    <sport:season>2024-2025</sport:season>
+    <sport:prizePool rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2500000000</sport:prizePool>
+    <sport:currentChampion rdf:resource="#ManchesterCity"/>
+</sport:Competition>
+
+<!-- World Cup Example -->
+<sport:Competition rdf:about="#WorldCup2026">
+    <sport:competitionName>FIFA World Cup 2026</sport:competitionName>
+    <sport:competitionType>WorldCup</sport:competitionType>
+    <sport:hostCountry>USA, Canada, Mexico</sport:hostCountry>
+    <sport:year rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2026</sport:year>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">48</sport:numberOfTeams>
+</sport:Competition>
+
+<!-- Championship Example -->
+<sport:Competition rdf:about="#ChampionsLeague">
+    <sport:competitionName>UEFA Champions League</sport:competitionName>
+    <sport:competitionType>Championship</sport:competitionType>
+    <sport:organizer rdf:resource="#UEFA"/>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</sport:numberOfTeams>
+    <sport:season>2024-2025</sport:season>
+</sport:Competition>
+```
+
+**C. Add More Organizations (Target: 8+ organizations)**
+
+Add organizations like:
+```xml
+<!-- Federation Example -->
+<sport:Organization rdf:about="#UEFA">
+    <sport:organizationName>Union of European Football Associations</sport:organizationName>
+    <sport:organizationType>Federation</sport:organizationType>
+    <sport:foundingYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1954</sport:foundingYear>
+    <sport:headquarters>Nyon, Switzerland</sport:headquarters>
+    <sport:numberOfMembers rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">55</sport:numberOfMembers>
+    <sport:president>Aleksander Čeferin</sport:president>
+</sport:Organization>
+
+<!-- League Organization Example -->
+<sport:Organization rdf:about="#NBA">
+    <sport:organizationName>National Basketball Association</sport:organizationName>
+    <sport:organizationType>League_Org</sport:organizationType>
+    <sport:foundingYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1946</sport:foundingYear>
+    <sport:headquarters>New York City, USA</sport:headquarters>
+    <sport:numberOfTeams rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</sport:numberOfTeams>
+    <sport:commissioner>Adam Silver</sport:commissioner>
+</sport:Organization>
+```
+
+---
+
+##### Task 2: Enhance Frontend UI Components
+
+**A. Create Team Detail Page**
+
+File: `frontend/src/pages/TeamDetailPage.jsx`
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+const TeamDetailPage = () => {
+  const { teamId } = useParams();
+  const [team, setTeam] = useState(null);
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTeamDetails();
+  }, [teamId]);
+
+  const fetchTeamDetails = async () => {
+    try {
+      const teamResponse = await axios.get(`http://localhost:8000/api/teams/${teamId}`);
+      setTeam(teamResponse.data);
+      
+      // Fetch team's players
+      const playersResponse = await axios.get(
+        `http://localhost:8000/api/persons/athletes?team=${teamId}`
+      );
+      setPlayers(playersResponse.data.athletes || []);
+    } catch (error) {
+      console.error('Error fetching team details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <div className="loading">Loading team...</div>;
+  if (!team) return <div className="error">Team not found</div>;
+
+  return (
+    <div className="team-detail-page">
+      <div className="team-header">
+        <h1>{team.teamName}</h1>
+        <div className="team-info">
+          <p><strong>Type:</strong> {team.teamType}</p>
+          <p><strong>Country:</strong> {team.country}</p>
+          <p><strong>Founded:</strong> {team.foundingYear}</p>
+          <p><strong>Stadium:</strong> {team.stadium}</p>
+          <p><strong>Colors:</strong> {team.teamColors}</p>
+          <p><strong>Nickname:</strong> {team.nickname}</p>
+        </div>
+      </div>
+
+      <div className="team-squad">
+        <h2>Squad ({players.length} players)</h2>
+        <div className="players-grid">
+          {players.map(player => (
+            <div key={player.id} className="player-card">
+              <h3>#{player.jerseyNumber} {player.firstName} {player.lastName}</h3>
+              <p>{player.position}</p>
+              <p>Goals: {player.goalsScored} | Assists: {player.assists}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TeamDetailPage;
+```
+
+**B. Create Competition Detail Page**
+
+File: `frontend/src/pages/CompetitionDetailPage.jsx`
+
+Similar structure showing:
+- Competition details
+- Participating teams
+- Current standings (if league)
+- Match schedule
+
+**C. Add Advanced Filters to Teams Page**
+
+Enhance `frontend/src/pages/TeamsPage.jsx`:
+```jsx
+// Add filter state
+const [filters, setFilters] = useState({
+  teamType: 'all',
+  country: 'all',
+  league: 'all'
+});
+
+// Add filter UI
+<div className="filters">
+  <select onChange={(e) => setFilters({...filters, teamType: e.target.value})}>
+    <option value="all">All Types</option>
+    <option value="ProfessionalTeam">Professional Teams</option>
+    <option value="NationalTeam">National Teams</option>
+  </select>
+  
+  <select onChange={(e) => setFilters({...filters, country: e.target.value})}>
+    <option value="all">All Countries</option>
+    <option value="Spain">Spain</option>
+    <option value="England">England</option>
+    <option value="Germany">Germany</option>
+  </select>
+</div>
+```
+
+---
+
+##### Task 3: Implement Advanced Backend Features
+
+**A. Add Team Statistics Endpoint**
+
+File: `backend/app/api/routes/teams.py`
+
+Add this endpoint:
+```python
+@router.get("/teams/{team_id}/statistics")
+async def get_team_statistics(team_id: str):
+    """
+    Get detailed statistics for a team.
+    - Total goals scored by all players
+    - Top scorers
+    - Total matches played
+    - Win/loss record (if available)
+    """
+    try:
+        stats = await team_service.get_team_statistics(team_id)
+        return stats
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+**B. Add Competition Standings Endpoint**
+
+File: `backend/app/api/routes/competitions.py`
+
+```python
+@router.get("/competitions/{competition_id}/standings")
+async def get_competition_standings(competition_id: str):
+    """
+    Get current standings for a league/competition.
+    """
+    try:
+        standings = await competition_service.get_standings(competition_id)
+        return standings
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+**C. Create Team Search by Multiple Criteria**
+
+```python
+@router.get("/teams/search/advanced")
+async def advanced_team_search(
+    team_type: Optional[str] = None,
+    country: Optional[str] = None,
+    league: Optional[str] = None,
+    min_titles: Optional[int] = None
+):
+    """
+    Advanced search for teams with multiple filters.
+    """
+    try:
+        teams = await team_service.advanced_search(
+            team_type=team_type,
+            country=country,
+            league=league,
+            min_titles=min_titles
+        )
+        return teams
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+---
+
+##### Task 4: Create Interactive Visualizations
+
+**A. Competition Tree/Bracket Visualization**
+
+Create a visual tournament bracket for knockout competitions (World Cup, Champions League):
+
+File: `frontend/src/components/CompetitionBracket.jsx`
+
+**B. League Table with Live Updates**
+
+Create a sortable league table showing:
+- Team rankings
+- Points
+- Goal difference
+- Form (last 5 matches)
+
+File: `frontend/src/components/LeagueTable.jsx`
+
+---
+
+##### Task 5: Add Relationships Between Classes
+
+Enhance your RDF data with **relationships**:
+
+```xml
+<!-- Link Team to Competition -->
+<sport:Team rdf:about="#FCBarcelona">
+    <!-- ... existing properties ... -->
+    <sport:participatesIn rdf:resource="#LaLiga"/>
+    <sport:participatesIn rdf:resource="#ChampionsLeague"/>
+    <sport:governedBy rdf:resource="#UEFA"/>
+</sport:Team>
+
+<!-- Link Competition to Organization -->
+<sport:Competition rdf:about="#ChampionsLeague">
+    <!-- ... existing properties ... -->
+    <sport:organizedBy rdf:resource="#UEFA"/>
+    <sport:hasParticipant rdf:resource="#FCBarcelona"/>
+    <sport:hasParticipant rdf:resource="#RealMadrid"/>
+</sport:Competition>
+```
+
+---
+
+##### Task 6: Documentation
+
+Create detailed documentation for your classes:
+
+File: `TEAMS_COMPETITIONS_ORGS_GUIDE.md`
+
+Include:
+- List of all teams, competitions, and organizations
+- Properties and their meanings
+- Relationships between entities
+- API endpoint documentation with examples
+- SPARQL query examples
+
+---
+
+#### ✅ Ala's Checklist
+
+- [ ] Add 10+ new teams to RDF file (mix of Professional & National)
+- [ ] Add 5+ new competitions to RDF file
+- [ ] Add 6+ new organizations to RDF file
+- [ ] Add relationships between teams, competitions, and organizations
+- [ ] Create TeamDetailPage component
+- [ ] Create CompetitionDetailPage component
+- [ ] Add advanced filters to TeamsPage
+- [ ] Implement team statistics endpoint
+- [ ] Implement competition standings endpoint
+- [ ] Create league table visualization
+- [ ] Create competition bracket visualization
+- [ ] Test all new endpoints
+- [ ] Write documentation
+- [ ] Commit and push all changes
 
 ---
 
