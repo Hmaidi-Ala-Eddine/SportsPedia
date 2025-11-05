@@ -23,35 +23,20 @@ async def get_organizations(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
-async def create_organization(organization: OrganizationCreate):
-    """Create a new organization."""
+@router.get("/{organization_id}")
+async def get_organization(organization_id: str):
+    """
+    Get organization by ID.
+    
+    - **organization_id**: Unique organization identifier
+    """
     try:
-        return await organization_service.create_organization(organization)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.put("/{organization_id}")
-async def update_organization(organization_id: str, organization: OrganizationUpdate):
-    """Update an existing organization."""
-    try:
-        updated = await organization_service.update_organization(organization_id, organization)
-        if not updated:
+        organization = await organization_service.get_organization_by_id(organization_id)
+        if not organization:
             raise HTTPException(status_code=404, detail=f"Organization {organization_id} not found")
-        return updated
+        return organization
     except HTTPException:
         raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.delete("/{organization_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_organization(organization_id: str):
-    """Delete an organization."""
-    try:
-        await organization_service.delete_organization(organization_id)
-        return None
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -35,6 +35,15 @@ const MainMenu = ({ toggleSubMenu, navbarPlacement }) => {
                     <Link to="/search">AI Search</Link>
                 </li>
                 <li>
+                    <Link to="/teams">Teams</Link>
+                </li>
+                <li>
+                    <Link to="/competitions">Competitions</Link>
+                </li>
+                <li>
+                    <Link to="/organizations">Organizations</Link>
+                </li>
+                <li>
                     <Link to="/performance">Performance</Link>
                 </li>
                 {isAdmin && (

@@ -28,16 +28,22 @@ class CompetitionService:
         query = f"""
         {self.client.get_prefixes()}
         
-        SELECT DISTINCT ?competition ?name ?season ?startDate ?endDate ?competitionType
+        SELECT ?competition
+               (SAMPLE(?competitionType) as ?type)
+               (SAMPLE(?competitionName) as ?name)
+               (SAMPLE(?season) as ?compSeason)
+               (SAMPLE(?startDate) as ?start)
+               (SAMPLE(?endDate) as ?end)
         WHERE {{
-            ?competition a sport:Competition .
-            OPTIONAL {{ ?competition sport:competitionName ?name . }}
+            ?competition a ?competitionType .
+            FILTER(?competitionType IN (sport:League, sport:WorldCup, sport:Championship, sport:Tournament, sport:Olympics))
+            OPTIONAL {{ ?competition sport:competitionName ?competitionName . }}
             OPTIONAL {{ ?competition sport:season ?season . }}
             OPTIONAL {{ ?competition sport:startDate ?startDate . }}
             OPTIONAL {{ ?competition sport:endDate ?endDate . }}
-            OPTIONAL {{ ?competition a ?competitionType . }}
         }}
-        ORDER BY DESC(?startDate)
+        GROUP BY ?competition
+        ORDER BY DESC(?start)
         LIMIT {limit}
         OFFSET {offset}
         """
@@ -51,10 +57,10 @@ class CompetitionService:
                 competition = {
                     "id": extract_id_from_uri(data.get('competition', '')),
                     "name": data.get('name'),
-                    "season": data.get('season'),
-                    "startDate": data.get('startDate'),
-                    "endDate": data.get('endDate'),
-                    "type": extract_id_from_uri(data.get('competitionType', '')) if data.get('competitionType') else None
+                    "season": data.get('compSeason'),
+                    "startDate": data.get('start'),
+                    "endDate": data.get('end'),
+                    "type": extract_id_from_uri(data.get('type', '')) if data.get('type') else None
                 }
                 competitions.append(competition)
             
@@ -62,6 +68,66 @@ class CompetitionService:
             
         except Exception as e:
             logger.error(f"Error getting competitions: {str(e)}")
+            raise
+    
+    async def get_competition_by_id(self, competition_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get competition by ID.
+        
+        Args:
+            competition_id: Competition identifier
+            
+        Returns:
+            Competition dict or None
+        """
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        SELECT ?name ?season ?startDate ?endDate ?competitionType ?numberOfTeams ?prizeMoney ?competitionFormat ?description ?country
+        WHERE {{
+            sport:{competition_id} a ?competitionType .
+            FILTER(?competitionType IN (sport:League, sport:WorldCup, sport:Championship, sport:Tournament, sport:Olympics))
+            OPTIONAL {{ sport:{competition_id} sport:competitionName ?name . }}
+            OPTIONAL {{ sport:{competition_id} sport:season ?season . }}
+            OPTIONAL {{ sport:{competition_id} sport:startDate ?startDate . }}
+            OPTIONAL {{ sport:{competition_id} sport:endDate ?endDate . }}
+            OPTIONAL {{ sport:{competition_id} sport:numberOfTeams ?numberOfTeams . }}
+            OPTIONAL {{ sport:{competition_id} sport:prizeMoney ?prizeMoney . }}
+            OPTIONAL {{ sport:{competition_id} sport:competitionFormat ?competitionFormat . }}
+            OPTIONAL {{ sport:{competition_id} sport:description ?description . }}
+            OPTIONAL {{ sport:{competition_id} sport:country ?country . }}
+        }}
+        LIMIT 1
+        """
+        
+        try:
+            results = self.client.execute_query(query)
+            comp_data = sparql_results_to_list(results)
+            
+            if not comp_data:
+                return None
+            
+            data = comp_data[0]
+            
+            competition = {
+                "id": competition_id,
+                "name": data.get('name'),
+                "competitionName": data.get('name'),
+                "season": data.get('season'),
+                "startDate": data.get('startDate'),
+                "endDate": data.get('endDate'),
+                "type": extract_id_from_uri(data.get('competitionType', '')) if data.get('competitionType') else None,
+                "country": data.get('country'),
+                "numberOfTeams": int(data['numberOfTeams']) if data.get('numberOfTeams') else None,
+                "prizeMoney": float(data['prizeMoney']) if data.get('prizeMoney') else None,
+                "competitionFormat": data.get('competitionFormat'),
+                "description": data.get('description')
+            }
+            
+            return competition
+            
+        except Exception as e:
+            logger.error(f"Error getting competition {competition_id}: {str(e)}")
             raise
     
     async def get_leagues(self, limit: int = 100) -> List[Dict[str, Any]]:

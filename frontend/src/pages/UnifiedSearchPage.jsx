@@ -22,6 +22,14 @@ const UnifiedSearchPage = () => {
     const [coaches, setCoaches] = useState([]);
     const [referees, setReferees] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
+    const [athletesCount, setAthletesCount] = useState(0);
+    const [coachesCount, setCoachesCount] = useState(0);
+    const [refereesCount, setRefereesCount] = useState(0);
+    const [teamsCount, setTeamsCount] = useState(0);
+    const [competitionsCount, setCompetitionsCount] = useState(0);
+    const [teams, setTeams] = useState([]);
+    const [competitions, setCompetitions] = useState([]);
+    const [performanceCount, setPerformanceCount] = useState(0);
     
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState(() => {
@@ -34,6 +42,12 @@ const UnifiedSearchPage = () => {
     // Auto-load all data on page mount
     useEffect(() => {
         fetchAll();
+        fetchCounts();
+        
+        // Set initial counts
+        setAthletesCount(athletes.length);
+        setCoachesCount(coaches.length);
+        setRefereesCount(referees.length);
     }, []);
 
     useEffect(() => {
@@ -49,8 +63,9 @@ const UnifiedSearchPage = () => {
 
     useEffect(() => {
         const q = searchParams.get('q');
-        if (q && activeTab === 'ai') {
+        if (q) {
             setQuery(q);
+            setActiveTab('ai'); // Always switch to AI tab when there's a query
             performAISearch(q);
         }
     }, [searchParams]);
@@ -61,8 +76,104 @@ const UnifiedSearchPage = () => {
             const response = await fetch(`http://localhost:8000/api/nl-search/search?q=${encodeURIComponent(searchQuery)}`);
             if (response.ok) {
                 const data = await response.json();
-                setSearchResults(data.results || []);
-                setSparqlQuery(data.sparql_query || '');
+                const results = data.results || [];
+                
+                console.log('AI Search Response:', data);
+                console.log('Results:', results);
+                
+                // Categorize results by type
+                const categorizedResults = {
+                    athletes: [],
+                    coaches: [],
+                    referees: [],
+                    teams: [],
+                    competitions: [],
+                    performance: []
+                };
+                
+                results.forEach(result => {
+                    // Athletes
+                    if (result.type === 'Athlete' || result.athlete || 
+                        (result.firstName && result.lastName && (result.position || result.goalsScored !== undefined))) {
+                        categorizedResults.athletes.push(result);
+                    }
+                    // Coaches
+                    else if (result.type === 'Coach' || result.coach || 
+                        (result.firstName && result.lastName && (result.experienceYears !== undefined || result.titlesWon !== undefined))) {
+                        categorizedResults.coaches.push(result);
+                    }
+                    // Referees
+                    else if (result.type === 'Referee' || result.referee || result.matchesOfficiated !== undefined) {
+                        categorizedResults.referees.push(result);
+                    }
+                    // Teams - check for teamName or team-specific properties
+                    else if (result.teamName || result.teamType || result.team || 
+                            (result.foundedYear && result.country && !result.competitionName && !result.organizationName)) {
+                        categorizedResults.teams.push({
+                            ...result,
+                            name: result.teamName || result.name || 'Unknown Team'
+                        });
+                    }
+                    // Competitions - check for competitionName or competition-specific properties
+                    else if (result.competitionName || result.compType || result.competition || result.season) {
+                        categorizedResults.competitions.push({
+                            ...result,
+                            name: result.competitionName || result.name || 'Unknown Competition'
+                        });
+                    }
+                    // Organizations - check for organizationName or organization-specific properties
+                    else if (result.organizationName || result.orgType || result.headquarters) {
+                        categorizedResults.performance.push({
+                            ...result,
+                            name: result.organizationName || result.name || 'Unknown Organization',
+                            type: 'Organization'
+                        });
+                    }
+                    // Performance records and achievements
+                    else if (result.achievementType || result.recordType || result.performanceValue) {
+                        categorizedResults.performance.push(result);
+                    }
+                });
+                
+                console.log('Categorized:', categorizedResults);
+                
+                // ALWAYS set searchResults first so AI tab shows something
+                setSearchResults(results);
+                setSparqlQuery(data.sparql_query || data.sparql || (data.metadata && data.metadata.sparql) || '');
+                
+                // Update state with categorized results (merge with existing, don't replace)
+                if (categorizedResults.athletes.length > 0) {
+                    setAthletes(prev => {
+                        const merged = [...categorizedResults.athletes];
+                        return merged;
+                    });
+                    setAthletesCount(categorizedResults.athletes.length);
+                }
+                if (categorizedResults.coaches.length > 0) {
+                    setCoaches(prev => {
+                        const merged = [...categorizedResults.coaches];
+                        return merged;
+                    });
+                    setCoachesCount(categorizedResults.coaches.length);
+                }
+                if (categorizedResults.referees.length > 0) {
+                    setReferees(prev => {
+                        const merged = [...categorizedResults.referees];
+                        return merged;
+                    });
+                    setRefereesCount(categorizedResults.referees.length);
+                }
+                if (categorizedResults.teams.length > 0) {
+                    setTeams(categorizedResults.teams);
+                    setTeamsCount(categorizedResults.teams.length);
+                }
+                if (categorizedResults.competitions.length > 0) {
+                    setCompetitions(categorizedResults.competitions);
+                    setCompetitionsCount(categorizedResults.competitions.length);
+                }
+                if (categorizedResults.performance.length > 0) {
+                    setPerformanceCount(categorizedResults.performance.length);
+                }
             }
         } catch (error) {
             console.error('AI Search error:', error);
@@ -76,7 +187,9 @@ const UnifiedSearchPage = () => {
             const response = await fetch('http://localhost:8000/api/persons/athletes?limit=100');
             if (response.ok) {
                 const data = await response.json();
-                setAthletes(data.athletes || []);
+                const athletesList = data.athletes || [];
+                setAthletes(athletesList);
+                setAthletesCount(athletesList.length);
             }
         } catch (error) {
             console.error('Athletes fetch error:', error);
@@ -90,7 +203,9 @@ const UnifiedSearchPage = () => {
             const response = await fetch('http://localhost:8000/api/persons/coaches?limit=50');
             if (response.ok) {
                 const data = await response.json();
-                setCoaches(data.coaches || []);
+                const coachesList = data.coaches || [];
+                setCoaches(coachesList);
+                setCoachesCount(coachesList.length);
             }
         } catch (error) {
             console.error('Coaches fetch error:', error);
@@ -104,7 +219,9 @@ const UnifiedSearchPage = () => {
             const response = await fetch('http://localhost:8000/api/persons/referees?limit=20');
             if (response.ok) {
                 const data = await response.json();
-                setReferees(data.referees || []);
+                const refereesList = data.referees || [];
+                setReferees(refereesList);
+                setRefereesCount(refereesList.length);
             }
         } catch (error) {
             console.error('Referees fetch error:', error);
@@ -167,13 +284,14 @@ const UnifiedSearchPage = () => {
     const nationalities = [...new Set(athletes.map(a => a.nationality).filter(Boolean))];
     const positions = [...new Set(athletes.map(a => a.position).filter(Boolean))];
 
-    // Smart AI suggestion prompts
+    // Smart AI suggestion prompts (includes Athletes AND TCO)
     const aiSuggestions = [
         "Show all athletes from Spain",
+        "Teams from England",
+        "Competitions in 2024",
         "List coaches by experience",
-        "Find referees with most matches",
-        "Show athletes who are captains",
-        "Find top scoring athletes"
+        "Top 10 ranked teams",
+        "Federations in Switzerland"
     ];
 
     const handleSuggestionClick = (suggestion) => {
@@ -198,11 +316,32 @@ const UnifiedSearchPage = () => {
         if (tabId === 'referees' && referees.length === 0) fetchReferees();
     };
 
+    const fetchCounts = async () => {
+        try {
+            const teamsRes = await fetch('http://localhost:8000/api/teams?limit=100');
+            if (teamsRes.ok) {
+                const teamsData = await teamsRes.json();
+                setTeamsCount(teamsData.teams?.length || 0);
+            }
+            
+            const compsRes = await fetch('http://localhost:8000/api/competitions?limit=100');
+            if (compsRes.ok) {
+                const compsData = await compsRes.json();
+                setCompetitionsCount(compsData.competitions?.length || 0);
+            }
+        } catch (error) {
+            console.error('Error fetching counts:', error);
+        }
+    };
+
     const tabs = [
         { id: 'ai', label: '🤖 AI Search', icon: 'fas fa-magic', count: searchResults.length },
-        { id: 'athletes', label: '🏃 Athletes', icon: 'fas fa-running', count: filteredAthletes.length },
-        { id: 'coaches', label: '📋 Coaches', icon: 'fas fa-clipboard', count: filteredCoaches.length },
-        { id: 'referees', label: '🟨 Referees', icon: 'fas fa-whistle', count: filteredReferees.length }
+        { id: 'athletes', label: '🏃 Athletes', icon: 'fas fa-running', count: athletesCount },
+        { id: 'coaches', label: '📋 Coaches', icon: 'fas fa-clipboard', count: coachesCount },
+        { id: 'referees', label: '🟨 Referees', icon: 'fas fa-whistle', count: refereesCount },
+        { id: 'teams', label: '⚽ Teams', icon: 'fas fa-users', count: teamsCount },
+        { id: 'competitions', label: '🏆 Competitions', icon: 'fas fa-trophy', count: competitionsCount },
+        { id: 'performance', label: '📊 Performance', icon: 'fas fa-chart-line', count: performanceCount }
     ];
 
     return (
@@ -319,7 +458,7 @@ const UnifiedSearchPage = () => {
                             </>
                         ) : (
                             <p style={{ fontSize: '17px', color: '#64748b', marginBottom: '25px' }}>
-                                Browse all persons: Athletes, Coaches, and Referees
+                                Browse all data: Athletes, Coaches, Referees, Teams, Competitions, and Performance
                             </p>
                         )}
                     </div>
@@ -440,7 +579,10 @@ const UnifiedSearchPage = () => {
                             ) : (
                                 <div className="row">
                                     {searchResults.map((result, index) => {
-                                        const name = result.firstName ? `${result.firstName} ${result.lastName}` : (result.name || result.achievementType || result.recordType || 'Item');
+                                        // Extract name based on entity type
+                                        const name = result.firstName ? `${result.firstName} ${result.lastName}` : 
+                                                    result.teamName || result.competitionName || result.organizationName ||
+                                                    result.name || result.achievementType || result.recordType || 'Item';
                                         
                                         // Extract ID from URI first (contains type info)
                                         let rawId = result.id || result.athlete || result.coach || result.referee || result.achievement || result.record || '';
@@ -483,6 +625,20 @@ const UnifiedSearchPage = () => {
                                                     {result.goalsScored !== undefined && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-trophy" style={{ marginRight: '8px', color: '#f59e0b' }}></i>Goals: {result.goalsScored}</p>}
                                                     {result.coachingStyle && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-lightbulb" style={{ marginRight: '8px', color: '#16a34a' }}></i>{result.coachingStyle}</p>}
                                                     {result.matchesOfficiated !== undefined && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-whistle" style={{ marginRight: '8px', color: '#dc2626' }}></i>Matches: {result.matchesOfficiated}</p>}
+                                                    
+                                                    {/* Team fields */}
+                                                    {result.teamName && result.country && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-flag" style={{ marginRight: '8px', color: '#2563eb' }}></i>{result.country}</p>}
+                                                    {result.teamName && result.foundedYear && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-calendar-alt" style={{ marginRight: '8px', color: '#f59e0b' }}></i>Founded: {result.foundedYear}</p>}
+                                                    {result.teamName && result.city && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-map-marker-alt" style={{ marginRight: '8px', color: '#dc2626' }}></i>{result.city}</p>}
+                                                    
+                                                    {/* Competition fields */}
+                                                    {result.competitionName && result.season && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-calendar" style={{ marginRight: '8px', color: '#f59e0b' }}></i>Season: {result.season}</p>}
+                                                    {result.competitionName && result.country && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-globe" style={{ marginRight: '8px', color: '#2563eb' }}></i>{result.country}</p>}
+                                                    {result.competitionName && result.startDate && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-calendar-check" style={{ marginRight: '8px', color: '#16a34a' }}></i>Start: {result.startDate}</p>}
+                                                    
+                                                    {/* Organization fields */}
+                                                    {result.organizationName && result.headquarters && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-building" style={{ marginRight: '8px', color: '#2563eb' }}></i>{result.headquarters}</p>}
+                                                    {result.organizationName && result.establishedYear && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-calendar-alt" style={{ marginRight: '8px', color: '#f59e0b' }}></i>Est: {result.establishedYear}</p>}
                                                     
                                                     {/* Achievement fields */}
                                                     {result.year && itemType === 'achievement' && <p style={{ marginBottom: '8px', color: '#64748b' }}><i className="fas fa-calendar" style={{ marginRight: '8px', color: '#f59e0b' }}></i>Year: {result.year}</p>}

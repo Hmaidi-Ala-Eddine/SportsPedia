@@ -200,3 +200,111 @@ async def delete_referee(referee_id: str):
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== TEAM CRUD ====================
+
+@router.post("/teams", dependencies=[Depends(require_admin)])
+async def create_team(data: Dict):
+    """Create a new team."""
+    try:
+        team_id = rdf_crud_service.create_team(data)
+        return {"success": True, "id": team_id, "message": "Team created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/teams/{team_id}", dependencies=[Depends(require_admin)])
+async def update_team(team_id: str, data: Dict):
+    """Update an existing team."""
+    try:
+        rdf_crud_service.update_team(team_id, data)
+        return {"success": True, "message": "Team updated successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/teams/{team_id}", dependencies=[Depends(require_admin)])
+async def delete_team(team_id: str):
+    """Delete a team."""
+    try:
+        rdf_crud_service.delete_team(team_id)
+        return {"success": True, "message": "Team deleted successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== COMPETITION CRUD ====================
+
+@router.post("/competitions", dependencies=[Depends(require_admin)])
+async def create_competition(data: Dict):
+    """Create a new competition."""
+    try:
+        competition_id = rdf_crud_service.create_competition(data)
+        return {"success": True, "id": competition_id, "message": "Competition created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/competitions/{competition_id}", dependencies=[Depends(require_admin)])
+async def update_competition(competition_id: str, data: Dict):
+    """Update an existing competition."""
+    try:
+        rdf_crud_service.update_competition(competition_id, data)
+        return {"success": True, "message": "Competition updated successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/competitions/{competition_id}", dependencies=[Depends(require_admin)])
+async def delete_competition(competition_id: str):
+    """Delete a competition."""
+    try:
+        rdf_crud_service.delete_competition(competition_id)
+        return {"success": True, "message": "Competition deleted successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== ORGANIZATION CRUD ====================
+
+@router.post("/organizations", dependencies=[Depends(require_admin)])
+async def create_organization(data: Dict):
+    """Create a new organization."""
+    try:
+        organization_id = rdf_crud_service.create_organization(data)
+        return {"success": True, "id": organization_id, "message": "Organization created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/organizations/{organization_id}", dependencies=[Depends(require_admin)])
+async def update_organization(organization_id: str, data: Dict):
+    """Update an existing organization."""
+    try:
+        rdf_crud_service.update_organization(organization_id, data)
+        return {"success": True, "message": "Organization updated successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/organizations/{organization_id}", dependencies=[Depends(require_admin)])
+async def delete_organization(organization_id: str):
+    """Delete an organization."""
+    try:
+        rdf_crud_service.delete_organization(organization_id)
+        return {"success": True, "message": "Organization deleted successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -24,15 +24,17 @@ const HomePage = () => {
 
     const exampleQueries = [
         "show all athletes",
-        "athletes from France", 
+        "teams from England",
+        "competitions in 2024", 
         "list coaches by experience",
-        "find Messi achievements"
+        "find top ranked teams"
     ];
 
     const stats = [
         { icon: "fas fa-running", label: "Athletes", value: 20, color: "#2563eb" },
-        { icon: "fas fa-clipboard", label: "Coaches", value: 5, color: "#16a34a" },
-        { icon: "fas fa-trophy", label: "Achievements", value: 7, color: "#f59e0b" }
+        { icon: "fas fa-users", label: "Teams", value: 35, color: "#8b5cf6" },
+        { icon: "fas fa-trophy", label: "Competitions", value: 28, color: "#f59e0b" },
+        { icon: "fas fa-building", label: "Organizations", value: 18, color: "#10b981" }
     ];
 
     return (
@@ -97,11 +99,11 @@ const HomePage = () => {
                         <p style={{ 
                             fontSize: '18px', 
                             color: 'rgba(255,255,255,0.95)',
-                            maxWidth: '600px',
+                            maxWidth: '700px',
                             margin: '0 auto',
                             lineHeight: '1.8',
                             textShadow: '0 2px 8px rgba(0,0,0,0.3)'
-                        }}>Search 20 athletes, 5 coaches, and 7+ achievements using natural language</p>
+                        }}>Search 20 athletes, 35 teams, 28 competitions, and 18 organizations using natural language</p>
                     </div>
 
                     <form onSubmit={handleSearch}>
@@ -191,7 +193,7 @@ const HomePage = () => {
                 <div className="container">
                     <div className="row">
                         {stats.map((stat, index) => (
-                            <div key={index} className="col-lg-4 col-md-6 mb-30">
+                            <div key={index} className="col-lg-3 col-md-6 mb-30">
                                 <div style={{ backgroundColor: 'white', padding: '40px', borderRadius: '15px', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', transition: 'transform 0.3s', cursor: 'pointer' }} onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                                     <i className={stat.icon} style={{ fontSize: '48px', color: stat.color, marginBottom: '20px' }}></i>
                                     <h3 style={{ fontSize: '36px', fontWeight: 'bold', color: '#1e293b', marginBottom: '10px' }}>{stat.value}</h3>

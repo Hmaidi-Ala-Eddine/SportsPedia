@@ -21,6 +21,9 @@ const AdminPage = () => {
     const [achievements, setAchievements] = useState([]);
     const [records, setRecords] = useState([]);
     const [referees, setReferees] = useState([]);
+    const [teams, setTeams] = useState([]);
+    const [competitions, setCompetitions] = useState([]);
+    const [organizations, setOrganizations] = useState([]);
     
     // Form states
     const [showForm, setShowForm] = useState(false);
@@ -76,6 +79,18 @@ const AdminPage = () => {
                 const res = await fetch('http://localhost:8000/api/persons/referees?limit=100');
                 const data = await res.json();
                 setReferees(data.referees || []);
+            } else if (activeTab === 'teams') {
+                const res = await fetch('http://localhost:8000/api/teams?limit=100');
+                const data = await res.json();
+                setTeams(data.teams || []);
+            } else if (activeTab === 'competitions') {
+                const res = await fetch('http://localhost:8000/api/competitions?limit=100');
+                const data = await res.json();
+                setCompetitions(data.competitions || []);
+            } else if (activeTab === 'organizations') {
+                const res = await fetch('http://localhost:8000/api/organizations?limit=100');
+                const data = await res.json();
+                setOrganizations(data.organizations || []);
             }
         } catch (error) {
             toast.error('Error fetching data');
@@ -232,7 +247,9 @@ const AdminPage = () => {
             const data = await response.json();
             console.log('AI Search Response:', data);
             
-            setSparqlQuery(data.sparql_query || data.sparql || '');
+            // Get SPARQL from various possible locations
+            const sparqlQuery = data.sparql_query || data.sparql || (data.metadata && data.metadata.sparql) || '';
+            setSparqlQuery(sparqlQuery);
             
             // Parse results and categorize by type
             const results = data.results || [];
@@ -243,7 +260,10 @@ const AdminPage = () => {
                 coaches: [],
                 achievements: [],
                 records: [],
-                referees: []
+                referees: [],
+                teams: [],
+                competitions: [],
+                organizations: []
             };
             
             results.forEach(result => {
@@ -302,6 +322,47 @@ const AdminPage = () => {
                         matchesOfficiated: result.matchesOfficiated || 0
                     });
                 }
+                // Teams - ENHANCED DETECTION
+                else if (result.teamName || result.team || result.teamType || 
+                        (result.country && result.foundedYear && !result.competitionName && !result.organizationName && !result.season)) {
+                    categorizedResults.teams.push({
+                        id: result.id || 'ProfessionalTeam',
+                        name: result.teamName || result.name || 'Unknown Team',
+                        team_type: result.teamType || result.type || '-',
+                        country: result.country || '-',
+                        foundedYear: result.foundedYear || '-',
+                        city: result.city || '-',
+                        budget: result.budget || '-',
+                        currentRanking: result.currentRanking || '-'
+                    });
+                }
+                // Competitions - ENHANCED DETECTION
+                else if (result.competitionName || result.competition || result.compType || result.season || 
+                        result.startDate || result.prizeMoney) {
+                    categorizedResults.competitions.push({
+                        id: result.id || 'Competition',
+                        name: result.competitionName || result.name || 'Unknown Competition',
+                        type: result.compType || result.type || '-',
+                        season: result.season || '-',
+                        startDate: result.startDate || '-',
+                        country: result.country || '-',
+                        numberOfTeams: result.numberOfTeams || '-',
+                        prizeMoney: result.prizeMoney || '-'
+                    });
+                }
+                // Organizations - ENHANCED DETECTION
+                else if (result.organizationName || result.organization || result.orgType || 
+                        result.headquarters || result.establishedYear || result.president) {
+                    categorizedResults.organizations.push({
+                        id: result.id || 'Organization',
+                        name: result.organizationName || result.name || 'Unknown Organization',
+                        type: result.orgType || result.type || '-',
+                        headquarters: result.headquarters || '-',
+                        establishedYear: result.establishedYear || result.foundedYear || '-',
+                        president: result.president || '-',
+                        memberCount: result.memberCount || '-'
+                    });
+                }
             });
             
             console.log('Categorized results:', categorizedResults);
@@ -349,7 +410,10 @@ const AdminPage = () => {
         { id: 'coaches', label: '📋 Coaches', icon: 'fa-clipboard', color: '#16a34a' },
         { id: 'achievements', label: '🏆 Achievements', icon: 'fa-trophy', color: '#f59e0b' },
         { id: 'records', label: '🥇 Records', icon: 'fa-medal', color: '#a855f7' },
-        { id: 'referees', label: '🔷 Referees', icon: 'fa-whistle', color: '#ec4899' }
+        { id: 'referees', label: '🔷 Referees', icon: 'fa-whistle', color: '#ec4899' },
+        { id: 'teams', label: '⚽ Teams', icon: 'fa-users', color: '#0891b2' },
+        { id: 'competitions', label: '🏆 Competitions', icon: 'fa-trophy', color: '#dc2626' },
+        { id: 'organizations', label: '🏢 Organizations', icon: 'fa-building', color: '#7c3aed' }
     ];
 
     const getCurrentData = () => {
@@ -359,6 +423,9 @@ const AdminPage = () => {
             if (activeTab === 'achievements') return searchResults.achievements || [];
             if (activeTab === 'records') return searchResults.records || [];
             if (activeTab === 'referees') return searchResults.referees || [];
+            if (activeTab === 'teams') return searchResults.teams || [];
+            if (activeTab === 'competitions') return searchResults.competitions || [];
+            if (activeTab === 'organizations') return searchResults.organizations || [];
         }
         
         if (activeTab === 'athletes') return athletes;
@@ -366,6 +433,9 @@ const AdminPage = () => {
         if (activeTab === 'achievements') return achievements;
         if (activeTab === 'records') return records;
         if (activeTab === 'referees') return referees;
+        if (activeTab === 'teams') return teams;
+        if (activeTab === 'competitions') return competitions;
+        if (activeTab === 'organizations') return organizations;
         return [];
     };
 
@@ -454,6 +524,73 @@ const AdminPage = () => {
                                 <FormField label="Nationality" name="nationality" value={formData.nationality || ''} onChange={(e) => setFormData({...formData, nationality: e.target.value})} />
                                 <FormField label="Experience Years" name="experienceYears" type="number" value={formData.experienceYears || ''} onChange={(e) => setFormData({...formData, experienceYears: e.target.value})} />
                                 <FormField label="Matches Officiated" name="matchesOfficiated" type="number" value={formData.matchesOfficiated || ''} onChange={(e) => setFormData({...formData, matchesOfficiated: e.target.value})} />
+                            </>
+                        )}
+
+                        {activeTab === 'teams' && (
+                            <>
+                                <FormField label="Team Name *" name="teamName" value={formData.teamName || ''} onChange={(e) => setFormData({...formData, teamName: e.target.value})} required />
+                                <SelectField 
+                                    label="Team Type *" 
+                                    name="team_type" 
+                                    value={formData.team_type || ''} 
+                                    onChange={(e) => setFormData({...formData, team_type: e.target.value})} 
+                                    options={['ProfessionalTeam', 'NationalTeam', 'AmateurTeam', 'YouthTeam', 'WomenTeam']} 
+                                    required 
+                                />
+                                <FormField label="City" name="city" value={formData.city || ''} onChange={(e) => setFormData({...formData, city: e.target.value})} />
+                                <FormField label="Country *" name="country" value={formData.country || ''} onChange={(e) => setFormData({...formData, country: e.target.value})} required />
+                                <FormField label="Founded Year" name="foundedYear" type="number" value={formData.foundedYear || ''} onChange={(e) => setFormData({...formData, foundedYear: e.target.value})} />
+                                <FormField label="Budget (in millions)" name="budget" type="number" value={formData.budget || ''} onChange={(e) => setFormData({...formData, budget: e.target.value})} />
+                                <FormField label="Current Ranking" name="currentRanking" type="number" value={formData.currentRanking || ''} onChange={(e) => setFormData({...formData, currentRanking: e.target.value})} />
+                                <FormField label="Wins" name="wins" type="number" value={formData.wins || ''} onChange={(e) => setFormData({...formData, wins: e.target.value})} />
+                                <FormField label="Draws" name="draws" type="number" value={formData.draws || ''} onChange={(e) => setFormData({...formData, draws: e.target.value})} />
+                                <FormField label="Losses" name="losses" type="number" value={formData.losses || ''} onChange={(e) => setFormData({...formData, losses: e.target.value})} />
+                                <FormField label="Primary Color" name="primaryColor" type="color" value={formData.primaryColor || '#000000'} onChange={(e) => setFormData({...formData, primaryColor: e.target.value})} />
+                                <FormField label="Secondary Color" name="secondaryColor" type="color" value={formData.secondaryColor || '#ffffff'} onChange={(e) => setFormData({...formData, secondaryColor: e.target.value})} />
+                            </>
+                        )}
+
+                        {activeTab === 'competitions' && (
+                            <>
+                                <FormField label="Competition Name *" name="competitionName" value={formData.competitionName || ''} onChange={(e) => setFormData({...formData, competitionName: e.target.value})} required />
+                                <SelectField 
+                                    label="Competition Type *" 
+                                    name="competition_type" 
+                                    value={formData.competition_type || ''} 
+                                    onChange={(e) => setFormData({...formData, competition_type: e.target.value})} 
+                                    options={['League', 'Tournament', 'Championship', 'WorldCup', 'Olympics']} 
+                                    required 
+                                />
+                                <FormField label="Season" name="season" value={formData.season || ''} onChange={(e) => setFormData({...formData, season: e.target.value})} placeholder="e.g., 2024/2025" />
+                                <FormField label="Start Date" name="startDate" type="date" value={formData.startDate || ''} onChange={(e) => setFormData({...formData, startDate: e.target.value})} />
+                                <FormField label="End Date" name="endDate" type="date" value={formData.endDate || ''} onChange={(e) => setFormData({...formData, endDate: e.target.value})} />
+                                <FormField label="Country" name="country" value={formData.country || ''} onChange={(e) => setFormData({...formData, country: e.target.value})} />
+                                <FormField label="Number of Teams" name="numberOfTeams" type="number" value={formData.numberOfTeams || ''} onChange={(e) => setFormData({...formData, numberOfTeams: e.target.value})} />
+                                <FormField label="Prize Money (in millions)" name="prizeMoney" type="number" value={formData.prizeMoney || ''} onChange={(e) => setFormData({...formData, prizeMoney: e.target.value})} />
+                                <FormField label="Competition Format" name="competitionFormat" value={formData.competitionFormat || ''} onChange={(e) => setFormData({...formData, competitionFormat: e.target.value})} placeholder="e.g., Round-robin, Knockout" />
+                                <FormField label="Description" name="description" value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} multiline rows={4} />
+                            </>
+                        )}
+
+                        {activeTab === 'organizations' && (
+                            <>
+                                <FormField label="Organization Name *" name="organizationName" value={formData.organizationName || ''} onChange={(e) => setFormData({...formData, organizationName: e.target.value})} required />
+                                <SelectField 
+                                    label="Organization Type *" 
+                                    name="organization_type" 
+                                    value={formData.organization_type || ''} 
+                                    onChange={(e) => setFormData({...formData, organization_type: e.target.value})} 
+                                    options={['Federation', 'Club', 'League_Org', 'SportsAgency', 'AntiDoping']} 
+                                    required 
+                                />
+                                <FormField label="Headquarters *" name="headquarters" value={formData.headquarters || ''} onChange={(e) => setFormData({...formData, headquarters: e.target.value})} required placeholder="e.g., Zurich, Switzerland" />
+                                <FormField label="Established Year" name="establishedYear" type="number" value={formData.establishedYear || ''} onChange={(e) => setFormData({...formData, establishedYear: e.target.value})} />
+                                <FormField label="President" name="president" value={formData.president || ''} onChange={(e) => setFormData({...formData, president: e.target.value})} />
+                                <FormField label="Member Count" name="memberCount" type="number" value={formData.memberCount || ''} onChange={(e) => setFormData({...formData, memberCount: e.target.value})} />
+                                <FormField label="Annual Revenue (in millions)" name="annualRevenue" type="number" value={formData.annualRevenue || ''} onChange={(e) => setFormData({...formData, annualRevenue: e.target.value})} />
+                                <FormField label="Website" name="website" value={formData.website || ''} onChange={(e) => setFormData({...formData, website: e.target.value})} placeholder="https://example.com" />
+                                <FormField label="Description" name="description" value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} multiline rows={4} />
                             </>
                         )}
 
@@ -677,6 +814,9 @@ const AdminPage = () => {
                                             {activeTab === 'achievements' && <><th style={thStyle}>ID</th><th style={thStyle}>Type</th><th style={thStyle}>Year</th><th style={thStyle}>Achieved By</th><th style={thStyle}>Actions</th></>}
                                             {activeTab === 'records' && <><th style={thStyle}>ID</th><th style={thStyle}>Type</th><th style={thStyle}>Value</th><th style={thStyle}>Set By</th><th style={thStyle}>Actions</th></>}
                                             {activeTab === 'referees' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Nationality</th><th style={thStyle}>Experience</th><th style={thStyle}>Matches</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'teams' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Type</th><th style={thStyle}>Country</th><th style={thStyle}>Founded</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'competitions' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Type</th><th style={thStyle}>Season</th><th style={thStyle}>Start Date</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'organizations' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Type</th><th style={thStyle}>Headquarters</th><th style={thStyle}>Founded</th><th style={thStyle}>Actions</th></>}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -730,6 +870,36 @@ const AdminPage = () => {
                                                         <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
                                                     </>
                                                 )}
+                                                {activeTab === 'teams' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.name || item.teamName}</td>
+                                                        <td style={tdStyle}>{item.team_type || item.type || '-'}</td>
+                                                        <td style={tdStyle}>{item.country || '-'}</td>
+                                                        <td style={tdStyle}>{item.foundedYear || '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'competitions' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.name || item.competitionName}</td>
+                                                        <td style={tdStyle}>{item.type || '-'}</td>
+                                                        <td style={tdStyle}>{item.season || '-'}</td>
+                                                        <td style={tdStyle}>{item.startDate || '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'organizations' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.name || item.organizationName}</td>
+                                                        <td style={tdStyle}>{item.type || '-'}</td>
+                                                        <td style={tdStyle}>{item.headquarters || '-'}</td>
+                                                        <td style={tdStyle}>{item.establishedYear || item.foundedYear || '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
                                             </tr>
                                         ))}
                                     </tbody>
@@ -744,28 +914,50 @@ const AdminPage = () => {
     );
 };
 
-const FormField = ({ label, name, type = 'text', value, onChange, required, placeholder }) => (
+const FormField = ({ label, name, type = 'text', value, onChange, required, placeholder, multiline, rows = 3 }) => (
     <div style={{ marginBottom: '20px' }}>
         <label style={{ display: 'block', marginBottom: '8px', color: '#1e293b', fontSize: '14px', fontWeight: '600' }}>
             {label}
         </label>
-        <input
-            type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
-            required={required}
-            placeholder={placeholder}
-            style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '2px solid #e2e8f0',
-                borderRadius: '10px',
-                fontSize: '15px',
-                outline: 'none',
-                transition: 'all 0.3s'
-            }}
-        />
+        {multiline ? (
+            <textarea
+                name={name}
+                value={value}
+                onChange={onChange}
+                required={required}
+                placeholder={placeholder}
+                rows={rows}
+                style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '10px',
+                    fontSize: '15px',
+                    outline: 'none',
+                    transition: 'all 0.3s',
+                    fontFamily: 'inherit',
+                    resize: 'vertical'
+                }}
+            />
+        ) : (
+            <input
+                type={type}
+                name={name}
+                value={value}
+                onChange={onChange}
+                required={required}
+                placeholder={placeholder}
+                style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '10px',
+                    fontSize: '15px',
+                    outline: 'none',
+                    transition: 'all 0.3s'
+                }}
+            />
+        )}
     </div>
 );
 

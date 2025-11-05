@@ -8,17 +8,19 @@ router = APIRouter(prefix="/teams", tags=["Teams"])
 
 @router.get("")
 async def get_teams(
+    team_type: Optional[str] = Query(default=None, description="Filter by team type: ProfessionalTeam, NationalTeam, AmateurTeam, YouthTeam, WomenTeam"),
     limit: int = Query(default=100, ge=1, le=500),
     offset: int = Query(default=0, ge=0)
 ):
     """
-    Get all teams.
+    Get all teams with optional type filter.
     
+    - **team_type**: Filter by team type (optional)
     - **limit**: Maximum number of results (1-500)
     - **offset**: Number of results to skip
     """
     try:
-        return await team_service.get_all_teams(limit=limit, offset=offset)
+        return await team_service.get_all_teams(team_type=team_type, limit=limit, offset=offset)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

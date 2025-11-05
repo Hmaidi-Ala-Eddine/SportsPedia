@@ -621,6 +621,397 @@ class RDFCrudService:
         except Exception as e:
             logger.error(f"Error deleting referee: {e}")
             raise
+    
+    # ==================== TEAM CRUD ====================
+    
+    def create_team(self, data: Dict) -> str:
+        """Create a new team in RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            team_id = data.get('id')
+            team_type = data.get('team_type', 'ProfessionalTeam')
+            
+            # Create team element with specific type
+            team = ET.SubElement(root, f'{{{self.namespace}}}{team_type}')
+            team.set(f'{{{self.rdf_ns}}}about', f'#{team_id}')
+            
+            # Add properties
+            property_mappings = {
+                'teamName': ('string', None),
+                'foundedYear': ('integer', None),
+                'primaryColor': ('string', None),
+                'secondaryColor': ('string', None),
+                'squadSize': ('integer', None),
+                'budget': ('float', None),
+                'currentRanking': ('integer', None),
+                'wins': ('integer', None),
+                'losses': ('integer', None),
+                'draws': ('integer', None),
+                'homeVenue': ('string', None),
+                'city': ('string', None),
+                'country': ('string', None),
+                'description': ('string', None),
+                'majorAchievements': ('string', None),
+                'estimatedFans': ('integer', None),
+                'rivals': ('string', None)
+            }
+            
+            for key, (dtype, _) in property_mappings.items():
+                if key in data and data[key] is not None:
+                    elem = ET.SubElement(team, f'{{{self.namespace}}}{key}')
+                    if dtype == 'integer':
+                        elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#integer')
+                        elem.text = str(int(data[key]))
+                    elif dtype == 'float':
+                        elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#float')
+                        elem.text = str(float(data[key]))
+                    else:
+                        elem.text = str(data[key])
+            
+            self._save_rdf(tree)
+            logger.info(f"Created team: {team_id}")
+            return team_id
+            
+        except Exception as e:
+            logger.error(f"Error creating team: {e}")
+            raise
+    
+    def update_team(self, team_id: str, data: Dict):
+        """Update an existing team in RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            # Find team (could be any subclass)
+            team = None
+            for team_type in ['ProfessionalTeam', 'NationalTeam', 'AmateurTeam', 'YouthTeam', 'WomenTeam']:
+                team = root.find(f".//{{{self.namespace}}}{team_type}[@{{{self.rdf_ns}}}about='#{team_id}']")
+                if team is not None:
+                    break
+            
+            if team is None:
+                raise ValueError(f"Team {team_id} not found")
+            
+            # Update properties
+            integer_fields = ['foundedYear', 'squadSize', 'currentRanking', 'wins', 'losses', 'draws', 'estimatedFans']
+            float_fields = ['budget']
+            
+            for key, value in data.items():
+                if key in ['id', 'team_type']:
+                    continue
+                
+                old_elem = team.find(f'{{{self.namespace}}}{key}')
+                if old_elem is not None:
+                    team.remove(old_elem)
+                
+                if value is not None and value != '':
+                    new_elem = ET.SubElement(team, f'{{{self.namespace}}}{key}')
+                    if key in integer_fields:
+                        new_elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#integer')
+                        new_elem.text = str(int(value))
+                    elif key in float_fields:
+                        new_elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#float')
+                        new_elem.text = str(float(value))
+                    else:
+                        new_elem.text = str(value)
+            
+            self._save_rdf(tree)
+            logger.info(f"Updated team: {team_id}")
+            
+        except Exception as e:
+            logger.error(f"Error updating team: {e}")
+            raise
+    
+    def delete_team(self, team_id: str):
+        """Delete a team from RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            # Find and remove team
+            team = None
+            for team_type in ['ProfessionalTeam', 'NationalTeam', 'AmateurTeam', 'YouthTeam', 'WomenTeam']:
+                team = root.find(f".//{{{self.namespace}}}{team_type}[@{{{self.rdf_ns}}}about='#{team_id}']")
+                if team is not None:
+                    root.remove(team)
+                    break
+            
+            if team is None:
+                raise ValueError(f"Team {team_id} not found")
+            
+            self._save_rdf(tree)
+            logger.info(f"Deleted team: {team_id}")
+            
+        except Exception as e:
+            logger.error(f"Error deleting team: {e}")
+            raise
+    
+    # ==================== COMPETITION CRUD ====================
+    
+    def create_competition(self, data: Dict) -> str:
+        """Create a new competition in RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            comp_id = data.get('id')
+            comp_type = data.get('competition_type', 'League')
+            
+            # Create competition element
+            competition = ET.SubElement(root, f'{{{self.namespace}}}{comp_type}')
+            competition.set(f'{{{self.rdf_ns}}}about', f'#{comp_id}')
+            
+            # Add properties
+            property_mappings = {
+                'competitionName': ('string', None),
+                'startDate': ('date', None),
+                'endDate': ('date', None),
+                'numberOfTeams': ('integer', None),
+                'prizeMoney': ('float', None),
+                'season': ('string', None),
+                'country': ('string', None),
+                'foundedYear': ('integer', None),
+                'description': ('string', None),
+                'broadcastCountries': ('integer', None),
+                'competitionFormat': ('string', None),
+                'currentChampion': ('string', None),
+                'lastWinner': ('string', None),
+                'mostSuccessful': ('string', None),
+                'venue': ('string', None),
+                'surface': ('string', None)
+            }
+            
+            for key, (dtype, _) in property_mappings.items():
+                if key in data and data[key] is not None:
+                    elem = ET.SubElement(competition, f'{{{self.namespace}}}{key}')
+                    if dtype == 'integer':
+                        elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#integer')
+                        elem.text = str(int(data[key]))
+                    elif dtype == 'float':
+                        elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#float')
+                        elem.text = str(float(data[key]))
+                    elif dtype == 'date':
+                        elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#date')
+                        elem.text = str(data[key])
+                    else:
+                        elem.text = str(data[key])
+            
+            self._save_rdf(tree)
+            logger.info(f"Created competition: {comp_id}")
+            return comp_id
+            
+        except Exception as e:
+            logger.error(f"Error creating competition: {e}")
+            raise
+    
+    def update_competition(self, comp_id: str, data: Dict):
+        """Update an existing competition in RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            # Find competition (could be any subclass)
+            competition = None
+            for comp_type in ['League', 'Tournament', 'Championship', 'WorldCup', 'Olympics', 'Match']:
+                competition = root.find(f".//{{{self.namespace}}}{comp_type}[@{{{self.rdf_ns}}}about='#{comp_id}']")
+                if competition is not None:
+                    break
+            
+            if competition is None:
+                raise ValueError(f"Competition {comp_id} not found")
+            
+            # Update properties
+            integer_fields = ['numberOfTeams', 'foundedYear', 'broadcastCountries']
+            float_fields = ['prizeMoney']
+            date_fields = ['startDate', 'endDate']
+            
+            for key, value in data.items():
+                if key in ['id', 'competition_type']:
+                    continue
+                
+                old_elem = competition.find(f'{{{self.namespace}}}{key}')
+                if old_elem is not None:
+                    competition.remove(old_elem)
+                
+                if value is not None and value != '':
+                    new_elem = ET.SubElement(competition, f'{{{self.namespace}}}{key}')
+                    if key in integer_fields:
+                        new_elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#integer')
+                        new_elem.text = str(int(value))
+                    elif key in float_fields:
+                        new_elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#float')
+                        new_elem.text = str(float(value))
+                    elif key in date_fields:
+                        new_elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#date')
+                        new_elem.text = str(value)
+                    else:
+                        new_elem.text = str(value)
+            
+            self._save_rdf(tree)
+            logger.info(f"Updated competition: {comp_id}")
+            
+        except Exception as e:
+            logger.error(f"Error updating competition: {e}")
+            raise
+    
+    def delete_competition(self, comp_id: str):
+        """Delete a competition from RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            # Find and remove competition
+            competition = None
+            for comp_type in ['League', 'Tournament', 'Championship', 'WorldCup', 'Olympics', 'Match']:
+                competition = root.find(f".//{{{self.namespace}}}{comp_type}[@{{{self.rdf_ns}}}about='#{comp_id}']")
+                if competition is not None:
+                    root.remove(competition)
+                    break
+            
+            if competition is None:
+                raise ValueError(f"Competition {comp_id} not found")
+            
+            self._save_rdf(tree)
+            logger.info(f"Deleted competition: {comp_id}")
+            
+        except Exception as e:
+            logger.error(f"Error deleting competition: {e}")
+            raise
+    
+    # ==================== ORGANIZATION CRUD ====================
+    
+    def create_organization(self, data: Dict) -> str:
+        """Create a new organization in RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            org_id = data.get('id')
+            org_type = data.get('organization_type', 'Federation')
+            
+            # Create organization element
+            organization = ET.SubElement(root, f'{{{self.namespace}}}{org_type}')
+            organization.set(f'{{{self.rdf_ns}}}about', f'#{org_id}')
+            
+            # Add properties
+            property_mappings = {
+                'organizationName': ('string', None),
+                'establishedYear': ('integer', None),
+                'headquarters': ('string', None),
+                'president': ('string', None),
+                'memberCount': ('integer', None),
+                'description': ('string', None),
+                'jurisdiction': ('string', None),
+                'annualRevenue': ('float', None),
+                'organizes': ('string', None),
+                'manages': ('string', None),
+                'foundingMembers': ('string', None),
+                'broadcastCountries': ('integer', None),
+                'salaryCap': ('float', None),
+                'ownershipModel': ('string', None),
+                'homeStadium': ('string', None),
+                'philosophy': ('string', None),
+                'sportsManaged': ('string', None),
+                'servicesOffered': ('string', None),
+                'notableClients': ('string', None),
+                'legacy': ('string', None),
+                'notableAspect': ('string', None),
+                'primaryResponsibility': ('string', None),
+                'uniqueFeature': ('string', None),
+                'historicalHighlights': ('string', None)
+            }
+            
+            for key, (dtype, _) in property_mappings.items():
+                if key in data and data[key] is not None:
+                    elem = ET.SubElement(organization, f'{{{self.namespace}}}{key}')
+                    if dtype == 'integer':
+                        elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#integer')
+                        elem.text = str(int(data[key]))
+                    elif dtype == 'float':
+                        elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#float')
+                        elem.text = str(float(data[key]))
+                    else:
+                        elem.text = str(data[key])
+            
+            self._save_rdf(tree)
+            logger.info(f"Created organization: {org_id}")
+            return org_id
+            
+        except Exception as e:
+            logger.error(f"Error creating organization: {e}")
+            raise
+    
+    def update_organization(self, org_id: str, data: Dict):
+        """Update an existing organization in RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            # Find organization (could be any subclass)
+            organization = None
+            for org_type in ['Federation', 'Club', 'League_Org', 'SportsAgency', 'AntiDoping']:
+                organization = root.find(f".//{{{self.namespace}}}{org_type}[@{{{self.rdf_ns}}}about='#{org_id}']")
+                if organization is not None:
+                    break
+            
+            if organization is None:
+                raise ValueError(f"Organization {org_id} not found")
+            
+            # Update properties
+            integer_fields = ['establishedYear', 'memberCount', 'broadcastCountries']
+            float_fields = ['annualRevenue', 'salaryCap']
+            
+            for key, value in data.items():
+                if key in ['id', 'organization_type']:
+                    continue
+                
+                old_elem = organization.find(f'{{{self.namespace}}}{key}')
+                if old_elem is not None:
+                    organization.remove(old_elem)
+                
+                if value is not None and value != '':
+                    new_elem = ET.SubElement(organization, f'{{{self.namespace}}}{key}')
+                    if key in integer_fields:
+                        new_elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#integer')
+                        new_elem.text = str(int(value))
+                    elif key in float_fields:
+                        new_elem.set(f'{{{self.rdf_ns}}}datatype', 'http://www.w3.org/2001/XMLSchema#float')
+                        new_elem.text = str(float(value))
+                    else:
+                        new_elem.text = str(value)
+            
+            self._save_rdf(tree)
+            logger.info(f"Updated organization: {org_id}")
+            
+        except Exception as e:
+            logger.error(f"Error updating organization: {e}")
+            raise
+    
+    def delete_organization(self, org_id: str):
+        """Delete an organization from RDF."""
+        try:
+            tree = self._load_rdf()
+            root = tree.getroot()
+            
+            # Find and remove organization
+            organization = None
+            for org_type in ['Federation', 'Club', 'League_Org', 'SportsAgency', 'AntiDoping']:
+                organization = root.find(f".//{{{self.namespace}}}{org_type}[@{{{self.rdf_ns}}}about='#{org_id}']")
+                if organization is not None:
+                    root.remove(organization)
+                    break
+            
+            if organization is None:
+                raise ValueError(f"Organization {org_id} not found")
+            
+            self._save_rdf(tree)
+            logger.info(f"Deleted organization: {org_id}")
+            
+        except Exception as e:
+            logger.error(f"Error deleting organization: {e}")
+            raise
 
 
 # Global service instance
