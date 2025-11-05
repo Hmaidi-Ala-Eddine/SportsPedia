@@ -40,31 +40,56 @@ async def natural_language_search(
     limit: int = Query(default=50, ge=1, le=200, description="Maximum results")
 ):
     """
-    Search using natural language queries.
+    **UNIFIED SEARCH** - Handles ALL entity types intelligently.
     
-    Examples:
+    **Person/Performance Examples:**
     - "show all athletes"
     - "athletes from France"
     - "list coaches with most experience"
     - "show achievements"
-    - "count all players"
     - "find Messi"
+    
+    **Team/Competition/Organization Examples:**
+    - "teams from England"
+    - "competitions in 2024"
+    - "federations in Switzerland"
+    - "leagues with high prize money"
     
     Args:
         q: Natural language query
         limit: Maximum number of results
         
     Returns:
-        Search results with generated SPARQL query
+        Search results with generated SPARQL query or direct results
     """
     try:
         logger.info(f"Processing natural language query: {q}")
         
-        # Convert natural language to SPARQL
+        # Convert natural language to SPARQL (or route to TCO semantic search)
         sparql_query, explanation, metadata = await ollama_sparql_service.convert_to_sparql(q)
         
-        logger.info(f"Generated SPARQL using {metadata.get('method')}: {sparql_query[:100]}...")
+        logger.info(f"Query processed using {metadata.get('method')}")
         
+        # HANDLE TCO SEMANTIC SEARCH RESULTS (special case)
+        if sparql_query == "TCO_DIRECT_RESULTS":
+            logger.info(f"Returning TCO semantic search results for {metadata.get('entity_type')}")
+            # Get the actual SPARQL from metadata
+            actual_sparql = metadata.get("sparql", "No SPARQL available")
+            return NLSearchResponse(
+                query=q,
+                sparql_query=actual_sparql,  # Use the actual SPARQL query
+                explanation=explanation,
+                results=metadata.get("results", []),
+                total=metadata.get("total", 0),
+                metadata={
+                    "method": metadata.get("method"),
+                    "entity_type": metadata.get("entity_type"),
+                    "sparql": actual_sparql,  # Include in metadata too
+                    "service": "tco_semantic_search"
+                }
+            )
+        
+        # HANDLE REGULAR SPARQL QUERIES (Person/Performance)
         # Add LIMIT to query if not present
         if "LIMIT" not in sparql_query.upper():
             sparql_query = sparql_query.strip()
@@ -108,22 +133,44 @@ async def get_query_examples():
     return {
         "examples": [
             {
-                "category": "Athletes",
+                "category": "Athletes & Coaches",
                 "queries": [
                     "show all athletes",
                     "list athletes from France",
                     "find athletes from Spain",
                     "search for Messi",
                     "athletes with most goals",
+                    "show all coaches",
                     "count all athletes"
                 ]
             },
             {
-                "category": "Coaches",
+                "category": "Teams",
                 "queries": [
-                    "show all coaches",
-                    "list coaches by experience",
-                    "find coaches with most titles"
+                    "teams from England",
+                    "professional teams with budget over 500",
+                    "top 10 ranked teams",
+                    "teams in Manchester",
+                    "national teams from Europe"
+                ]
+            },
+            {
+                "category": "Competitions",
+                "queries": [
+                    "competitions in 2024",
+                    "all leagues",
+                    "world cups",
+                    "championships with high prize money",
+                    "tournaments in France"
+                ]
+            },
+            {
+                "category": "Organizations",
+                "queries": [
+                    "federations in Switzerland",
+                    "all sports agencies",
+                    "find FIFA",
+                    "organizations with high revenue"
                 ]
             },
             {
@@ -133,20 +180,14 @@ async def get_query_examples():
                     "list all records",
                     "find Ballon d'Or winners"
                 ]
-            },
-            {
-                "category": "General",
-                "queries": [
-                    "count all players",
-                    "how many athletes are there"
-                ]
             }
         ],
         "tips": [
-            "Use simple language",
-            "Mention the entity type (athletes, coaches, etc.)",
-            "Use keywords like 'from', 'count', 'list', 'show'",
-            "You can search by name directly"
+            "Use simple, natural language",
+            "Mention the entity type (athletes, teams, competitions, organizations)",
+            "Use keywords like 'from', 'in', 'with', 'list', 'show'",
+            "You can search by name, country, year, or other criteria",
+            "The system automatically routes to the right search engine"
         ]
     }
 

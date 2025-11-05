@@ -11570,7 +11570,7 @@ ul.link-list li a {
 	content: "";
 	height: 50px;
 	width: 50px;
-	background: url(../img/logo-icon.png);
+	background: url(/assets/img/logo-icon.png);
 	transform: translateX(-50%);
 	background-repeat: no-repeat;
 	background-position: center;

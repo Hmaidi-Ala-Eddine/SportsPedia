@@ -10,6 +10,12 @@ import AchievementDetailPage from './pages/AchievementDetailPage';
 import RecordDetailPage from './pages/RecordDetailPage';
 import AthletesPage from './pages/AthletesPage';
 import CoachesPage from './pages/CoachesPage';
+import TeamsPage from './pages/TeamsPage';
+import CompetitionsPage from './pages/CompetitionsPage';
+import OrganizationsPage from './pages/OrganizationsPage';
+import TeamDetailPage from './pages/TeamDetailPage';
+import CompetitionDetailPage from './pages/CompetitionDetailPage';
+import OrganizationDetailPage from './pages/OrganizationDetailPage';
 import ExplorePage from './pages/innerPages/ExplorePage';
 
 // Auth Pages (Keep existing)
@@ -35,6 +41,15 @@ const Routers = () => {
                 <Route path='/performance' element={<PerformancePage />}></Route>
                 <Route path='/performance/achievement/:id' element={<AchievementDetailPage />}></Route>
                 <Route path='/performance/record/:id' element={<RecordDetailPage />}></Route>
+                
+                {/* TCO Routes */}
+                <Route path='/teams' element={<TeamsPage />}></Route>
+                <Route path='/teams/:id' element={<TeamDetailPage />}></Route>
+                <Route path='/competitions' element={<CompetitionsPage />}></Route>
+                <Route path='/competitions/:id' element={<CompetitionDetailPage />}></Route>
+                <Route path='/organizations' element={<OrganizationsPage />}></Route>
+                <Route path='/organizations/:id' element={<OrganizationDetailPage />}></Route>
+                
                 <Route path='/explore' element={<ExplorePage />}></Route>
 
                 {/* Auth Pages - KEEP THESE */}

@@ -42,7 +42,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers - All 10 domain classes + search + NL search + auth + admin
+# Include routers - All 10 domain classes + search + NL search + TCO search + auth + admin
 app.include_router(persons.router, prefix="/api")
 app.include_router(teams.router, prefix="/api")
 app.include_router(competitions.router, prefix="/api")
@@ -55,6 +55,7 @@ app.include_router(media.router, prefix="/api")
 app.include_router(sponsorships.router, prefix="/api")
 app.include_router(search.router, prefix="/api")
 app.include_router(nl_search.router, prefix="/api")
+# TCO search now handled by nl_search.router
 app.include_router(auth.router, prefix="/api")
 app.include_router(users.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")

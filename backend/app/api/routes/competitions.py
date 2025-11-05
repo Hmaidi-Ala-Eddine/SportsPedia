@@ -23,6 +23,24 @@ async def get_competitions(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/{competition_id}")
+async def get_competition(competition_id: str):
+    """
+    Get competition by ID.
+    
+    - **competition_id**: Unique competition identifier
+    """
+    try:
+        competition = await competition_service.get_competition_by_id(competition_id)
+        if not competition:
+            raise HTTPException(status_code=404, detail=f"Competition {competition_id} not found")
+        return competition
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/leagues")
 async def get_leagues(
     limit: int = Query(default=100, ge=1, le=500)

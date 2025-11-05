@@ -28,15 +28,20 @@ class OrganizationService:
         query = f"""
         {self.client.get_prefixes()}
         
-        SELECT DISTINCT ?organization ?name ?foundedYear ?headquarters ?orgType
+        SELECT ?organization
+               (SAMPLE(?orgType) as ?type)
+               (SAMPLE(?organizationName) as ?name)
+               (SAMPLE(?foundedYear) as ?founded)
+               (SAMPLE(?headquarters) as ?hq)
         WHERE {{
-            ?organization a sport:Organization .
-            OPTIONAL {{ ?organization sport:organizationName ?name . }}
-            OPTIONAL {{ ?organization rdfs:label ?name . }}
+            ?organization a ?orgType .
+            FILTER(?orgType IN (sport:Federation, sport:Club, sport:League_Org, sport:SportsAgency, sport:AntiDoping))
+            OPTIONAL {{ ?organization sport:organizationName ?organizationName . }}
+            OPTIONAL {{ ?organization rdfs:label ?organizationName . }}
             OPTIONAL {{ ?organization sport:foundedYear ?foundedYear . }}
             OPTIONAL {{ ?organization sport:headquarters ?headquarters . }}
-            OPTIONAL {{ ?organization a ?orgType . }}
         }}
+        GROUP BY ?organization
         ORDER BY ?name
         LIMIT {limit}
         OFFSET {offset}
@@ -51,9 +56,9 @@ class OrganizationService:
                 org = {
                     "id": extract_id_from_uri(data.get('organization', '')),
                     "name": data.get('name'),
-                    "foundedYear": int(data['foundedYear']) if data.get('foundedYear') else None,
-                    "headquarters": data.get('headquarters'),
-                    "type": extract_id_from_uri(data.get('orgType', '')) if data.get('orgType') else None
+                    "foundedYear": int(data['founded']) if data.get('founded') else None,
+                    "headquarters": data.get('hq'),
+                    "type": extract_id_from_uri(data.get('type', '')) if data.get('type') else None
                 }
                 organizations.append(org)
             
@@ -61,6 +66,64 @@ class OrganizationService:
             
         except Exception as e:
             logger.error(f"Error getting organizations: {str(e)}")
+            raise
+    
+    async def get_organization_by_id(self, org_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get organization by ID.
+        
+        Args:
+            org_id: Organization identifier
+            
+        Returns:
+            Organization dict or None
+        """
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        SELECT ?name ?foundedYear ?headquarters ?orgType ?president ?memberCount ?annualRevenue ?description
+        WHERE {{
+            sport:{org_id} a ?orgType .
+            FILTER(?orgType IN (sport:Federation, sport:Club, sport:League_Org, sport:SportsAgency, sport:AntiDoping))
+            OPTIONAL {{ sport:{org_id} sport:organizationName ?name . }}
+            OPTIONAL {{ sport:{org_id} rdfs:label ?name . }}
+            OPTIONAL {{ sport:{org_id} sport:foundedYear ?foundedYear . }}
+            OPTIONAL {{ sport:{org_id} sport:headquarters ?headquarters . }}
+            OPTIONAL {{ sport:{org_id} sport:president ?president . }}
+            OPTIONAL {{ sport:{org_id} sport:memberCount ?memberCount . }}
+            OPTIONAL {{ sport:{org_id} sport:annualRevenue ?annualRevenue . }}
+            OPTIONAL {{ sport:{org_id} sport:description ?description . }}
+        }}
+        LIMIT 1
+        """
+        
+        try:
+            results = self.client.execute_query(query)
+            org_data = sparql_results_to_list(results)
+            
+            if not org_data:
+                return None
+            
+            data = org_data[0]
+            
+            organization = {
+                "id": org_id,
+                "name": data.get('name'),
+                "organizationName": data.get('name'),
+                "foundedYear": int(data['foundedYear']) if data.get('foundedYear') else None,
+                "establishedYear": int(data['foundedYear']) if data.get('foundedYear') else None,
+                "headquarters": data.get('headquarters'),
+                "type": extract_id_from_uri(data.get('orgType', '')) if data.get('orgType') else None,
+                "president": data.get('president'),
+                "memberCount": int(data['memberCount']) if data.get('memberCount') else None,
+                "annualRevenue": float(data['annualRevenue']) if data.get('annualRevenue') else None,
+                "description": data.get('description')
+            }
+            
+            return organization
+            
+        except Exception as e:
+            logger.error(f"Error getting organization {org_id}: {str(e)}")
             raise
     
     async def get_federations(self, limit: int = 100) -> List[Dict[str, Any]]:

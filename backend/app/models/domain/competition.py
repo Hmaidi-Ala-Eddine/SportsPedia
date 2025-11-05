@@ -7,12 +7,23 @@ from app.models.base import CompetitionBase
 class CompetitionCreate(BaseModel):
     """Model for creating a new competition."""
     id: str = Field(..., description="Unique competition identifier")
+    competition_type: str = Field(..., description="Competition type: League, Tournament, Championship, WorldCup, Olympics, Match")
     competitionName: str
     startDate: Optional[date] = None
     endDate: Optional[date] = None
     numberOfTeams: Optional[int] = None
     prizeMoney: Optional[float] = None
     season: Optional[str] = None
+    country: Optional[str] = None
+    foundedYear: Optional[int] = None
+    description: Optional[str] = None
+    broadcastCountries: Optional[int] = None
+    competitionFormat: Optional[str] = None
+    currentChampion: Optional[str] = None
+    lastWinner: Optional[str] = None
+    mostSuccessful: Optional[str] = None
+    venue: Optional[str] = None
+    surface: Optional[str] = None
     organizedBy: Optional[str] = None
 
 
@@ -24,15 +35,39 @@ class CompetitionUpdate(BaseModel):
     numberOfTeams: Optional[int] = None
     prizeMoney: Optional[float] = None
     season: Optional[str] = None
+    country: Optional[str] = None
+    foundedYear: Optional[int] = None
+    description: Optional[str] = None
+    broadcastCountries: Optional[int] = None
+    competitionFormat: Optional[str] = None
+    currentChampion: Optional[str] = None
+    lastWinner: Optional[str] = None
+    mostSuccessful: Optional[str] = None
+    venue: Optional[str] = None
+    surface: Optional[str] = None
     organizedBy: Optional[str] = None
 
 
 class Competition(CompetitionBase):
     """Competition model."""
+    competition_type: Optional[str] = None
     name: Optional[str] = None
+    competitionName: Optional[str] = None
     season: Optional[str] = None
     startDate: Optional[str] = None
-    endDate: Optional[str] = None
+    endDate: Optional[date] = None
+    numberOfTeams: Optional[int] = None
+    prizeMoney: Optional[float] = None
+    country: Optional[str] = None
+    foundedYear: Optional[int] = None
+    description: Optional[str] = None
+    broadcastCountries: Optional[int] = None
+    competitionFormat: Optional[str] = None
+    currentChampion: Optional[str] = None
+    lastWinner: Optional[str] = None
+    mostSuccessful: Optional[str] = None
+    venue: Optional[str] = None
+    surface: Optional[str] = None
     type: Optional[str] = None
     sport: Optional[str] = None
 
