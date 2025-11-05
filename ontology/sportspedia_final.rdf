@@ -3642,4 +3642,4 @@
     <rdfs:subClassOf rdf:resource="http://example.org/sports-ontology#Sponsorship" />
     <rdfs:label xml:lang="en">Title Sponsor</rdfs:label>
   </rdf:Description>
-</rdf:RDF>
+<sport:Coach rdf:about="#hhhhhhhh"><sport:firstName>hhhh</sport:firstName><sport:lastName>hhhh</sport:lastName><sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-11-14</sport:birthDate><sport:nationality>hhhh</sport:nationality><sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2019</sport:experienceYears><sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19</sport:titlesWon><sport:coachingStyle>Defensive</sport:coachingStyle></sport:Coach></rdf:RDF>

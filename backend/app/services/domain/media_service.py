@@ -28,17 +28,17 @@ class MediaService:
         query = f"""
         {self.client.get_prefixes()}
         
-        SELECT DISTINCT ?media ?name ?mediaType ?broadcastDate ?event ?broadcaster
+        SELECT DISTINCT ?media ?name ?mediaType ?audience ?launchYear ?website ?covers
         WHERE {{
             ?media a sport:Media .
-            OPTIONAL {{ ?media sport:mediaTitle ?name . }}
-            OPTIONAL {{ ?media rdfs:label ?name . }}
-            OPTIONAL {{ ?media a ?mediaType . }}
-            OPTIONAL {{ ?media sport:broadcastDate ?broadcastDate . }}
-            OPTIONAL {{ ?media sport:covers ?event . }}
-            OPTIONAL {{ ?media sport:broadcastBy ?broadcaster . }}
+            OPTIONAL {{ ?media a ?mediaType . FILTER(?mediaType != sport:Media) }}
+            OPTIONAL {{ ?media sport:mediaName ?name . }}
+            OPTIONAL {{ ?media sport:audience ?audience . }}
+            OPTIONAL {{ ?media sport:launchYear ?launchYear . }}
+            OPTIONAL {{ ?media sport:website ?website . }}
+            OPTIONAL {{ ?media sport:covers ?covers . }}
         }}
-        ORDER BY DESC(?broadcastDate)
+        ORDER BY ?name
         LIMIT {limit}
         OFFSET {offset}
         """
@@ -52,10 +52,11 @@ class MediaService:
                 media = {
                     "id": extract_id_from_uri(data.get('media', '')),
                     "name": data.get('name'),
-                    "type": extract_id_from_uri(data.get('mediaType', '')) if data.get('mediaType') else None,
-                    "broadcastDate": data.get('broadcastDate'),
-                    "event": extract_id_from_uri(data.get('event', '')) if data.get('event') else None,
-                    "broadcaster": data.get('broadcaster')
+                    "type": extract_id_from_uri(data.get('mediaType', '')) if data.get('mediaType') else 'Media',
+                    "audience": int(float(data['audience'])) if data.get('audience') else None,
+                    "launchYear": int(float(data['launchYear'])) if data.get('launchYear') else None,
+                    "website": data.get('website'),
+                    "covers": data.get('covers')
                 }
                 media_list.append(media)
             

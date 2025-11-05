@@ -28,13 +28,13 @@ class SportService:
         query = f"""
         {self.client.get_prefixes()}
         
-        SELECT DISTINCT ?sport ?name ?category ?isOlympic
+        SELECT DISTINCT ?sport ?name ?isOlympic ?originCountry ?globalParticipants
         WHERE {{
             ?sport a sport:SportDiscipline .
             OPTIONAL {{ ?sport sport:sportName ?name . }}
-            OPTIONAL {{ ?sport rdfs:label ?name . }}
-            OPTIONAL {{ ?sport a ?category . }}
             OPTIONAL {{ ?sport sport:isOlympic ?isOlympic . }}
+            OPTIONAL {{ ?sport sport:originCountry ?originCountry . }}
+            OPTIONAL {{ ?sport sport:globalParticipants ?globalParticipants . }}
         }}
         ORDER BY ?name
         LIMIT {limit}
@@ -50,8 +50,9 @@ class SportService:
                 sport_obj = {
                     "id": extract_id_from_uri(data.get('sport', '')),
                     "name": data.get('name'),
-                    "category": extract_id_from_uri(data.get('category', '')) if data.get('category') else None,
-                    "isOlympic": data.get('isOlympic', '').lower() == 'true' if data.get('isOlympic') else None
+                    "isOlympic": data.get('isOlympic', '').lower() == 'true' if data.get('isOlympic') else False,
+                    "originCountry": data.get('originCountry'),
+                    "globalParticipants": int(float(data['globalParticipants'])) if data.get('globalParticipants') else None
                 }
                 sports.append(sport_obj)
             

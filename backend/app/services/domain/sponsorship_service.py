@@ -28,19 +28,17 @@ class SponsorshipService:
         query = f"""
         {self.client.get_prefixes()}
         
-        SELECT DISTINCT ?sponsorship ?sponsor ?sponsorName ?sponsee ?startDate ?endDate ?amount
+        SELECT DISTINCT ?sponsorship ?sponsorName ?dealValue ?contractDuration ?industry ?sponsors ?endorses
         WHERE {{
             ?sponsorship a sport:Sponsorship .
-            OPTIONAL {{ 
-                ?sponsorship sport:sponsor ?sponsor .
-                ?sponsor sport:companyName ?sponsorName .
-            }}
-            OPTIONAL {{ ?sponsorship sport:sponsors ?sponsee . }}
-            OPTIONAL {{ ?sponsorship sport:startDate ?startDate . }}
-            OPTIONAL {{ ?sponsorship sport:endDate ?endDate . }}
-            OPTIONAL {{ ?sponsorship sport:amount ?amount . }}
+            OPTIONAL {{ ?sponsorship sport:sponsorName ?sponsorName . }}
+            OPTIONAL {{ ?sponsorship sport:dealValue ?dealValue . }}
+            OPTIONAL {{ ?sponsorship sport:contractDuration ?contractDuration . }}
+            OPTIONAL {{ ?sponsorship sport:industry ?industry . }}
+            OPTIONAL {{ ?sponsorship sport:sponsors ?sponsors . }}
+            OPTIONAL {{ ?sponsorship sport:endorses ?endorses . }}
         }}
-        ORDER BY DESC(?startDate)
+        ORDER BY ?sponsorName
         LIMIT {limit}
         OFFSET {offset}
         """
@@ -53,12 +51,13 @@ class SponsorshipService:
             for data in sponsorships_data:
                 sponsorship = {
                     "id": extract_id_from_uri(data.get('sponsorship', '')),
-                    "sponsorId": extract_id_from_uri(data.get('sponsor', '')) if data.get('sponsor') else None,
                     "sponsorName": data.get('sponsorName'),
-                    "sponsee": extract_id_from_uri(data.get('sponsee', '')) if data.get('sponsee') else None,
-                    "startDate": data.get('startDate'),
-                    "endDate": data.get('endDate'),
-                    "amount": float(data['amount']) if data.get('amount') else None
+                    "amount": int(float(data['dealValue'])) if data.get('dealValue') else None,
+                    "dealValue": int(float(data['dealValue'])) if data.get('dealValue') else None,
+                    "contractDuration": int(float(data['contractDuration'])) if data.get('contractDuration') else None,
+                    "industry": data.get('industry'),
+                    "sponsee": data.get('sponsors'),
+                    "endorses": data.get('endorses')
                 }
                 sponsorships.append(sponsorship)
             

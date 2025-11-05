@@ -24,6 +24,11 @@ const AdminPage = () => {
     const [teams, setTeams] = useState([]);
     const [competitions, setCompetitions] = useState([]);
     const [organizations, setOrganizations] = useState([]);
+    const [venues, setVenues] = useState([]);
+    const [media, setMedia] = useState([]);
+    const [sports, setSports] = useState([]);
+    const [equipment, setEquipment] = useState([]);
+    const [sponsorships, setSponsorships] = useState([]);
     
     // Form states
     const [showForm, setShowForm] = useState(false);
@@ -91,6 +96,26 @@ const AdminPage = () => {
                 const res = await fetch('http://localhost:8000/api/organizations?limit=100');
                 const data = await res.json();
                 setOrganizations(data.organizations || []);
+            } else if (activeTab === 'venues') {
+                const res = await fetch('http://localhost:8000/api/venues?limit=100');
+                const data = await res.json();
+                setVenues(data.venues || []);
+            } else if (activeTab === 'media') {
+                const res = await fetch('http://localhost:8000/api/media?limit=100');
+                const data = await res.json();
+                setMedia(data.media || []);
+            } else if (activeTab === 'sports') {
+                const res = await fetch('http://localhost:8000/api/sports?limit=100');
+                const data = await res.json();
+                setSports(data.sports || []);
+            } else if (activeTab === 'equipment') {
+                const res = await fetch('http://localhost:8000/api/equipment?limit=100');
+                const data = await res.json();
+                setEquipment(data.equipment || []);
+            } else if (activeTab === 'sponsorships') {
+                const res = await fetch('http://localhost:8000/api/sponsorships?limit=100');
+                const data = await res.json();
+                setSponsorships(data.sponsorships || []);
             }
         } catch (error) {
             toast.error('Error fetching data');
@@ -103,15 +128,35 @@ const AdminPage = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const endpoint = `http://localhost:8000/api/admin/${activeTab}`;
+            
+            // Determine correct endpoint
+            const useAdminRoute = ['athletes', 'coaches', 'referees', 'achievements', 'records'].includes(activeTab);
+            const endpoint = useAdminRoute 
+                ? `http://localhost:8000/api/admin/${activeTab}`
+                : `http://localhost:8000/api/${activeTab}`;
+            
+            // Auto-generate ID for new classes if not provided
+            let dataWithId = {...formData};
+            if (['venues', 'media', 'sports', 'equipment', 'sponsorships'].includes(activeTab) && !dataWithId.id) {
+                // Generate ID from name field
+                const nameField = activeTab === 'venues' ? 'venueName' :
+                                 activeTab === 'media' ? 'mediaName' :
+                                 activeTab === 'sports' ? 'sportName' :
+                                 activeTab === 'equipment' ? 'equipmentName' :
+                                 activeTab === 'sponsorships' ? 'sponsorName' : '';
+                
+                if (dataWithId[nameField]) {
+                    dataWithId.id = dataWithId[nameField].replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+                }
+            }
             
             // Clean and prepare data
             const cleanData = {};
-            Object.keys(formData).forEach(key => {
-                const value = formData[key];
+            Object.keys(dataWithId).forEach(key => {
+                const value = dataWithId[key];
                 if (value !== null && value !== undefined && value !== '') {
                     // Convert number fields to integers
-                    if (['jerseyNumber', 'goalsScored', 'assists', 'matchesPlayed', 'experienceYears', 'titlesWon', 'year', 'matchesOfficiated'].includes(key)) {
+                    if (['jerseyNumber', 'goalsScored', 'assists', 'matchesPlayed', 'experienceYears', 'titlesWon', 'year', 'matchesOfficiated', 'capacity', 'openedYear', 'audience', 'launchYear', 'globalParticipants', 'price', 'dealValue', 'contractDuration'].includes(key)) {
                         cleanData[key] = parseInt(value);
                     } else {
                         cleanData[key] = value;
@@ -150,7 +195,10 @@ const AdminPage = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const endpoint = `http://localhost:8000/api/admin/${activeTab}/${editingItem.id}`;
+            const useAdminRoute = ['athletes', 'coaches', 'referees', 'achievements', 'records'].includes(activeTab);
+            const endpoint = useAdminRoute
+                ? `http://localhost:8000/api/admin/${activeTab}/${editingItem.id}`
+                : `http://localhost:8000/api/${activeTab}/${editingItem.id}`;
             
             // Clean and prepare data
             const cleanData = {};
@@ -158,7 +206,7 @@ const AdminPage = () => {
                 const value = formData[key];
                 if (value !== null && value !== undefined && value !== '') {
                     // Convert number fields to integers
-                    if (['jerseyNumber', 'goalsScored', 'assists', 'matchesPlayed', 'experienceYears', 'titlesWon', 'year', 'matchesOfficiated'].includes(key)) {
+                    if (['jerseyNumber', 'goalsScored', 'assists', 'matchesPlayed', 'experienceYears', 'titlesWon', 'year', 'matchesOfficiated', 'capacity', 'openedYear', 'audience', 'launchYear', 'globalParticipants', 'price', 'dealValue', 'contractDuration'].includes(key)) {
                         cleanData[key] = parseInt(value);
                     } else {
                         cleanData[key] = value;
@@ -199,7 +247,10 @@ const AdminPage = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const endpoint = `http://localhost:8000/api/admin/${activeTab}/${id}`;
+            const useAdminRoute = ['athletes', 'coaches', 'referees', 'achievements', 'records'].includes(activeTab);
+            const endpoint = useAdminRoute
+                ? `http://localhost:8000/api/admin/${activeTab}/${id}`
+                : `http://localhost:8000/api/${activeTab}/${id}`;
             const res = await fetch(endpoint, {
                 method: 'DELETE',
                 headers: {
@@ -413,7 +464,12 @@ const AdminPage = () => {
         { id: 'referees', label: '🔷 Referees', icon: 'fa-whistle', color: '#ec4899' },
         { id: 'teams', label: '⚽ Teams', icon: 'fa-users', color: '#0891b2' },
         { id: 'competitions', label: '🏆 Competitions', icon: 'fa-trophy', color: '#dc2626' },
-        { id: 'organizations', label: '🏢 Organizations', icon: 'fa-building', color: '#7c3aed' }
+        { id: 'organizations', label: '🏢 Organizations', icon: 'fa-building', color: '#7c3aed' },
+        { id: 'venues', label: '🏟️ Venues', icon: 'fa-map-marker-alt', color: '#10b981' },
+        { id: 'media', label: '📺 Media', icon: 'fa-broadcast-tower', color: '#ec4899' },
+        { id: 'sports', label: '⚽ Sports', icon: 'fa-futbol', color: '#fb923c' },
+        { id: 'equipment', label: '🏀 Equipment', icon: 'fa-basketball-ball', color: '#0ea5e9' },
+        { id: 'sponsorships', label: '🤝 Sponsorships', icon: 'fa-handshake', color: '#a855f7' }
     ];
 
     const getCurrentData = () => {
@@ -426,6 +482,11 @@ const AdminPage = () => {
             if (activeTab === 'teams') return searchResults.teams || [];
             if (activeTab === 'competitions') return searchResults.competitions || [];
             if (activeTab === 'organizations') return searchResults.organizations || [];
+            if (activeTab === 'venues') return searchResults.venues || [];
+            if (activeTab === 'media') return searchResults.media || [];
+            if (activeTab === 'sports') return searchResults.sports || [];
+            if (activeTab === 'equipment') return searchResults.equipment || [];
+            if (activeTab === 'sponsorships') return searchResults.sponsorships || [];
         }
         
         if (activeTab === 'athletes') return athletes;
@@ -436,6 +497,11 @@ const AdminPage = () => {
         if (activeTab === 'teams') return teams;
         if (activeTab === 'competitions') return competitions;
         if (activeTab === 'organizations') return organizations;
+        if (activeTab === 'venues') return venues;
+        if (activeTab === 'media') return media;
+        if (activeTab === 'sports') return sports;
+        if (activeTab === 'equipment') return equipment;
+        if (activeTab === 'sponsorships') return sponsorships;
         return [];
     };
 
@@ -591,6 +657,83 @@ const AdminPage = () => {
                                 <FormField label="Annual Revenue (in millions)" name="annualRevenue" type="number" value={formData.annualRevenue || ''} onChange={(e) => setFormData({...formData, annualRevenue: e.target.value})} />
                                 <FormField label="Website" name="website" value={formData.website || ''} onChange={(e) => setFormData({...formData, website: e.target.value})} placeholder="https://example.com" />
                                 <FormField label="Description" name="description" value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} multiline rows={4} />
+                            </>
+                        )}
+
+                        {activeTab === 'venues' && (
+                            <>
+                                <FormField label="Venue Name *" name="venueName" value={formData.venueName || ''} onChange={(e) => setFormData({...formData, venueName: e.target.value})} required />
+                                <FormField label="City" name="city" value={formData.city || ''} onChange={(e) => setFormData({...formData, city: e.target.value})} />
+                                <FormField label="Country" name="country" value={formData.country || ''} onChange={(e) => setFormData({...formData, country: e.target.value})} />
+                                <FormField label="Capacity" name="capacity" type="number" value={formData.capacity || ''} onChange={(e) => setFormData({...formData, capacity: e.target.value})} />
+                                <FormField label="Opened Year" name="openedYear" type="number" value={formData.openedYear || ''} onChange={(e) => setFormData({...formData, openedYear: e.target.value})} />
+                                <FormField label="Surface Type" name="surfaceType" value={formData.surfaceType || ''} onChange={(e) => setFormData({...formData, surfaceType: e.target.value})} placeholder="e.g., Grass, Artificial Turf, Hardwood" />
+                                <div style={{ marginBottom: '20px' }}>
+                                    <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                                        <input 
+                                            type="checkbox" 
+                                            name="isIndoor" 
+                                            checked={formData.isIndoor || false} 
+                                            onChange={(e) => setFormData({...formData, isIndoor: e.target.checked})}
+                                            style={{ marginRight: '8px', width: '18px', height: '18px', cursor: 'pointer' }}
+                                        />
+                                        <span style={{ color: '#1e293b', fontSize: '14px', fontWeight: '600' }}>Is Indoor</span>
+                                    </label>
+                                </div>
+                            </>
+                        )}
+
+                        {activeTab === 'media' && (
+                            <>
+                                <FormField label="Media Name *" name="mediaName" value={formData.mediaName || ''} onChange={(e) => setFormData({...formData, mediaName: e.target.value})} required />
+                                <FormField label="Audience" name="audience" type="number" value={formData.audience || ''} onChange={(e) => setFormData({...formData, audience: e.target.value})} placeholder="Number of viewers/readers" />
+                                <FormField label="Launch Year" name="launchYear" type="number" value={formData.launchYear || ''} onChange={(e) => setFormData({...formData, launchYear: e.target.value})} />
+                                <FormField label="Website" name="website" value={formData.website || ''} onChange={(e) => setFormData({...formData, website: e.target.value})} placeholder="https://example.com" />
+                                <FormField label="Covers" name="covers" value={formData.covers || ''} onChange={(e) => setFormData({...formData, covers: e.target.value})} placeholder="Sports covered (e.g., Football, Basketball)" />
+                            </>
+                        )}
+
+                        {activeTab === 'sports' && (
+                            <>
+                                <FormField label="Sport Name *" name="sportName" value={formData.sportName || ''} onChange={(e) => setFormData({...formData, sportName: e.target.value})} required />
+                                <div style={{ marginBottom: '20px' }}>
+                                    <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                                        <input 
+                                            type="checkbox" 
+                                            name="isOlympic" 
+                                            checked={formData.isOlympic || false} 
+                                            onChange={(e) => setFormData({...formData, isOlympic: e.target.checked})}
+                                            style={{ marginRight: '8px', width: '18px', height: '18px', cursor: 'pointer' }}
+                                        />
+                                        <span style={{ color: '#1e293b', fontSize: '14px', fontWeight: '600' }}>Is Olympic</span>
+                                    </label>
+                                </div>
+                                <FormField label="Origin Country" name="originCountry" value={formData.originCountry || ''} onChange={(e) => setFormData({...formData, originCountry: e.target.value})} />
+                                <FormField label="Global Participants" name="globalParticipants" type="number" value={formData.globalParticipants || ''} onChange={(e) => setFormData({...formData, globalParticipants: e.target.value})} placeholder="Estimated number of players worldwide" />
+                            </>
+                        )}
+
+                        {activeTab === 'equipment' && (
+                            <>
+                                <FormField label="Equipment Name *" name="equipmentName" value={formData.equipmentName || ''} onChange={(e) => setFormData({...formData, equipmentName: e.target.value})} required />
+                                <FormField label="Brand" name="brand" value={formData.brand || ''} onChange={(e) => setFormData({...formData, brand: e.target.value})} />
+                                <FormField label="Model" name="model" value={formData.model || ''} onChange={(e) => setFormData({...formData, model: e.target.value})} />
+                                <FormField label="Price" name="price" type="number" value={formData.price || ''} onChange={(e) => setFormData({...formData, price: e.target.value})} placeholder="Price in USD" />
+                                <FormField label="Color" name="color" value={formData.color || ''} onChange={(e) => setFormData({...formData, color: e.target.value})} />
+                                <FormField label="Size" name="size" value={formData.size || ''} onChange={(e) => setFormData({...formData, size: e.target.value})} />
+                                <FormField label="Material" name="material" value={formData.material || ''} onChange={(e) => setFormData({...formData, material: e.target.value})} />
+                                <FormField label="Required For" name="requiredFor" value={formData.requiredFor || ''} onChange={(e) => setFormData({...formData, requiredFor: e.target.value})} placeholder="Sport or activity" />
+                            </>
+                        )}
+
+                        {activeTab === 'sponsorships' && (
+                            <>
+                                <FormField label="Sponsor Name *" name="sponsorName" value={formData.sponsorName || ''} onChange={(e) => setFormData({...formData, sponsorName: e.target.value})} required />
+                                <FormField label="Deal Value" name="dealValue" type="number" value={formData.dealValue || ''} onChange={(e) => setFormData({...formData, dealValue: e.target.value})} placeholder="Value in millions" />
+                                <FormField label="Contract Duration (years)" name="contractDuration" type="number" value={formData.contractDuration || ''} onChange={(e) => setFormData({...formData, contractDuration: e.target.value})} />
+                                <FormField label="Industry" name="industry" value={formData.industry || ''} onChange={(e) => setFormData({...formData, industry: e.target.value})} placeholder="e.g., Technology, Sportswear, Finance" />
+                                <FormField label="Sponsors" name="sponsors" value={formData.sponsors || ''} onChange={(e) => setFormData({...formData, sponsors: e.target.value})} placeholder="Entity being sponsored" />
+                                <FormField label="Endorses" name="endorses" value={formData.endorses || ''} onChange={(e) => setFormData({...formData, endorses: e.target.value})} placeholder="Person or team endorsing" />
                             </>
                         )}
 
@@ -817,6 +960,11 @@ const AdminPage = () => {
                                             {activeTab === 'teams' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Type</th><th style={thStyle}>Country</th><th style={thStyle}>Founded</th><th style={thStyle}>Actions</th></>}
                                             {activeTab === 'competitions' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Type</th><th style={thStyle}>Season</th><th style={thStyle}>Start Date</th><th style={thStyle}>Actions</th></>}
                                             {activeTab === 'organizations' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Type</th><th style={thStyle}>Headquarters</th><th style={thStyle}>Founded</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'venues' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>City</th><th style={thStyle}>Country</th><th style={thStyle}>Capacity</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'media' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Type</th><th style={thStyle}>Launch Year</th><th style={thStyle}>Audience</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'sports' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Olympic</th><th style={thStyle}>Origin</th><th style={thStyle}>Participants</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'equipment' && <><th style={thStyle}>ID</th><th style={thStyle}>Name</th><th style={thStyle}>Brand</th><th style={thStyle}>Sport</th><th style={thStyle}>Price</th><th style={thStyle}>Actions</th></>}
+                                            {activeTab === 'sponsorships' && <><th style={thStyle}>ID</th><th style={thStyle}>Sponsor</th><th style={thStyle}>Sponsee</th><th style={thStyle}>Industry</th><th style={thStyle}>Amount</th><th style={thStyle}>Actions</th></>}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -897,6 +1045,56 @@ const AdminPage = () => {
                                                         <td style={tdStyle}>{item.type || '-'}</td>
                                                         <td style={tdStyle}>{item.headquarters || '-'}</td>
                                                         <td style={tdStyle}>{item.establishedYear || item.foundedYear || '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'venues' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.name}</td>
+                                                        <td style={tdStyle}>{item.city || '-'}</td>
+                                                        <td style={tdStyle}>{item.country || '-'}</td>
+                                                        <td style={tdStyle}>{item.capacity ? item.capacity.toLocaleString() : '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'media' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.name}</td>
+                                                        <td style={tdStyle}>{item.type || 'Media'}</td>
+                                                        <td style={tdStyle}>{item.launchYear || '-'}</td>
+                                                        <td style={tdStyle}>{item.audience ? item.audience.toLocaleString() : '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'sports' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.name}</td>
+                                                        <td style={tdStyle}>{item.isOlympic ? '✓ Yes' : '✗ No'}</td>
+                                                        <td style={tdStyle}>{item.originCountry || '-'}</td>
+                                                        <td style={tdStyle}>{item.globalParticipants ? item.globalParticipants.toLocaleString() : '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'equipment' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.name}</td>
+                                                        <td style={tdStyle}>{item.brand || '-'}</td>
+                                                        <td style={tdStyle}>{item.sport || '-'}</td>
+                                                        <td style={tdStyle}>{item.price ? `$${item.price}` : '-'}</td>
+                                                        <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
+                                                    </>
+                                                )}
+                                                {activeTab === 'sponsorships' && (
+                                                    <>
+                                                        <td style={tdStyle}>{item.id}</td>
+                                                        <td style={tdStyle}>{item.sponsorName || '-'}</td>
+                                                        <td style={tdStyle}>{item.sponsee || '-'}</td>
+                                                        <td style={tdStyle}>{item.industry || '-'}</td>
+                                                        <td style={tdStyle}>{item.amount ? `$${item.amount.toLocaleString()}M` : '-'}</td>
                                                         <td style={tdStyle}><ActionButtons item={item} onEdit={openEditForm} onDelete={handleDelete} /></td>
                                                     </>
                                                 )}

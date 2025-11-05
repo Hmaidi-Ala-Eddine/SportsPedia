@@ -49,7 +49,9 @@ class SPARQLCRUDHelper:
                 continue
             
             property_name = key
-            delete_patterns.append(f"{namespace}:{entity_id} {namespace}:{property_name} ?old{key.capitalize()} .")
+            # Create a safe variable name by replacing special chars and keeping original case
+            safe_var_name = key.replace('-', '_').replace('.', '_')
+            delete_patterns.append(f"{namespace}:{entity_id} {namespace}:{property_name} ?old_{safe_var_name} .")
             
             if isinstance(value, bool):
                 insert_patterns.append(f'{namespace}:{entity_id} {namespace}:{property_name} "{str(value).lower()}"^^xsd:boolean .')

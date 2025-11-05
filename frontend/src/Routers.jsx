@@ -18,6 +18,13 @@ import CompetitionDetailPage from './pages/CompetitionDetailPage';
 import OrganizationDetailPage from './pages/OrganizationDetailPage';
 import ExplorePage from './pages/innerPages/ExplorePage';
 
+// Mehdi's & Ahmed's Classes Pages
+import VenuesPage from './pages/VenuesPage';
+import MediaPage from './pages/MediaPage';
+import SportsPage from './pages/SportsPage';
+import EquipmentPage from './pages/EquipmentPage';
+import SponsorshipsPage from './pages/SponsorshipsPage';
+
 // Auth Pages (Keep existing)
 import LoginPage from './pages/authPages/LoginPage';
 import SignupPage from './pages/authPages/SignupPage';
@@ -49,6 +56,13 @@ const Routers = () => {
                 <Route path='/competitions/:id' element={<CompetitionDetailPage />}></Route>
                 <Route path='/organizations' element={<OrganizationsPage />}></Route>
                 <Route path='/organizations/:id' element={<OrganizationDetailPage />}></Route>
+                
+                {/* Mehdi's & Ahmed's Classes Routes */}
+                <Route path='/venues' element={<VenuesPage />}></Route>
+                <Route path='/media' element={<MediaPage />}></Route>
+                <Route path='/sports' element={<SportsPage />}></Route>
+                <Route path='/equipment' element={<EquipmentPage />}></Route>
+                <Route path='/sponsorships' element={<SponsorshipsPage />}></Route>
                 
                 <Route path='/explore' element={<ExplorePage />}></Route>
 

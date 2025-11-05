@@ -28,14 +28,17 @@ class EquipmentService:
         query = f"""
         {self.client.get_prefixes()}
         
-        SELECT DISTINCT ?equipment ?name ?sport ?equipmentType ?description
+        SELECT DISTINCT ?equipment ?name ?brand ?model ?price ?color ?size ?material ?requiredFor
         WHERE {{
             ?equipment a sport:Equipment .
             OPTIONAL {{ ?equipment sport:equipmentName ?name . }}
-            OPTIONAL {{ ?equipment rdfs:label ?name . }}
-            OPTIONAL {{ ?equipment sport:usedIn ?sport . }}
-            OPTIONAL {{ ?equipment a ?equipmentType . }}
-            OPTIONAL {{ ?equipment rdfs:comment ?description . }}
+            OPTIONAL {{ ?equipment sport:brand ?brand . }}
+            OPTIONAL {{ ?equipment sport:model ?model . }}
+            OPTIONAL {{ ?equipment sport:price ?price . }}
+            OPTIONAL {{ ?equipment sport:color ?color . }}
+            OPTIONAL {{ ?equipment sport:size ?size . }}
+            OPTIONAL {{ ?equipment sport:material ?material . }}
+            OPTIONAL {{ ?equipment sport:requiredFor ?requiredFor . }}
         }}
         ORDER BY ?name
         LIMIT {limit}
@@ -51,9 +54,13 @@ class EquipmentService:
                 equipment = {
                     "id": extract_id_from_uri(data.get('equipment', '')),
                     "name": data.get('name'),
-                    "sport": extract_id_from_uri(data.get('sport', '')) if data.get('sport') else None,
-                    "type": extract_id_from_uri(data.get('equipmentType', '')) if data.get('equipmentType') else None,
-                    "description": data.get('description')
+                    "brand": data.get('brand'),
+                    "model": data.get('model'),
+                    "price": int(float(data['price'])) if data.get('price') else None,
+                    "color": data.get('color'),
+                    "size": data.get('size'),
+                    "material": data.get('material'),
+                    "sport": data.get('requiredFor')
                 }
                 equipment_list.append(equipment)
             

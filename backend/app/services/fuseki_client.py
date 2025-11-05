@@ -1,4 +1,4 @@
-from SPARQLWrapper import SPARQLWrapper, JSON, POST, GET
+from SPARQLWrapper import SPARQLWrapper, JSON, POST, GET, BASIC
 from typing import Dict, List, Any, Optional
 import logging
 from app.config.settings import settings
@@ -13,6 +13,8 @@ class FusekiClient:
         self.endpoint = settings.FUSEKI_ENDPOINT
         self.update_endpoint = settings.FUSEKI_UPDATE_ENDPOINT
         self.namespace = settings.ONTOLOGY_NAMESPACE
+        self.user = settings.FUSEKI_USER
+        self.password = settings.FUSEKI_PASSWORD
         
     def execute_query(self, query: str) -> Dict[str, Any]:
         """
@@ -50,6 +52,8 @@ class FusekiClient:
         """
         try:
             sparql = SPARQLWrapper(self.update_endpoint)
+            sparql.setHTTPAuth(BASIC)
+            sparql.setCredentials(self.user, self.password)
             sparql.setQuery(query)
             sparql.setMethod(POST)
             

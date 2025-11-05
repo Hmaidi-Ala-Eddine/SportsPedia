@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     FUSEKI_ENDPOINT: str = "http://localhost:3030/sportspedia/query"
     FUSEKI_UPDATE_ENDPOINT: str = "http://localhost:3030/sportspedia/update"
     FUSEKI_GRAPH_STORE: str = "http://localhost:3030/sportspedia/data"
+    FUSEKI_USER: str = "admin"
+    FUSEKI_PASSWORD: str = "admin123"
     
     # Ontology
     ONTOLOGY_NAMESPACE: str = "http://example.org/sports-ontology#"
