@@ -30,7 +30,11 @@ class SPARQLCRUDHelper:
             elif isinstance(value, str):
                 # Check if it's a reference to another entity (starts with uppercase or is a known pattern)
                 if key in ['team', 'sport', 'homeVenue', 'competition', 'organizedBy', 'achievedBy', 'requiredFor', 'covers', 'sponsors', 'endorses']:
-                    query += f' ; {namespace}:{property_name} {namespace}:{value}'
+                    # Check if value is already a full URI
+                    if value.startswith('http://') or value.startswith('https://'):
+                        query += f' ; {namespace}:{property_name} <{value}>'
+                    else:
+                        query += f' ; {namespace}:{property_name} {namespace}:{value}'
                 else:
                     # Escape quotes in string values
                     escaped_value = value.replace('"', '\\"')
@@ -49,9 +53,7 @@ class SPARQLCRUDHelper:
                 continue
             
             property_name = key
-            # Create a safe variable name by replacing special chars and keeping original case
-            safe_var_name = key.replace('-', '_').replace('.', '_')
-            delete_patterns.append(f"{namespace}:{entity_id} {namespace}:{property_name} ?old_{safe_var_name} .")
+            delete_patterns.append(f"{namespace}:{entity_id} {namespace}:{property_name} ?old{key.capitalize()} .")
             
             if isinstance(value, bool):
                 insert_patterns.append(f'{namespace}:{entity_id} {namespace}:{property_name} "{str(value).lower()}"^^xsd:boolean .')
@@ -63,7 +65,11 @@ class SPARQLCRUDHelper:
                 insert_patterns.append(f'{namespace}:{entity_id} {namespace}:{property_name} "{value}"^^xsd:date .')
             elif isinstance(value, str):
                 if key in ['team', 'sport', 'homeVenue', 'competition', 'organizedBy', 'achievedBy', 'requiredFor', 'covers', 'sponsors', 'endorses']:
-                    insert_patterns.append(f'{namespace}:{entity_id} {namespace}:{property_name} {namespace}:{value} .')
+                    # Check if value is already a full URI
+                    if value.startswith('http://') or value.startswith('https://'):
+                        insert_patterns.append(f'{namespace}:{entity_id} {namespace}:{property_name} <{value}> .')
+                    else:
+                        insert_patterns.append(f'{namespace}:{entity_id} {namespace}:{property_name} {namespace}:{value} .')
                 else:
                     escaped_value = value.replace('"', '\\"')
                     insert_patterns.append(f'{namespace}:{entity_id} {namespace}:{property_name} "{escaped_value}" .')

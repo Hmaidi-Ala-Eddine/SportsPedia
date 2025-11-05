@@ -170,7 +170,25 @@ class SponsorshipService:
         if not data_dict:
             return {"id": spon_id}
         delete_patterns, insert_patterns = SPARQLCRUDHelper.build_update_patterns(spon_id, data_dict)
-        query = f"{self.client.get_prefixes()}\nDELETE {{ {' '.join(delete_patterns)} }}\nINSERT {{ {' '.join(insert_patterns)} }}\nWHERE {{ {' OPTIONAL { ' + ' } OPTIONAL { '.join(delete_patterns) + ' }'} }}"
+        
+        # Build WHERE clause with proper OPTIONAL blocks
+        where_clause = '\n            '.join([f'OPTIONAL {{ {pattern} }}' for pattern in delete_patterns])
+        
+        query = f"""
+        {self.client.get_prefixes()}
+        
+        DELETE {{
+            {' '.join(delete_patterns)}
+        }}
+        INSERT {{
+            {' '.join(insert_patterns)}
+        }}
+        WHERE {{
+            {where_clause}
+        }}
+        """
+        
+        logger.info(f"Update query for {spon_id}: {query}")
         try:
             self.client.execute_update(query)
             logger.info(f"Updated sponsorship: {spon_id}")
