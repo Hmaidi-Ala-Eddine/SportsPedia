@@ -50,24 +50,59 @@ const SearchPage = () => {
     };
 
     const getCategoryColor = (result) => {
-        const firstName = result.firstName || '';
-        const type = result.type || result.recordType || '';
+        const type = result.type || '';
         
-        if (firstName || type.includes('Athlete')) return '#2563eb';
-        if (type.includes('Coach')) return '#16a34a';
-        if (type.includes('Referee')) return '#dc2626';
+        // Person types
+        if (type === 'Athlete') return '#2563eb';
+        if (type === 'Coach') return '#16a34a';
+        if (type === 'Referee') return '#ec4899';
+        
+        // Entity types
+        if (type === 'Team') return '#0891b2';
+        if (type === 'Competition') return '#dc2626';
+        if (type === 'Organization') return '#7c3aed';
+        if (type === 'Venue') return '#10b981';
+        if (type === 'Media') return '#ec4899';
+        if (type === 'Sport') return '#fb923c';
+        if (type === 'Equipment') return '#0ea5e9';
+        if (type === 'Sponsorship') return '#a855f7';
+        
+        // Legacy types
         if (type.includes('Achievement') || type.includes('Ballon')) return '#f59e0b';
         if (type.includes('Record') || type.includes('Goals')) return '#8b5cf6';
+        
         return '#6b7280';
     };
 
     const getCategoryIcon = (result) => {
-        const type = result.type || result.recordType || '';
-        if (result.firstName) return 'fas fa-running';
-        if (type.includes('Coach')) return 'fas fa-clipboard';
+        const type = result.type || '';
+        
+        // Person types
+        if (type === 'Athlete') return 'fas fa-running';
+        if (type === 'Coach') return 'fas fa-clipboard';
+        if (type === 'Referee') return 'fas fa-whistle';
+        
+        // Entity types
+        if (type === 'Team') return 'fas fa-users';
+        if (type === 'Competition') return 'fas fa-trophy';
+        if (type === 'Organization') return 'fas fa-building';
+        if (type === 'Venue') return 'fas fa-map-marker-alt';
+        if (type === 'Media') return 'fas fa-broadcast-tower';
+        if (type === 'Sport') return 'fas fa-futbol';
+        if (type === 'Equipment') return 'fas fa-basketball-ball';
+        if (type === 'Sponsorship') return 'fas fa-handshake';
+        
+        // Legacy
         if (type.includes('Achievement')) return 'fas fa-trophy';
         if (type.includes('Record')) return 'fas fa-medal';
-        return 'fas fa-user-circle';
+        
+        return 'fas fa-circle';
+    };
+
+    const getCategoryLabel = (result) => {
+        const type = result.type || '';
+        if (type) return type;
+        return 'Item';
     };
 
     return (
@@ -131,18 +166,79 @@ const SearchPage = () => {
                             ) : (
                                 <div className="row">
                                     {results.map((result, index) => {
-                                        const displayName = result.firstName ? `${result.firstName} ${result.lastName}` : (result.recordType || result.name || 'Item');
+                                        // Determine display name based on entity type
+                                        let displayName = 'Item';
+                                        if (result.firstName && result.lastName) {
+                                            displayName = `${result.firstName} ${result.lastName}`;
+                                        } else if (result.teamName) {
+                                            displayName = result.teamName;
+                                        } else if (result.competitionName) {
+                                            displayName = result.competitionName;
+                                        } else if (result.organizationName) {
+                                            displayName = result.organizationName;
+                                        } else if (result.venueName) {
+                                            displayName = result.venueName;
+                                        } else if (result.mediaName) {
+                                            displayName = result.mediaName;
+                                        } else if (result.sportName) {
+                                            displayName = result.sportName;
+                                        } else if (result.equipmentName) {
+                                            displayName = result.equipmentName;
+                                        } else if (result.sponsorName) {
+                                            displayName = result.sponsorName;
+                                        } else if (result.name) {
+                                            displayName = result.name;
+                                        }
+                                        
                                         const color = getCategoryColor(result);
                                         const icon = getCategoryIcon(result);
+                                        const categoryLabel = getCategoryLabel(result);
+                                        
+                                        // Determine the correct detail page URL based on entity type
+                                        const getDetailUrl = () => {
+                                            const id = result.id || 'unknown';
+                                            const type = result.type || '';
+                                            
+                                            // Person types
+                                            if (type === 'Athlete') return `/person/athlete/${id}`;
+                                            if (type === 'Coach') return `/person/coach/${id}`;
+                                            if (type === 'Referee') return `/person/referee/${id}`;
+                                            
+                                            // TCO types - match existing routes
+                                            if (type === 'Team') return `/teams/${id}`;
+                                            if (type === 'Competition') return `/competitions/${id}`;
+                                            if (type === 'Organization') return `/organizations/${id}`;
+                                            
+                                            // New entity types - for now route to list pages
+                                            // TODO: Create detail pages for these
+                                            if (type === 'Venue') return `/venues`;
+                                            if (type === 'Media') return `/media`;
+                                            if (type === 'Sport') return `/sports`;
+                                            if (type === 'Equipment') return `/equipment`;
+                                            if (type === 'Sponsorship') return `/sponsorships`;
+                                            
+                                            // Fallback
+                                            return '#';
+                                        };
+                                        
+                                        const detailUrl = getDetailUrl();
                                         
                                         return (
                                             <div key={index} className="col-lg-6 col-md-6 mb-30">
-                                                <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)', transition: 'all 0.3s', cursor: 'pointer', border: '2px solid transparent' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.12)'; e.currentTarget.style.borderColor = color; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = 'transparent'; }}>
+                                                <div 
+                                                    onClick={() => detailUrl !== '#' && navigate(detailUrl)}
+                                                    style={{ backgroundColor: 'white', borderRadius: '15px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.08)', transition: 'all 0.3s', cursor: 'pointer', border: '2px solid transparent' }} 
+                                                    onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.12)'; e.currentTarget.style.borderColor = color; }} 
+                                                    onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = 'transparent'; }}
+                                                >
                                                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
                                                         <div style={{ width: '50px', height: '50px', borderRadius: '12px', backgroundColor: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '15px' }}>
                                                             <i className={icon} style={{ fontSize: '24px', color: color }}></i>
                                                         </div>
                                                         <div style={{ flex: 1 }}>
+                                                            <span style={{ display: 'inline-block', padding: '4px 12px', backgroundColor: `${color}15`, color: color, borderRadius: '20px', fontSize: '12px', fontWeight: '600', marginBottom: '8px' }}>
+                                                                {categoryLabel}
+                                                            </span>
                                                             <h4 style={{ fontSize: '20px', fontWeight: '600', color: '#1e293b', marginBottom: '5px' }}>{displayName}</h4>
                                                             {result.nationality && (
                                                                 <span style={{ fontSize: '14px', color: '#64748b' }}>
@@ -150,19 +246,69 @@ const SearchPage = () => {
                                                                     {result.nationality}
                                                                 </span>
                                                             )}
+                                                            {result.country && !result.nationality && (
+                                                                <span style={{ fontSize: '14px', color: '#64748b' }}>
+                                                                    <i className="fas fa-flag" style={{ marginRight: '5px' }}></i>
+                                                                    {result.country}
+                                                                </span>
+                                                            )}
                                                         </div>
                                                     </div>
 
                                                     <div style={{ paddingTop: '15px', borderTop: '1px solid #f1f5f9' }}>
+                                                        {/* Person fields */}
                                                         {result.position && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Position:</strong> {result.position}</p>}
                                                         {result.goals && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Goals:</strong> {result.goals}</p>}
-                                                        {result.assists && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Assists:</strong> {result.assists}</p>}
-                                                        {result.performanceValue && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Value:</strong> {result.performanceValue}</p>}
+                                                        {result.goalsScored && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Goals:</strong> {result.goalsScored}</p>}
+                                                        {result.experienceYears && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Experience:</strong> {result.experienceYears} years</p>}
+                                                        {result.titlesWon && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Titles:</strong> {result.titlesWon}</p>}
+                                                        {result.matchesOfficiated && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Matches:</strong> {result.matchesOfficiated}</p>}
+                                                        
+                                                        {/* Team fields */}
+                                                        {result.team_type && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Type:</strong> {result.team_type}</p>}
+                                                        {result.foundedYear && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Founded:</strong> {result.foundedYear}</p>}
+                                                        {result.city && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>City:</strong> {result.city}</p>}
+                                                        
+                                                        {/* Competition fields */}
+                                                        {result.compType && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Type:</strong> {result.compType}</p>}
+                                                        {result.season && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Season:</strong> {result.season}</p>}
+                                                        {result.startDate && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Start:</strong> {result.startDate}</p>}
+                                                        {result.prizeMoney && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Prize:</strong> ${result.prizeMoney}M</p>}
+                                                        
+                                                        {/* Organization fields */}
+                                                        {result.orgType && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Type:</strong> {result.orgType}</p>}
+                                                        {result.headquarters && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>HQ:</strong> {result.headquarters}</p>}
+                                                        {result.establishedYear && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Established:</strong> {result.establishedYear}</p>}
+                                                        
+                                                        {/* Venue fields */}
+                                                        {result.capacity && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Capacity:</strong> {result.capacity.toLocaleString()}</p>}
+                                                        {result.openedYear && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Opened:</strong> {result.openedYear}</p>}
+                                                        {result.surfaceType && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Surface:</strong> {result.surfaceType}</p>}
+                                                        
+                                                        {/* Media fields */}
+                                                        {result.audience && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Audience:</strong> {result.audience.toLocaleString()}</p>}
+                                                        {result.launchYear && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Launched:</strong> {result.launchYear}</p>}
+                                                        
+                                                        {/* Sport fields */}
+                                                        {result.isOlympic !== undefined && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Olympic:</strong> {result.isOlympic ? '✓ Yes' : '✗ No'}</p>}
+                                                        {result.originCountry && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Origin:</strong> {result.originCountry}</p>}
+                                                        
+                                                        {/* Equipment fields */}
+                                                        {result.brand && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Brand:</strong> {result.brand}</p>}
+                                                        {result.model && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Model:</strong> {result.model}</p>}
+                                                        {result.sport && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Sport:</strong> {result.sport}</p>}
+                                                        {result.price && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Price:</strong> ${result.price}</p>}
+                                                        
+                                                        {/* Sponsorship fields */}
+                                                        {result.dealValue && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Deal Value:</strong> ${result.dealValue}M</p>}
+                                                        {result.industry && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Industry:</strong> {result.industry}</p>}
+                                                        {result.sponsors && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Sponsors:</strong> {result.sponsors}</p>}
+                                                        {result.endorses && <p style={{ marginBottom: '5px', color: '#64748b' }}><strong>Endorses:</strong> {result.endorses}</p>}
                                                     </div>
 
-                                                    <button style={{ marginTop: '15px', color: color, background: 'none', border: 'none', fontSize: '14px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                                                    <div style={{ marginTop: '15px', color: color, fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center' }}>
                                                         View Details <i className="fas fa-arrow-right" style={{ marginLeft: '8px' }}></i>
-                                                    </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         );

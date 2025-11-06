@@ -27,7 +27,8 @@ def sparql_results_to_list(results: Dict[str, Any]) -> List[Dict[str, Any]]:
                 item[key] = value['value']
                 # Store the first URI we encounter (usually the entity URI)
                 if not entity_uri and key in ['athlete', 'coach', 'referee', 'achievement', 'record', 'person', 
-                                              'team', 'competition', 'organization']:
+                                              'team', 'competition', 'organization', 'venue', 'media', 'sport',
+                                              'equipment', 'sponsorship', 'entity']:
                     entity_uri = value['value']
             elif value['type'] == 'literal':
                 item[key] = value['value']
@@ -40,6 +41,8 @@ def sparql_results_to_list(results: Dict[str, Any]) -> List[Dict[str, Any]]:
         # Extract ID from URI and determine type
         if entity_uri:
             item['id'] = extract_id_from_uri(entity_uri)
+        elif 'entity' in item:
+            item['id'] = extract_id_from_uri(item['entity'])
         elif 'athlete' in item:
             item['id'] = extract_id_from_uri(item['athlete'])
         elif 'coach' in item:
@@ -58,6 +61,16 @@ def sparql_results_to_list(results: Dict[str, Any]) -> List[Dict[str, Any]]:
             item['id'] = extract_id_from_uri(item['competition'])
         elif 'organization' in item:
             item['id'] = extract_id_from_uri(item['organization'])
+        elif 'venue' in item:
+            item['id'] = extract_id_from_uri(item['venue'])
+        elif 'media' in item:
+            item['id'] = extract_id_from_uri(item['media'])
+        elif 'sport' in item:
+            item['id'] = extract_id_from_uri(item['sport'])
+        elif 'equipment' in item:
+            item['id'] = extract_id_from_uri(item['equipment'])
+        elif 'sponsorship' in item:
+            item['id'] = extract_id_from_uri(item['sponsorship'])
         
         # Determine entity type
         if 'type' not in item:

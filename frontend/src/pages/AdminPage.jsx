@@ -41,12 +41,17 @@ const AdminPage = () => {
     const [sparqlQuery, setSparqlQuery] = useState('');
     const [showSparql, setShowSparql] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
+    
+    // Local search state for filtering current tab data
+    const [localSearchQuery, setLocalSearchQuery] = useState('');
 
     useEffect(() => {
         checkAdminAccess();
         if (!aiSearchActive) {
             fetchData();
         }
+        // Clear local search when switching tabs
+        setLocalSearchQuery('');
     }, [activeTab, aiSearchActive]);
 
     const checkAdminAccess = async () => {
@@ -314,17 +319,45 @@ const AdminPage = () => {
                 referees: [],
                 teams: [],
                 competitions: [],
-                organizations: []
+                organizations: [],
+                venues: [],
+                media: [],
+                sports: [],
+                equipment: [],
+                sponsorships: []
             };
             
             results.forEach(result => {
                 console.log('Processing result:', result);
                 
-                // Athletes
-                if (result.type === 'Athlete' || result.athlete || 
-                    (result.firstName && result.lastName && (result.position || result.goalsScored !== undefined))) {
+                // Extract ID from entity URI if needed
+                const extractId = (entity) => {
+                    // Try result.id first
+                    if (result.id) return result.id;
+                    
+                    // Try to extract from entity URI
+                    if (entity && typeof entity === 'string') {
+                        if (entity.includes('#')) {
+                            return entity.split('#')[1];
+                        }
+                        if (entity.includes('/')) {
+                            const parts = entity.split('/');
+                            return parts[parts.length - 1];
+                        }
+                        return entity;
+                    }
+                    
+                    // Fallback
+                    return 'unknown_' + Math.random().toString(36).substr(2, 9);
+                };
+                
+                const entityId = extractId(result.entity);
+                console.log('Extracted ID:', entityId, 'from entity:', result.entity, 'Type:', result.type);
+                
+                // Use the type field to categorize (PRIORITY)
+                if (result.type === 'Athlete') {
                     categorizedResults.athletes.push({
-                        id: result.id,
+                        id: entityId,
                         firstName: result.firstName,
                         lastName: result.lastName,
                         nationality: result.nationality,
@@ -332,11 +365,9 @@ const AdminPage = () => {
                         goalsScored: result.goalsScored || result.goals || 0
                     });
                 }
-                // Coaches  
-                else if (result.type === 'Coach' || result.coach ||
-                    (result.firstName && result.lastName && (result.experienceYears !== undefined || result.titlesWon !== undefined))) {
+                else if (result.type === 'Coach') {
                     categorizedResults.coaches.push({
-                        id: result.id,
+                        id: entityId,
                         firstName: result.firstName,
                         lastName: result.lastName,
                         nationality: result.nationality,
@@ -344,28 +375,9 @@ const AdminPage = () => {
                         titlesWon: result.titlesWon || 0
                     });
                 }
-                // Achievements
-                else if (result.type === 'Achievement' || result.achievement || result.achievementType) {
-                    categorizedResults.achievements.push({
-                        id: result.id,
-                        achievementType: result.achievementType,
-                        year: result.year,
-                        achievedBy: result.athleteName || result.fullName || '-'
-                    });
-                }
-                // Records
-                else if (result.type === 'Record' || result.record || result.recordType) {
-                    categorizedResults.records.push({
-                        id: result.id,
-                        recordType: result.recordType,
-                        recordValue: result.recordValue || result.value || result.performanceValue,
-                        setBy: result.athleteName || result.fullName || '-'
-                    });
-                }
-                // Referees
-                else if (result.type === 'Referee' || result.referee || result.matchesOfficiated !== undefined) {
+                else if (result.type === 'Referee') {
                     categorizedResults.referees.push({
-                        id: result.id,
+                        id: entityId,
                         firstName: result.firstName,
                         lastName: result.lastName,
                         nationality: result.nationality,
@@ -373,27 +385,26 @@ const AdminPage = () => {
                         matchesOfficiated: result.matchesOfficiated || 0
                     });
                 }
-                // Teams - ENHANCED DETECTION
-                else if (result.teamName || result.team || result.teamType || 
-                        (result.country && result.foundedYear && !result.competitionName && !result.organizationName && !result.season)) {
+                else if (result.type === 'Team') {
                     categorizedResults.teams.push({
-                        id: result.id || 'ProfessionalTeam',
+                        id: entityId,
                         name: result.teamName || result.name || 'Unknown Team',
-                        team_type: result.teamType || result.type || '-',
+                        teamName: result.teamName || result.name,
+                        team_type: result.team_type || '-',
                         country: result.country || '-',
                         foundedYear: result.foundedYear || '-',
                         city: result.city || '-',
                         budget: result.budget || '-',
-                        currentRanking: result.currentRanking || '-'
+                        currentRanking: result.currentRanking || '-',
+                        wins: result.wins || '-'
                     });
                 }
-                // Competitions - ENHANCED DETECTION
-                else if (result.competitionName || result.competition || result.compType || result.season || 
-                        result.startDate || result.prizeMoney) {
+                else if (result.type === 'Competition') {
                     categorizedResults.competitions.push({
-                        id: result.id || 'Competition',
+                        id: entityId,
                         name: result.competitionName || result.name || 'Unknown Competition',
-                        type: result.compType || result.type || '-',
+                        competitionName: result.competitionName || result.name,
+                        type: result.compType || '-',
                         season: result.season || '-',
                         startDate: result.startDate || '-',
                         country: result.country || '-',
@@ -401,17 +412,93 @@ const AdminPage = () => {
                         prizeMoney: result.prizeMoney || '-'
                     });
                 }
-                // Organizations - ENHANCED DETECTION
-                else if (result.organizationName || result.organization || result.orgType || 
-                        result.headquarters || result.establishedYear || result.president) {
+                else if (result.type === 'Organization') {
                     categorizedResults.organizations.push({
-                        id: result.id || 'Organization',
+                        id: entityId,
                         name: result.organizationName || result.name || 'Unknown Organization',
-                        type: result.orgType || result.type || '-',
+                        organizationName: result.organizationName || result.name,
+                        type: result.orgType || '-',
                         headquarters: result.headquarters || '-',
                         establishedYear: result.establishedYear || result.foundedYear || '-',
                         president: result.president || '-',
                         memberCount: result.memberCount || '-'
+                    });
+                }
+                else if (result.type === 'Venue') {
+                    categorizedResults.venues.push({
+                        id: entityId,
+                        name: result.venueName || result.name || 'Unknown Venue',
+                        venueName: result.venueName || result.name,
+                        city: result.city || '-',
+                        country: result.country || '-',
+                        capacity: result.capacity || '-',
+                        openedYear: result.openedYear || '-',
+                        surfaceType: result.surfaceType || '-'
+                    });
+                }
+                else if (result.type === 'Media') {
+                    categorizedResults.media.push({
+                        id: entityId,
+                        name: result.mediaName || result.name || 'Unknown Media',
+                        mediaName: result.mediaName || result.name,
+                        type: result.mediaType || 'Media',
+                        audience: result.audience || '-',
+                        launchYear: result.launchYear || '-',
+                        covers: result.covers || '-'
+                    });
+                }
+                else if (result.type === 'Sport') {
+                    categorizedResults.sports.push({
+                        id: entityId,
+                        name: result.sportName || result.name || 'Unknown Sport',
+                        sportName: result.sportName || result.name,
+                        isOlympic: result.isOlympic || false,
+                        originCountry: result.originCountry || '-',
+                        globalParticipants: result.globalParticipants || '-',
+                        category: result.category || '-'
+                    });
+                }
+                else if (result.type === 'Equipment') {
+                    categorizedResults.equipment.push({
+                        id: entityId,
+                        name: result.equipmentName || result.name || 'Unknown Equipment',
+                        equipmentName: result.equipmentName || result.name,
+                        brand: result.brand || '-',
+                        model: result.model || '-',
+                        sport: result.sport || '-',
+                        price: result.price || '-',
+                        material: result.material || '-'
+                    });
+                }
+                else if (result.type === 'Sponsorship') {
+                    categorizedResults.sponsorships.push({
+                        id: entityId,
+                        sponsorName: result.sponsorName || 'Unknown Sponsor',
+                        dealValue: result.dealValue || '-',
+                        industry: result.industry || '-',
+                        sponsors: result.sponsors || '-',
+                        endorses: result.endorses || '-',
+                        amount: result.dealValue || '-',
+                        sponsee: result.sponsors || '-',
+                        startDate: result.startDate || '-',
+                        endDate: result.endDate || '-'
+                    });
+                }
+                // Fallback for legacy results without type field
+                else if (result.achievementType) {
+                    categorizedResults.achievements.push({
+                        id: entityId,
+                        achievementType: result.achievementType,
+                        year: result.year,
+                        achievedBy: result.athleteName || result.fullName || '-'
+                    });
+                }
+                else if (result.recordType) {
+                    categorizedResults.records.push({
+                        id: entityId,
+                        recordType: result.recordType,
+                        recordValue: result.recordValue || result.value || result.performanceValue,
+                        setBy: result.athleteName || result.fullName || '-'
                     });
                 }
             });
@@ -503,6 +590,119 @@ const AdminPage = () => {
         if (activeTab === 'equipment') return equipment;
         if (activeTab === 'sponsorships') return sponsorships;
         return [];
+    };
+
+    const getFilteredData = () => {
+        const currentData = getCurrentData();
+        
+        if (!localSearchQuery.trim()) {
+            return currentData;
+        }
+        
+        const searchTerm = localSearchQuery.toLowerCase();
+        
+        return currentData.filter(item => {
+            // Convert all item values to searchable string
+            const searchableFields = [];
+            
+            // Common fields
+            if (item.id) searchableFields.push(item.id.toLowerCase());
+            if (item.firstName) searchableFields.push(item.firstName.toLowerCase());
+            if (item.lastName) searchableFields.push(item.lastName.toLowerCase());
+            if (item.nationality) searchableFields.push(item.nationality.toLowerCase());
+            
+            // Tab-specific fields
+            if (activeTab === 'athletes') {
+                if (item.position) searchableFields.push(item.position.toLowerCase());
+                if (item.goalsScored) searchableFields.push(item.goalsScored.toString());
+            }
+            
+            if (activeTab === 'coaches') {
+                if (item.coachingStyle) searchableFields.push(item.coachingStyle.toLowerCase());
+                if (item.experienceYears) searchableFields.push(item.experienceYears.toString());
+            }
+            
+            if (activeTab === 'achievements') {
+                if (item.achievementType) searchableFields.push(item.achievementType.toLowerCase());
+                if (item.year) searchableFields.push(item.year.toString());
+                if (item.achievedBy) searchableFields.push(item.achievedBy.toLowerCase());
+            }
+            
+            if (activeTab === 'records') {
+                if (item.recordType) searchableFields.push(item.recordType.toLowerCase());
+                if (item.recordValue) searchableFields.push(item.recordValue.toString().toLowerCase());
+                if (item.setBy) searchableFields.push(item.setBy.toLowerCase());
+            }
+            
+            if (activeTab === 'referees') {
+                if (item.experienceYears) searchableFields.push(item.experienceYears.toString());
+                if (item.matchesOfficiated) searchableFields.push(item.matchesOfficiated.toString());
+            }
+            
+            if (activeTab === 'teams') {
+                if (item.name) searchableFields.push(item.name.toLowerCase());
+                if (item.teamName) searchableFields.push(item.teamName.toLowerCase());
+                if (item.team_type) searchableFields.push(item.team_type.toLowerCase());
+                if (item.type) searchableFields.push(item.type.toLowerCase());
+                if (item.country) searchableFields.push(item.country.toLowerCase());
+                if (item.city) searchableFields.push(item.city.toLowerCase());
+            }
+            
+            if (activeTab === 'competitions') {
+                if (item.name) searchableFields.push(item.name.toLowerCase());
+                if (item.competitionName) searchableFields.push(item.competitionName.toLowerCase());
+                if (item.type) searchableFields.push(item.type.toLowerCase());
+                if (item.season) searchableFields.push(item.season.toLowerCase());
+                if (item.country) searchableFields.push(item.country.toLowerCase());
+            }
+            
+            if (activeTab === 'organizations') {
+                if (item.name) searchableFields.push(item.name.toLowerCase());
+                if (item.organizationName) searchableFields.push(item.organizationName.toLowerCase());
+                if (item.type) searchableFields.push(item.type.toLowerCase());
+                if (item.headquarters) searchableFields.push(item.headquarters.toLowerCase());
+                if (item.president) searchableFields.push(item.president.toLowerCase());
+            }
+            
+            if (activeTab === 'venues') {
+                if (item.name) searchableFields.push(item.name.toLowerCase());
+                if (item.venueName) searchableFields.push(item.venueName.toLowerCase());
+                if (item.city) searchableFields.push(item.city.toLowerCase());
+                if (item.country) searchableFields.push(item.country.toLowerCase());
+                if (item.surfaceType) searchableFields.push(item.surfaceType.toLowerCase());
+            }
+            
+            if (activeTab === 'media') {
+                if (item.name) searchableFields.push(item.name.toLowerCase());
+                if (item.mediaName) searchableFields.push(item.mediaName.toLowerCase());
+                if (item.type) searchableFields.push(item.type.toLowerCase());
+                if (item.covers) searchableFields.push(item.covers.toLowerCase());
+            }
+            
+            if (activeTab === 'sports') {
+                if (item.name) searchableFields.push(item.name.toLowerCase());
+                if (item.sportName) searchableFields.push(item.sportName.toLowerCase());
+                if (item.originCountry) searchableFields.push(item.originCountry.toLowerCase());
+            }
+            
+            if (activeTab === 'equipment') {
+                if (item.name) searchableFields.push(item.name.toLowerCase());
+                if (item.equipmentName) searchableFields.push(item.equipmentName.toLowerCase());
+                if (item.brand) searchableFields.push(item.brand.toLowerCase());
+                if (item.model) searchableFields.push(item.model.toLowerCase());
+                if (item.sport) searchableFields.push(item.sport.toLowerCase());
+            }
+            
+            if (activeTab === 'sponsorships') {
+                if (item.sponsorName) searchableFields.push(item.sponsorName.toLowerCase());
+                if (item.industry) searchableFields.push(item.industry.toLowerCase());
+                if (item.sponsors) searchableFields.push(item.sponsors.toLowerCase());
+                if (item.endorses) searchableFields.push(item.endorses.toLowerCase());
+            }
+            
+            // Check if any field contains the search term
+            return searchableFields.some(field => field.includes(searchTerm));
+        });
     };
 
     const renderForm = () => {
@@ -913,8 +1113,41 @@ const AdminPage = () => {
                         </div>
                     </div>
 
-                    {/* Create Button */}
-                    <div style={{ marginBottom: '30px', textAlign: 'right' }}>
+                    {/* Create Button and Local Search */}
+                    <div style={{ marginBottom: '30px', display: 'flex', gap: '15px', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ flex: 1, maxWidth: '400px' }}>
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type="text"
+                                    value={localSearchQuery}
+                                    onChange={(e) => setLocalSearchQuery(e.target.value)}
+                                    placeholder={`Filter ${activeTab}...`}
+                                    style={{
+                                        width: '100%',
+                                        padding: '12px 40px 12px 15px',
+                                        border: '2px solid #e2e8f0',
+                                        borderRadius: '12px',
+                                        fontSize: '15px',
+                                        outline: 'none',
+                                        transition: 'all 0.3s'
+                                    }}
+                                />
+                                <i className="fas fa-filter" style={{
+                                    position: 'absolute',
+                                    right: '15px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    color: '#64748b',
+                                    fontSize: '16px'
+                                }}></i>
+                            </div>
+                            {localSearchQuery && (
+                                <div style={{ marginTop: '8px', fontSize: '13px', color: '#64748b', fontWeight: '600' }}>
+                                    <i className="fas fa-info-circle" style={{ marginRight: '5px' }}></i>
+                                    Showing {getFilteredData().length} of {getCurrentData().length} results
+                                </div>
+                            )}
+                        </div>
                         <button
                             onClick={openCreateForm}
                             style={{
@@ -927,7 +1160,8 @@ const AdminPage = () => {
                                 fontWeight: '700',
                                 cursor: 'pointer',
                                 boxShadow: '0 8px 25px rgba(16,185,129,0.3)',
-                                transition: 'all 0.3s'
+                                transition: 'all 0.3s',
+                                whiteSpace: 'nowrap'
                             }}
                             onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
                             onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
@@ -941,13 +1175,21 @@ const AdminPage = () => {
                     <div style={{ background: 'white', borderRadius: '20px', padding: '30px', boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}>
                         {loading && <div style={{ textAlign: 'center', padding: '40px' }}><i className="fas fa-spinner fa-spin" style={{ fontSize: '36px', color: '#2563eb' }}></i></div>}
                         
-                        {!loading && getCurrentData().length === 0 && (
+                        {!loading && getFilteredData().length === 0 && getCurrentData().length === 0 && (
                             <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
                                 No {activeTab} found. Create your first one!
                             </div>
                         )}
 
-                        {!loading && getCurrentData().length > 0 && (
+                        {!loading && getFilteredData().length === 0 && getCurrentData().length > 0 && (
+                            <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
+                                <i className="fas fa-search" style={{ fontSize: '48px', marginBottom: '15px', color: '#cbd5e1' }}></i>
+                                <p style={{ fontSize: '18px', fontWeight: '600' }}>No results match your search</p>
+                                <p style={{ fontSize: '14px', marginTop: '8px' }}>Try adjusting your search query</p>
+                            </div>
+                        )}
+
+                        {!loading && getFilteredData().length > 0 && (
                             <div style={{ overflowX: 'auto' }}>
                                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                                     <thead>
@@ -968,7 +1210,7 @@ const AdminPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {getCurrentData().map(item => (
+                                        {getFilteredData().map(item => (
                                             <tr key={item.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                                                 {activeTab === 'athletes' && (
                                                     <>

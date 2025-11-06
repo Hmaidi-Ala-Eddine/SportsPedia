@@ -3642,4 +3642,241 @@
     <rdfs:subClassOf rdf:resource="http://example.org/sports-ontology#Sponsorship" />
     <rdfs:label xml:lang="en">Title Sponsor</rdfs:label>
   </rdf:Description>
-<sport:Coach rdf:about="#hhhhhhhh"><sport:firstName>hhhh</sport:firstName><sport:lastName>hhhh</sport:lastName><sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-11-14</sport:birthDate><sport:nationality>hhhh</sport:nationality><sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2019</sport:experienceYears><sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19</sport:titlesWon><sport:coachingStyle>Defensive</sport:coachingStyle></sport:Coach></rdf:RDF>
+
+  <!-- VENUES -->
+  <rdf:Description rdf:about="http://example.org/sports-ontology#CampNou">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Stadium" />
+    <sport:venueName>Camp Nou</sport:venueName>
+    <sport:city>Barcelona</sport:city>
+    <sport:country>Spain</sport:country>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">99354</sport:capacity>
+    <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1957</sport:openedYear>
+    <sport:surfaceType>Natural Grass</sport:surfaceType>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#WembleyStadium">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Stadium" />
+    <sport:venueName>Wembley Stadium</sport:venueName>
+    <sport:city>London</sport:city>
+    <sport:country>England</sport:country>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90000</sport:capacity>
+    <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2007</sport:openedYear>
+    <sport:surfaceType>Hybrid Grass</sport:surfaceType>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#MadisonSquareGarden">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Arena" />
+    <sport:venueName>Madison Square Garden</sport:venueName>
+    <sport:city>New York</sport:city>
+    <sport:country>United States</sport:country>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20789</sport:capacity>
+    <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1968</sport:openedYear>
+    <sport:surfaceType>Hardwood</sport:surfaceType>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#RolandGarros">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Court" />
+    <sport:venueName>Roland Garros</sport:venueName>
+    <sport:city>Paris</sport:city>
+    <sport:country>France</sport:country>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15225</sport:capacity>
+    <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1928</sport:openedYear>
+    <sport:surfaceType>Clay</sport:surfaceType>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#AllianzArena">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Stadium" />
+    <sport:venueName>Allianz Arena</sport:venueName>
+    <sport:city>Munich</sport:city>
+    <sport:country>Germany</sport:country>
+    <sport:capacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">75024</sport:capacity>
+    <sport:openedYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2005</sport:openedYear>
+    <sport:surfaceType>Hybrid Grass</sport:surfaceType>
+  </rdf:Description>
+
+  <!-- MEDIA -->
+  <rdf:Description rdf:about="http://example.org/sports-ontology#SkySports">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Television" />
+    <sport:mediaName>Sky Sports</sport:mediaName>
+    <sport:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10000000</sport:audience>
+    <sport:launchYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1991</sport:launchYear>
+    <sport:mediaType>Television</sport:mediaType>
+    <sport:covers>Football, Cricket, Rugby, F1</sport:covers>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#ESPN">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Television" />
+    <sport:mediaName>ESPN</sport:mediaName>
+    <sport:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80000000</sport:audience>
+    <sport:launchYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1979</sport:launchYear>
+    <sport:mediaType>Television</sport:mediaType>
+    <sport:covers>American Football, Basketball, Baseball, Soccer</sport:covers>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#BeINSports">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Television" />
+    <sport:mediaName>beIN Sports</sport:mediaName>
+    <sport:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50000000</sport:audience>
+    <sport:launchYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2012</sport:launchYear>
+    <sport:mediaType>Television</sport:mediaType>
+    <sport:covers>Football, Basketball, Tennis, Motorsports</sport:covers>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#DAZN">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Media" />
+    <sport:mediaName>DAZN</sport:mediaName>
+    <sport:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20000000</sport:audience>
+    <sport:launchYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</sport:launchYear>
+    <sport:mediaType>Streaming</sport:mediaType>
+    <sport:covers>Boxing, Football, MMA, Basketball</sport:covers>
+  </rdf:Description>
+
+  <!-- SPORTS -->
+  <rdf:Description rdf:about="http://example.org/sports-ontology#Volleyball">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#TeamSport" />
+    <sport:sportName>Volleyball</sport:sportName>
+    <sport:isOlympic rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sport:isOlympic>
+    <sport:originCountry>United States</sport:originCountry>
+    <sport:globalParticipants rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">900000000</sport:globalParticipants>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#Golf">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#IndividualSport" />
+    <sport:sportName>Golf</sport:sportName>
+    <sport:isOlympic rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sport:isOlympic>
+    <sport:originCountry>Scotland</sport:originCountry>
+    <sport:globalParticipants rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">450000000</sport:globalParticipants>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#Rugby">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#TeamSport" />
+    <sport:sportName>Rugby</sport:sportName>
+    <sport:isOlympic rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sport:isOlympic>
+    <sport:originCountry>England</sport:originCountry>
+    <sport:globalParticipants rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">475000000</sport:globalParticipants>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#Cricket">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#TeamSport" />
+    <sport:sportName>Cricket</sport:sportName>
+    <sport:isOlympic rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</sport:isOlympic>
+    <sport:originCountry>England</sport:originCountry>
+    <sport:globalParticipants rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2500000000</sport:globalParticipants>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#IceHockey">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#TeamSport" />
+    <sport:sportName>Ice Hockey</sport:sportName>
+    <sport:isOlympic rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sport:isOlympic>
+    <sport:originCountry>Canada</sport:originCountry>
+    <sport:globalParticipants rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50000000</sport:globalParticipants>
+  </rdf:Description>
+
+  <!-- EQUIPMENT -->
+  <rdf:Description rdf:about="http://example.org/sports-ontology#NikePhantom">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Footwear" />
+    <sport:equipmentName>Nike Phantom GT2</sport:equipmentName>
+    <sport:brand>Nike</sport:brand>
+    <sport:model>Phantom GT2 Elite</sport:model>
+    <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">250.00</sport:price>
+    <sport:material>Synthetic Leather</sport:material>
+    <sport:sport>Football</sport:sport>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#WilsonBasketball">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Ball" />
+    <sport:equipmentName>Wilson Evolution</sport:equipmentName>
+    <sport:brand>Wilson</sport:brand>
+    <sport:model>Evolution Game Ball</sport:model>
+    <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">65.00</sport:price>
+    <sport:material>Composite Leather</sport:material>
+    <sport:sport>Basketball</sport:sport>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#BabolatRacket">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Equipment" />
+    <sport:equipmentName>Babolat Pure Drive</sport:equipmentName>
+    <sport:brand>Babolat</sport:brand>
+    <sport:model>Pure Drive 2023</sport:model>
+    <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">229.00</sport:price>
+    <sport:material>Graphite Composite</sport:material>
+    <sport:sport>Tennis</sport:sport>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#MoltenVolleyball">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Ball" />
+    <sport:equipmentName>Molten FLISTATEC</sport:equipmentName>
+    <sport:brand>Molten</sport:brand>
+    <sport:model>V5M5000</sport:model>
+    <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">80.00</sport:price>
+    <sport:material>Synthetic Leather</sport:material>
+    <sport:sport>Volleyball</sport:sport>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#PumaKingBoots">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Footwear" />
+    <sport:equipmentName>Puma King Ultimate</sport:equipmentName>
+    <sport:brand>Puma</sport:brand>
+    <sport:model>King Ultimate FG/AG</sport:model>
+    <sport:price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.00</sport:price>
+    <sport:material>K-Leather</sport:material>
+    <sport:sport>Football</sport:sport>
+  </rdf:Description>
+
+  <!-- SPONSORSHIPS -->
+  <rdf:Description rdf:about="http://example.org/sports-ontology#EmiratesFCBSponsorship">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#TitleSponsor" />
+    <sport:sponsorName>Emirates Airlines</sport:sponsorName>
+    <sport:dealValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">70.0</sport:dealValue>
+    <sport:contractDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</sport:contractDuration>
+    <sport:industry>Aviation</sport:industry>
+    <sport:startDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-07-01</sport:startDate>
+    <sport:endDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2028-06-30</sport:endDate>
+    <sport:sponsors rdf:resource="http://example.org/sports-ontology#RealMadrid" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#NikeRonaldoEndorsement">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Endorsement" />
+    <sport:sponsorName>Nike</sport:sponsorName>
+    <sport:dealValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">15.0</sport:dealValue>
+    <sport:contractDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</sport:contractDuration>
+    <sport:industry>Sports Equipment</sport:industry>
+    <sport:startDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2020-01-01</sport:startDate>
+    <sport:endDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2030-12-31</sport:endDate>
+    <sport:endorses rdf:resource="http://example.org/sports-ontology#CristianoRonaldo" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#ChevroletManUtdSponsorship">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#TitleSponsor" />
+    <sport:sponsorName>Chevrolet</sport:sponsorName>
+    <sport:dealValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">64.0</sport:dealValue>
+    <sport:contractDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</sport:contractDuration>
+    <sport:industry>Automotive</sport:industry>
+    <sport:startDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2014-08-01</sport:startDate>
+    <sport:endDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2021-07-31</sport:endDate>
+    <sport:sponsors rdf:resource="http://example.org/sports-ontology#ManUnited" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#PepsiUEFASponsorship">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Sponsorship" />
+    <sport:sponsorName>PepsiCo</sport:sponsorName>
+    <sport:dealValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">50.0</sport:dealValue>
+    <sport:contractDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</sport:contractDuration>
+    <sport:industry>Food and Beverage</sport:industry>
+    <sport:startDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2024-01-01</sport:startDate>
+    <sport:endDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2027-12-31</sport:endDate>
+    <sport:sponsors rdf:resource="http://example.org/sports-ontology#UEFA" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://example.org/sports-ontology#JordanBrandEndorsement">
+    <rdf:type rdf:resource="http://example.org/sports-ontology#Endorsement" />
+    <sport:sponsorName>Jordan Brand</sport:sponsorName>
+    <sport:dealValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">20.0</sport:dealValue>
+    <sport:contractDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</sport:contractDuration>
+    <sport:industry>Sports Equipment</sport:industry>
+    <sport:startDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2022-01-01</sport:startDate>
+    <sport:endDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2027-12-31</sport:endDate>
+    <sport:endorses rdf:resource="http://example.org/sports-ontology#LukaDoncic" />
+  </rdf:Description>
+
+<sport:Coach rdf:about="#hhhhhhhh"><sport:firstName>hhhh</sport:firstName><sport:lastName>hhhh</sport:lastName><sport:birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-11-14</sport:birthDate><sport:nationality>hhhh</sport:nationality><sport:experienceYears rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2019</sport:experienceYears><sport:titlesWon rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19</sport:titlesWon><sport:coachingStyle>Defensive</sport:coachingStyle></sport:Coach><sport:Achievement rdf:about="#AchievementChampionsLeague"><sport:achievementType>Champions League</sport:achievementType><sport:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2026</sport:year><sport:performanceValue>lll</sport:performanceValue><sport:unit>mmm</sport:unit><sport:achievedBy rdf:resource="#StephenCurry" /></sport:Achievement></rdf:RDF>

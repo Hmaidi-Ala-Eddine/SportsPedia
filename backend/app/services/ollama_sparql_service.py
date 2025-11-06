@@ -1474,7 +1474,7 @@ WHERE {{
   OPTIONAL {{ ?athlete sport:goalsScored ?goals }}
 }}
 ORDER BY DESC(?goals)
-LIMIT {default_limit}
+LIMIT 50
 """
                 return (sparql, f"Showing all {pos_value}s")
         
@@ -1542,37 +1542,97 @@ WHERE {{
             "haaland": "Haaland", "erling": "Haaland",
             "guardiola": "Guardiola", "pep": "Guardiola",
             "ancelotti": "Ancelotti", "carlo": "Ancelotti",
-            "klopp": "Klopp", "jurgen": "Klopp"
+            "klopp": "Klopp", "jurgen": "Klopp",
+            # Add famous team names
+            "barcelona": "Barcelona", "barca": "Barcelona",
+            "madrid": "Madrid", "real": "Real",
+            "manchester": "Manchester", "united": "United",
+            "liverpool": "Liverpool", "chelsea": "Chelsea",
+            "arsenal": "Arsenal", "bayern": "Bayern",
+            "juventus": "Juventus", "juve": "Juventus",
+            "milan": "Milan", "inter": "Inter",
+            # Add famous organizations
+            "fifa": "FIFA", "uefa": "UEFA", "fiba": "FIBA",
+            "ioc": "IOC", "nba": "NBA"
         }
         
         for name_key, name_value in famous_names.items():
             if name_key in query:
                 sparql = f"""
 PREFIX sport: <{self.namespace}>
-SELECT ?person ?firstName ?lastName ?nationality ?position ?goals ?experienceYears ?titlesWon
+SELECT ?entity ?firstName ?lastName ?name ?nationality ?position ?goals ?experienceYears ?titlesWon ?matchesOfficiated
+       ?teamName ?country ?foundedYear ?city ?team_type
+       ?competitionName ?compType ?season ?startDate
+       ?organizationName ?orgType ?headquarters ?establishedYear
+       ?type
 WHERE {{
   {{
-    ?person a sport:Athlete .
-    ?person sport:firstName ?firstName .
-    ?person sport:lastName ?lastName .
+    ?entity a sport:Athlete .
+    ?entity sport:firstName ?firstName .
+    ?entity sport:lastName ?lastName .
+    BIND("Athlete" as ?type)
     FILTER(CONTAINS(LCASE(?lastName), "{name_value.lower()}") || CONTAINS(LCASE(?firstName), "{name_value.lower()}"))
-    OPTIONAL {{ ?person sport:nationality ?nationality }}
-    OPTIONAL {{ ?person sport:position ?position }}
-    OPTIONAL {{ ?person sport:goalsScored ?goals }}
+    OPTIONAL {{ ?entity sport:nationality ?nationality }}
+    OPTIONAL {{ ?entity sport:position ?position }}
+    OPTIONAL {{ ?entity sport:goalsScored ?goals }}
   }}
   UNION
   {{
-    ?person a sport:Coach .
-    ?person sport:firstName ?firstName .
-    ?person sport:lastName ?lastName .
+    ?entity a sport:Coach .
+    ?entity sport:firstName ?firstName .
+    ?entity sport:lastName ?lastName .
+    BIND("Coach" as ?type)
     FILTER(CONTAINS(LCASE(?lastName), "{name_value.lower()}") || CONTAINS(LCASE(?firstName), "{name_value.lower()}"))
-    OPTIONAL {{ ?person sport:nationality ?nationality }}
-    OPTIONAL {{ ?person sport:experienceYears ?experienceYears }}
-    OPTIONAL {{ ?person sport:titlesWon ?titlesWon }}
+    OPTIONAL {{ ?entity sport:nationality ?nationality }}
+    OPTIONAL {{ ?entity sport:experienceYears ?experienceYears }}
+    OPTIONAL {{ ?entity sport:titlesWon ?titlesWon }}
+  }}
+  UNION
+  {{
+    ?entity a sport:Referee .
+    ?entity sport:firstName ?firstName .
+    ?entity sport:lastName ?lastName .
+    BIND("Referee" as ?type)
+    FILTER(CONTAINS(LCASE(?lastName), "{name_value.lower()}") || CONTAINS(LCASE(?firstName), "{name_value.lower()}"))
+    OPTIONAL {{ ?entity sport:nationality ?nationality }}
+    OPTIONAL {{ ?entity sport:matchesOfficiated ?matchesOfficiated }}
+  }}
+  UNION
+  {{
+    ?entity a ?team_type .
+    FILTER(?team_type IN (sport:ProfessionalTeam, sport:NationalTeam, sport:AmateurTeam, sport:YouthTeam, sport:WomenTeam))
+    ?entity sport:teamName ?teamName .
+    BIND("Team" as ?type)
+    FILTER(CONTAINS(LCASE(?teamName), "{name_value.lower()}"))
+    OPTIONAL {{ ?entity sport:country ?country }}
+    OPTIONAL {{ ?entity sport:foundedYear ?foundedYear }}
+    OPTIONAL {{ ?entity sport:city ?city }}
+  }}
+  UNION
+  {{
+    ?entity a ?compType .
+    FILTER(?compType IN (sport:League, sport:Tournament, sport:Championship, sport:WorldCup, sport:Olympics))
+    ?entity sport:competitionName ?competitionName .
+    BIND("Competition" as ?type)
+    FILTER(CONTAINS(LCASE(?competitionName), "{name_value.lower()}"))
+    OPTIONAL {{ ?entity sport:season ?season }}
+    OPTIONAL {{ ?entity sport:startDate ?startDate }}
+    OPTIONAL {{ ?entity sport:country ?country }}
+  }}
+  UNION
+  {{
+    ?entity a ?orgType .
+    FILTER(?orgType IN (sport:Federation, sport:Club, sport:League_Org, sport:SportsAgency, sport:AntiDoping))
+    ?entity sport:organizationName ?organizationName .
+    BIND("Organization" as ?type)
+    FILTER(CONTAINS(LCASE(?organizationName), "{name_value.lower()}"))
+    OPTIONAL {{ ?entity sport:headquarters ?headquarters }}
+    OPTIONAL {{ ?entity sport:establishedYear ?establishedYear }}
   }}
 }}
+LIMIT 50
 """
-                return (sparql, f"Searching for {name_value}")
+                return (sparql, f"Searching for {name_value} across all entities")
         
         # SMART Pattern 11: General name search (any name not in famous list)
         # If query is 1-3 words and doesn't match other patterns, treat as name search
@@ -1580,57 +1640,200 @@ WHERE {{
             "athletes", "coaches", "referees", "achievement", "record", "count", "how many",
             "most", "best", "top", "all", "list", "show"
         ]):
-            # Search for the name across all person types
-            search_term = query.strip()
+            # Search for the name across ALL entity types (persons, teams, competitions, organizations, etc.)
+            search_term = query.strip().lower()
             sparql = f"""
 PREFIX sport: <{self.namespace}>
-SELECT ?person ?firstName ?lastName ?nationality ?position ?goals ?experienceYears ?titlesWon ?type
+SELECT ?entity ?firstName ?lastName ?name ?nationality ?position ?goals ?experienceYears ?titlesWon ?matchesOfficiated
+       ?teamName ?country ?foundedYear ?city ?team_type
+       ?competitionName ?compType ?season ?startDate ?prizeMoney
+       ?organizationName ?orgType ?headquarters ?establishedYear ?president
+       ?venueName ?capacity ?openedYear ?surfaceType
+       ?mediaName ?audience ?launchYear
+       ?sportName ?isOlympic ?originCountry ?globalParticipants
+       ?equipmentName ?brand ?model ?price ?sport
+       ?sponsorName ?dealValue ?industry ?sponsors ?endorses
+       ?type
 WHERE {{
   {{
-    ?person a sport:Athlete .
-    ?person sport:firstName ?firstName .
-    ?person sport:lastName ?lastName .
+    ?entity a sport:Athlete .
+    ?entity sport:firstName ?firstName .
+    ?entity sport:lastName ?lastName .
     BIND("Athlete" as ?type)
     FILTER(
       CONTAINS(LCASE(?firstName), "{search_term}") || 
       CONTAINS(LCASE(?lastName), "{search_term}") ||
       CONTAINS(LCASE(CONCAT(?firstName, " ", ?lastName)), "{search_term}")
     )
-    OPTIONAL {{ ?person sport:nationality ?nationality }}
-    OPTIONAL {{ ?person sport:position ?position }}
-    OPTIONAL {{ ?person sport:goalsScored ?goals }}
+    OPTIONAL {{ ?entity sport:nationality ?nationality }}
+    OPTIONAL {{ ?entity sport:position ?position }}
+    OPTIONAL {{ ?entity sport:goalsScored ?goals }}
   }}
   UNION
   {{
-    ?person a sport:Coach .
-    ?person sport:firstName ?firstName .
-    ?person sport:lastName ?lastName .
+    ?entity a sport:Coach .
+    ?entity sport:firstName ?firstName .
+    ?entity sport:lastName ?lastName .
     BIND("Coach" as ?type)
     FILTER(
       CONTAINS(LCASE(?firstName), "{search_term}") || 
       CONTAINS(LCASE(?lastName), "{search_term}") ||
       CONTAINS(LCASE(CONCAT(?firstName, " ", ?lastName)), "{search_term}")
     )
-    OPTIONAL {{ ?person sport:nationality ?nationality }}
-    OPTIONAL {{ ?person sport:experienceYears ?experienceYears }}
-    OPTIONAL {{ ?person sport:titlesWon ?titlesWon }}
+    OPTIONAL {{ ?entity sport:nationality ?nationality }}
+    OPTIONAL {{ ?entity sport:experienceYears ?experienceYears }}
+    OPTIONAL {{ ?entity sport:titlesWon ?titlesWon }}
   }}
   UNION
   {{
-    ?person a sport:Referee .
-    ?person sport:firstName ?firstName .
-    ?person sport:lastName ?lastName .
+    ?entity a sport:Referee .
+    ?entity sport:firstName ?firstName .
+    ?entity sport:lastName ?lastName .
     BIND("Referee" as ?type)
     FILTER(
       CONTAINS(LCASE(?firstName), "{search_term}") || 
       CONTAINS(LCASE(?lastName), "{search_term}") ||
       CONTAINS(LCASE(CONCAT(?firstName, " ", ?lastName)), "{search_term}")
     )
-    OPTIONAL {{ ?person sport:nationality ?nationality }}
+    OPTIONAL {{ ?entity sport:nationality ?nationality }}
+    OPTIONAL {{ ?entity sport:matchesOfficiated ?matchesOfficiated }}
+  }}
+  UNION
+  {{
+    ?entity a ?team_type .
+    FILTER(?team_type IN (sport:ProfessionalTeam, sport:NationalTeam, sport:AmateurTeam, sport:YouthTeam, sport:WomenTeam))
+    ?entity sport:teamName ?teamName .
+    BIND("Team" as ?type)
+    OPTIONAL {{ ?entity sport:country ?country }}
+    OPTIONAL {{ ?entity sport:foundedYear ?foundedYear }}
+    OPTIONAL {{ ?entity sport:city ?city }}
+    OPTIONAL {{ ?entity sport:budget ?budget }}
+    OPTIONAL {{ ?entity sport:currentRanking ?currentRanking }}
+    OPTIONAL {{ ?entity sport:wins ?wins }}
+    FILTER(
+      CONTAINS(LCASE(?teamName), "{search_term}") ||
+      CONTAINS(LCASE(STR(?country)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?city)), "{search_term}")
+    )
+  }}
+  UNION
+  {{
+    ?entity a ?compType .
+    FILTER(?compType IN (sport:League, sport:Tournament, sport:Championship, sport:WorldCup, sport:Olympics))
+    ?entity sport:competitionName ?competitionName .
+    BIND("Competition" as ?type)
+    OPTIONAL {{ ?entity sport:season ?season }}
+    OPTIONAL {{ ?entity sport:startDate ?startDate }}
+    OPTIONAL {{ ?entity sport:country ?country }}
+    OPTIONAL {{ ?entity sport:prizeMoney ?prizeMoney }}
+    OPTIONAL {{ ?entity sport:numberOfTeams ?numberOfTeams }}
+    FILTER(
+      CONTAINS(LCASE(?competitionName), "{search_term}") ||
+      CONTAINS(LCASE(STR(?country)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?season)), "{search_term}")
+    )
+  }}
+  UNION
+  {{
+    ?entity a ?orgType .
+    FILTER(?orgType IN (sport:Federation, sport:Club, sport:League_Org, sport:SportsAgency, sport:AntiDoping))
+    ?entity sport:organizationName ?organizationName .
+    BIND("Organization" as ?type)
+    OPTIONAL {{ ?entity sport:headquarters ?headquarters }}
+    OPTIONAL {{ ?entity sport:establishedYear ?establishedYear }}
+    OPTIONAL {{ ?entity sport:president ?president }}
+    OPTIONAL {{ ?entity sport:memberCount ?memberCount }}
+    FILTER(
+      CONTAINS(LCASE(?organizationName), "{search_term}") ||
+      CONTAINS(LCASE(STR(?headquarters)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?president)), "{search_term}")
+    )
+  }}
+  UNION
+  {{
+    ?entity a sport:Venue .
+    ?entity sport:venueName ?venueName .
+    BIND("Venue" as ?type)
+    OPTIONAL {{ ?entity sport:city ?city }}
+    OPTIONAL {{ ?entity sport:country ?country }}
+    OPTIONAL {{ ?entity sport:capacity ?capacity }}
+    OPTIONAL {{ ?entity sport:openedYear ?openedYear }}
+    OPTIONAL {{ ?entity sport:surfaceType ?surfaceType }}
+    FILTER(
+      CONTAINS(LCASE(?venueName), "{search_term}") ||
+      CONTAINS(LCASE(STR(?city)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?country)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?surfaceType)), "{search_term}")
+    )
+  }}
+  UNION
+  {{
+    ?entity a sport:Media .
+    ?entity sport:mediaName ?mediaName .
+    BIND("Media" as ?type)
+    OPTIONAL {{ ?entity sport:audience ?audience }}
+    OPTIONAL {{ ?entity sport:launchYear ?launchYear }}
+    OPTIONAL {{ ?entity sport:mediaType ?mediaType }}
+    OPTIONAL {{ ?entity sport:covers ?covers }}
+    FILTER(
+      CONTAINS(LCASE(?mediaName), "{search_term}") ||
+      CONTAINS(LCASE(STR(?mediaType)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?covers)), "{search_term}")
+    )
+  }}
+  UNION
+  {{
+    ?entity sport:sportName ?sportName .
+    BIND("Sport" as ?type)
+    OPTIONAL {{ ?entity sport:isOlympic ?isOlympic }}
+    OPTIONAL {{ ?entity sport:originCountry ?originCountry }}
+    OPTIONAL {{ ?entity sport:globalParticipants ?globalParticipants }}
+    OPTIONAL {{ ?entity a ?category }}
+    FILTER(
+      CONTAINS(LCASE(?sportName), "{search_term}") ||
+      CONTAINS(LCASE(STR(?originCountry)), "{search_term}")
+    )
+  }}
+  UNION
+  {{
+    ?entity a sport:Equipment .
+    ?entity sport:equipmentName ?equipmentName .
+    BIND("Equipment" as ?type)
+    OPTIONAL {{ ?entity sport:brand ?brand }}
+    OPTIONAL {{ ?entity sport:model ?model }}
+    OPTIONAL {{ ?entity sport:price ?price }}
+    OPTIONAL {{ ?entity sport:requiredFor ?sport }}
+    OPTIONAL {{ ?entity sport:material ?material }}
+    FILTER(
+      CONTAINS(LCASE(?equipmentName), "{search_term}") ||
+      CONTAINS(LCASE(STR(?brand)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?model)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?sport)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?material)), "{search_term}")
+    )
+  }}
+  UNION
+  {{
+    ?entity a sport:Sponsorship .
+    ?entity sport:sponsorName ?sponsorName .
+    BIND("Sponsorship" as ?type)
+    OPTIONAL {{ ?entity sport:dealValue ?dealValue }}
+    OPTIONAL {{ ?entity sport:industry ?industry }}
+    OPTIONAL {{ ?entity sport:sponsors ?sponsors }}
+    OPTIONAL {{ ?entity sport:endorses ?endorses }}
+    OPTIONAL {{ ?entity sport:startDate ?startDate }}
+    OPTIONAL {{ ?entity sport:endDate ?endDate }}
+    FILTER(
+      CONTAINS(LCASE(?sponsorName), "{search_term}") ||
+      CONTAINS(LCASE(STR(?industry)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?sponsors)), "{search_term}") ||
+      CONTAINS(LCASE(STR(?endorses)), "{search_term}")
+    )
   }}
 }}
+LIMIT 50
 """
-            return (sparql, f"Searching for people named '{search_term}'")
+            return (sparql, f"Searching across all entities for '{search_term}'")
         
         return None, None
     
